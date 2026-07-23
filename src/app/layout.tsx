@@ -1,0 +1,66 @@
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import "./globals.css";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+export const metadata: Metadata = {
+  title: {
+    default: "AniVerse — Where AI Meets Anime Art",
+    template: "%s | AniVerse",
+  },
+  description:
+    "AniVerse is a creative platform for generating, sharing, and discovering AI-powered anime artwork. Create stunning anime art with cutting-edge AI.",
+  keywords: [
+    "anime",
+    "AI art",
+    "anime generator",
+    "AI anime",
+    "art platform",
+    "creative AI",
+  ],
+  openGraph: {
+    title: "AniVerse — Where AI Meets Anime Art",
+    description:
+      "Generate, share, and discover stunning AI-powered anime artwork.",
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "AniVerse — Where AI Meets Anime Art",
+    description:
+      "Generate, share, and discover stunning AI-powered anime artwork.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}
+      suppressHydrationWarning
+    >
+      <head />
+      <body className="min-h-full bg-zinc-950 font-sans text-zinc-100">
+        {children}
+      </body>
+    </html>
+  );
+}

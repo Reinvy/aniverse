@@ -1,0 +1,754 @@
+// ============================================================
+// AniVerse — Complete Prisma Schema
+// AI Anime Creator Ecosystem
+// ============================================================
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============================================================
+// ENUMS
+// ============================================================
+
+enum Role {
+  USER
+  CREATOR
+  ADMIN
+}
+
+enum PremiumTier {
+  FREE
+  PRO
+  ULTIMATE
+}
+
+enum ArtworkStyle {
+  ANIME
+  MANGA
+  CHIBI
+  REALISTIC
+  SEMI_REALISTIC
+  WATERCOLOR
+  PIXEL_ART
+  OTHER
+}
+
+enum StoryGenre {
+  ACTION
+  ROMANCE
+  COMEDY
+  FANTASY
+  HORROR
+  MYSTERY
+  DRAMA
+  SLICE_OF_LIFE
+  SCI_FI
+  OTHER
+}
+
+enum CommissionStatus {
+  PENDING
+  ACCEPTED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  REFUNDED
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  PROCESSING
+  COMPLETED
+  CANCELLED
+  REFUNDED
+}
+
+enum TransactionType {
+  PURCHASE
+  REFUND
+  WITHDRAWAL
+  DEPOSIT
+  COMMISSION
+  SUBSCRIPTION
+}
+
+enum ChallengeType {
+  DAILY
+  WEEKLY
+}
+
+enum ChallengeStatus {
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+enum SubmissionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum PostStatus {
+  DRAFT
+  SCHEDULED
+  PUBLISHED
+  FAILED
+}
+
+enum SocialPlatform {
+  TWITTER
+  INSTAGRAM
+  TIKTOK
+  YOUTUBE
+  DEVIANTART
+  PIXIV
+  OTHER
+}
+
+// ============================================================
+// 1. USERS & AUTH (next-auth v5)
+// ============================================================
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+
+  // -- Custom profile fields --
+  role          Role        @default(USER)
+  premiumTier   PremiumTier @default(FREE)
+  username      String?     @unique
+  bio           String?     @db.Text
+  avatar        String?
+  socialLinks   Json?       // [{ platform: "twitter", url: "..." }]
+  coinBalance   Int         @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // ---- Relations ----
+  // Auth
+  accounts             Account[]
+  sessions             Session[]
+
+  // Content
+  artworks             Artwork[]
+  characters           Character[]
+  stories              Story[]
+  webtoonPanels        WebtoonPanel[]
+  galleries            Gallery[]
+
+  // Social
+  comments             Comment[]     @relation("UserComments")
+  likes                Like[]
+  followers            Follow[]      @relation("UserFollowers")   // people who follow me
+  following            Follow[]      @relation("UserFollowing")   // people I follow
+
+  // Marketplace
+  commissionsAsBuyer   Commission[]  @relation("Buyer")
+  commissionsAsCreator Commission[]  @relation("Creator")
+  products             Product[]
+  orders               Order[]
+  transactions         Transaction[]
+
+  // Subscription
+  subscription         UserSubscription?
+
+  // Marketing / Agent-generated
+  socialMediaPosts     SocialMediaPost[]
+  blogArticles         BlogArticle[]
+
+  // Gamification
+  challengeSubmissions ChallengeSubmission[]
+
+  // Analytics
+  analyticsEvents      AnalyticsEvent[]
+
+  @@index([role])
+  @@index([premiumTier])
+  @@index([createdAt])
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ============================================================
+// 2. CONTENT — Artworks
+// ============================================================
+
+model Artwork {
+  id          String       @id @default(cuid())
+  title       String
+  description String?      @db.Text
+  imageUrl    String
+  style       ArtworkStyle @default(ANIME)
+  prompt      String?      @db.Text
+  modelUsed   String?
+  width       Int?
+  height      Int?
+  isPublic    Boolean      @default(true)
+
+  creatorId   String
+  characterId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  creator      User          @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  character    Character?    @relation(fields: [characterId], references: [id], onDelete: SetNull)
+  galleryItems GalleryItem[]
+  products     Product[]
+
+  @@index([creatorId])
+  @@index([characterId])
+  @@index([style])
+  @@index([createdAt])
+  @@index([isPublic])
+}
+
+// ============================================================
+// 3. CONTENT — Characters (OC)
+// ============================================================
+
+model Character {
+  id              String  @id @default(cuid())
+  name            String
+  appearanceDesc  String? @db.Text
+  personality     String? @db.Text
+  backstory       String? @db.Text
+  referenceImages Json?   // Array of image URLs
+  isPublic        Boolean @default(true)
+
+  creatorId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  creator  User      @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  artworks Artwork[]
+  stories  Story[]
+
+  @@index([creatorId])
+  @@index([name])
+}
+
+// ============================================================
+// 4. CONTENT — Stories / Novels
+// ============================================================
+
+model Story {
+  id          String     @id @default(cuid())
+  title       String
+  description String?    @db.Text
+  genre       StoryGenre @default(FANTASY)
+  coverImage  String?
+  isPublished Boolean    @default(false)
+
+  authorId    String
+  characterId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  character Character? @relation(fields: [characterId], references: [id], onDelete: SetNull)
+  chapters  Chapter[]
+
+  @@index([authorId])
+  @@index([genre])
+  @@index([createdAt])
+}
+
+// ============================================================
+// 5. CONTENT — Chapters
+// ============================================================
+
+model Chapter {
+  id        String  @id @default(cuid())
+  title     String
+  content   String  @db.Text
+  order     Int
+  wordCount Int     @default(0)
+
+  storyId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  story         Story           @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  webtoonPanels WebtoonPanel[]
+
+  @@unique([storyId, order])
+  @@index([storyId])
+}
+
+// ============================================================
+// 6. CONTENT — Webtoon Panels
+// ============================================================
+
+model WebtoonPanel {
+  id         String  @id @default(cuid())
+  title      String?
+  imageUrl   String
+  dialogue   String? @db.Text
+  panelOrder Int
+
+  creatorId  String
+  chapterId  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  creator User    @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  chapter Chapter? @relation(fields: [chapterId], references: [id], onDelete: SetNull)
+
+  @@index([creatorId])
+  @@index([chapterId])
+  @@index([panelOrder])
+}
+
+// ============================================================
+// 7. CONTENT — Galleries / Collections
+// ============================================================
+
+model Gallery {
+  id          String   @id @default(cuid())
+  name        String
+  description String?  @db.Text
+  coverImage  String?
+  isPublic    Boolean  @default(true)
+
+  creatorId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  creator User         @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  items   GalleryItem[]
+
+  @@index([creatorId])
+}
+
+model GalleryItem {
+  id        String @id @default(cuid())
+  galleryId String
+  artworkId String
+  order     Int    @default(0)
+
+  // Relations
+  gallery Gallery @relation(fields: [galleryId], references: [id], onDelete: Cascade)
+  artwork Artwork @relation(fields: [artworkId], references: [id], onDelete: Cascade)
+
+  @@unique([galleryId, artworkId])
+  @@index([galleryId])
+  @@index([artworkId])
+}
+
+// ============================================================
+// 8. SOCIAL — Comments (polymorphic)
+// ============================================================
+
+model Comment {
+  id         String   @id @default(cuid())
+  content    String   @db.Text
+  targetType String   // "Artwork" | "Chapter" | "Comment"
+  targetId   String
+
+  authorId String
+  parentId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  author  User      @relation("UserComments", fields: [authorId], references: [id], onDelete: Cascade)
+  parent  Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies Comment[] @relation("CommentReplies")
+
+  @@index([targetType, targetId])
+  @@index([authorId])
+  @@index([parentId])
+  @@index([createdAt])
+}
+
+// ============================================================
+// 9. SOCIAL — Likes (polymorphic)
+// ============================================================
+
+model Like {
+  id         String   @id @default(cuid())
+  targetType String   // "Artwork" | "Chapter" | "Comment"
+  targetId   String
+
+  userId String
+
+  createdAt DateTime @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, targetType, targetId])
+  @@index([targetType, targetId])
+  @@index([userId])
+}
+
+// ============================================================
+// 10. SOCIAL — Follows
+// ============================================================
+
+model Follow {
+  id          String   @id @default(cuid())
+  followerId  String
+  followingId String
+
+  createdAt DateTime @default(now())
+
+  // Relations
+  follower  User @relation("UserFollowing", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("UserFollowers", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
+}
+
+// ============================================================
+// 11. MARKETPLACE — Commissions
+// ============================================================
+
+model Commission {
+  id          String           @id @default(cuid())
+  title       String
+  description String?          @db.Text
+  price       Decimal          @db.Decimal(10, 2)
+  status      CommissionStatus @default(PENDING)
+  deadline    DateTime?
+  details     Json?            // Custom requirements, reference images, etc.
+
+  buyerId   String
+  creatorId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  buyer  User @relation("Buyer", fields: [buyerId], references: [id], onDelete: Cascade)
+  creator User @relation("Creator", fields: [creatorId], references: [id], onDelete: Cascade)
+
+  @@index([buyerId])
+  @@index([creatorId])
+  @@index([status])
+}
+
+// ============================================================
+// 12. MARKETPLACE — Products (digital downloads)
+// ============================================================
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  description String?  @db.Text
+  price       Decimal  @db.Decimal(10, 2)
+  fileUrl     String?  // Digital download URL
+  isActive    Boolean  @default(true)
+
+  creatorId String
+  artworkId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  creator    User        @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  artwork    Artwork?    @relation(fields: [artworkId], references: [id], onDelete: SetNull)
+  orderItems OrderItem[]
+
+  @@index([creatorId])
+  @@index([artworkId])
+  @@index([isActive])
+}
+
+// ============================================================
+// 13. MARKETPLACE — Orders & Order Items
+// ============================================================
+
+model Order {
+  id        String      @id @default(cuid())
+  total     Decimal     @db.Decimal(10, 2)
+  status    OrderStatus @default(PENDING)
+
+  buyerId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  buyer       User          @relation(fields: [buyerId], references: [id], onDelete: Cascade)
+  items       OrderItem[]
+  transaction Transaction?
+
+  @@index([buyerId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  productId String
+  quantity  Int     @default(1)
+  price     Decimal @db.Decimal(10, 2) // Price snapshot at time of purchase
+
+  // Relations
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+// ============================================================
+// 14. FINANCE — Transactions (coin & payment history)
+// ============================================================
+
+model Transaction {
+  id        String          @id @default(cuid())
+  amount    Decimal         @db.Decimal(10, 2)
+  type      TransactionType
+  status    String          @default("COMPLETED")
+  reference String?         // External reference (Stripe charge ID, etc.)
+  note      String?
+
+  userId  String
+  orderId String? @unique
+
+  createdAt DateTime @default(now())
+
+  // Relations
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  order Order? @relation(fields: [orderId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([type])
+  @@index([createdAt])
+  @@index([reference])
+}
+
+// ============================================================
+// 15. SUBSCRIPTIONS — Premium Tiers
+// ============================================================
+
+model UserSubscription {
+  id          String       @id @default(cuid())
+  tier        PremiumTier  @default(FREE)
+  startDate   DateTime     @default(now())
+  endDate     DateTime?
+  autoRenew   Boolean      @default(true)
+  stripeSubId String?      @unique
+
+  userId String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([tier])
+}
+
+// ============================================================
+// 16. MARKETING — Social Media Posts (Agent-generated)
+// ============================================================
+
+model SocialMediaPost {
+  id          String        @id @default(cuid())
+  content     String        @db.Text
+  imageUrl    String?
+  platform    SocialPlatform
+  status      PostStatus    @default(DRAFT)
+  scheduledAt DateTime?
+  postedAt    DateTime?
+  postUrl     String?       // URL to the live post
+  errorLog    String?       @db.Text
+
+  creatorId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  creator User @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+
+  @@index([creatorId])
+  @@index([status])
+  @@index([platform])
+  @@index([scheduledAt])
+}
+
+// ============================================================
+// 17. SEO — Blog Articles (Agent-published)
+// ============================================================
+
+model BlogArticle {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  content     String   @db.Text
+  excerpt     String?  @db.Text
+  coverImage  String?
+  tags        String[] // PostgreSQL text[] array
+  seoTitle    String?
+  seoDesc     String?
+  isPublished Boolean  @default(false)
+  publishedAt DateTime?
+
+  authorId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([authorId])
+  @@index([slug])
+  @@index([isPublished])
+  @@index([publishedAt])
+}
+
+// ============================================================
+// 18. GAMIFICATION — Challenges
+// ============================================================
+
+model Challenge {
+  id           String          @id @default(cuid())
+  title        String
+  description  String          @db.Text
+  type         ChallengeType   @default(DAILY)
+  status       ChallengeStatus @default(ACTIVE)
+  startsAt     DateTime
+  endsAt       DateTime
+  rewardCoins  Int             @default(0)
+  prompt       String?         @db.Text // AI generation prompt
+  requirements Json?           // Specific challenge rules / requirements
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  submissions ChallengeSubmission[]
+
+  @@index([type])
+  @@index([status])
+  @@index([startsAt, endsAt])
+}
+
+// ============================================================
+// 19. GAMIFICATION — Challenge Submissions
+// ============================================================
+
+model ChallengeSubmission {
+  id          String           @id @default(cuid())
+  imageUrl    String
+  description String?
+  status      SubmissionStatus @default(PENDING)
+  score       Int?
+  feedback    String?          @db.Text
+
+  challengeId String
+  userId      String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  challenge Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([challengeId, userId])
+  @@index([challengeId])
+  @@index([userId])
+  @@index([status])
+}
+
+// ============================================================
+// 20. ANALYTICS — Events
+// ============================================================
+
+model AnalyticsEvent {
+  id        String   @id @default(cuid())
+  event     String   // Event name, e.g. "page_view", "artwork_like"
+  category  String   @default("OTHER")
+  label     String?
+  value     Int?
+  metadata  Json?    // Arbitrary event payload (URL, referrer, element, etc.)
+  ipAddress String?
+  userAgent String?  @db.Text
+
+  userId    String?
+  sessionId String?
+
+  createdAt DateTime @default(now())
+
+  // Relations
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([event])
+  @@index([category])
+  @@index([createdAt])
+  @@index([sessionId])
+}
