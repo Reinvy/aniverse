@@ -118,7 +118,44 @@ export const STYLE_PRESETS = [
   { id: "watercolor", label: "Watercolor", description: "Soft watercolor painted look" },
   { id: "cyberpunk", label: "Cyberpunk", description: "Neon-drenched futuristic style" },
   { id: "ghibli", label: "Ghibli-inspired", description: "Warm, whimsical Studio Ghibli aesthetic" },
+  { id: "ghibli-background", label: "Ghibli Background", description: "Lush, detailed Ghibli-style landscape backgrounds" },
+  { id: "ghibli-character", label: "Ghibli Character", description: "Classic Miyazaki-era Ghibli character design" },
+  { id: "retro-90s", label: "Retro '90s", description: "Vibrant cel-shaded 1990s anime revival aesthetic" },
+  { id: "vhs-anime", label: "VHS Anime", description: "Grainy VHS-tape look with scanlines and warm color bleed" },
   { id: "chibi", label: "Chibi", description: "Cute, proportionally exaggerated characters" },
+  { id: "pixel-anime", label: "Pixel Anime", description: "Pixel-art fusion with anime-style characters and sprites" },
+] as const;
+
+/** Trending styles from market research (used for showcase). */
+export const TRENDING_STYLES = [
+  {
+    id: "retro-90s",
+    label: "Retro '90s Revival",
+    description: "The iconic cel-shaded look of 1990s anime is back — think Science SARU's vibrant aesthetic. High saturation, bold outlines, and nostalgic charm.",
+    gradient: "from-pink-500 to-rose-600",
+    badge: "HOT",
+  },
+  {
+    id: "ghibli",
+    label: "Ghibli-Inspired",
+    description: "Studio Ghibli's warm, whimsical style continues to dominate. From lush forest backdrops to gentle character designs — timeless and beloved.",
+    gradient: "from-emerald-500 to-teal-600",
+    badge: "TRENDING",
+  },
+  {
+    id: "cyberpunk",
+    label: "Cyberpunk Neon",
+    description: "Neon-drenched futurescapes with magenta, cyan, and electric blue on dark backgrounds. The perennial favorite for sci-fi anime art.",
+    gradient: "from-violet-500 to-fuchsia-600",
+    badge: "CLASSIC",
+  },
+  {
+    id: "pixel-anime",
+    label: "Pixel Art Fusion",
+    description: "Blending retro pixel art with anime-style characters — a crossover trend gaining massive traction in indie games and social art.",
+    gradient: "from-amber-500 to-orange-600",
+    badge: "NEW",
+  },
 ] as const;
 
 /** Example artworks for feature showcase. */

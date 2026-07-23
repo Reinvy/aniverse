@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { APP_NAME, APP_DESCRIPTION, APP_URL } from "@/lib/constants";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -51,13 +52,48 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: APP_NAME,
+    description: APP_DESCRIPTION,
+    url: APP_URL,
+    applicationCategory: "Multimedia",
+    operatingSystem: "Web",
+    offers: [
+      {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "USD",
+        description: "Free plan with 10 generations/month",
+      },
+      {
+        "@type": "Offer",
+        price: "9.99",
+        priceCurrency: "USD",
+        description: "Pro plan with 100 generations/month",
+      },
+      {
+        "@type": "Offer",
+        price: "24.99",
+        priceCurrency: "USD",
+        description: "Studio plan with unlimited generations",
+      },
+    ],
+  };
+
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}
       suppressHydrationWarning
     >
-      <head />
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className="min-h-full bg-zinc-950 font-sans text-zinc-100">
         {children}
       </body>
