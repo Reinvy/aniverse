@@ -85,5 +85,5 @@ export const chapter: StoryChapter = {
     "Langit ungu semakin gelap. Dua rembulan mulai bersinar terang. Di Vallenwood, penduduk desa menyalakan lentera kristal mereka—seribu titik cahaya kecil yang berkelap-kelip seperti bintang jatuh. Dan di kejauhan, di puncak Menara Hati Alam, sesosok bayangan emas mengamati kedatangan mereka dengan senyum sinis.\n",
     "Pertarungan baru saja akan dimulai.",
   ].join("\n"),
-  wordCount: 1346,
+  wordCount: 1183,
 };
