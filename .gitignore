@@ -46,3 +46,7 @@ skills-lock.json
 
 # Cron
 .cron/*.log
+src/generated/
+CLAUDE.md
+.cron/pr-body-*.md
+.cron/create_pr.js

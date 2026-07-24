@@ -44,6 +44,16 @@ export const DASHBOARD_NAV = [
     href: "/dashboard/social",
     icon: "Share2",
   },
+  {
+    label: "Challenges",
+    href: "/dashboard/challenges",
+    icon: "Trophy",
+  },
+  {
+    label: "Monetization",
+    href: "/dashboard/monetization",
+    icon: "DollarSign",
+  },
 ] as const;
 
 /** Subscription tier definitions. */
@@ -99,6 +109,31 @@ export const TIERS = {
 
 export type TierId = keyof typeof TIERS;
 
+/** Annual pricing (20% discount applied). */
+export const ANNUAL_PRICES: Record<Exclude<TierId, "FREE">, number> = {
+  PRO: 7.99,
+  STUDIO: 19.99,
+} as const;
+
+/** Coin pack definitions for microtransactions. */
+export const COIN_PACKS = [
+  { id: "coins-10", coins: 10, price: 1.99, bonus: 0, label: "Starter Pack" },
+  { id: "coins-50", coins: 50, price: 7.99, bonus: 5, label: "Creator Pack" },
+  { id: "coins-100", coins: 100, price: 14.99, bonus: 15, label: "Pro Pack" },
+  { id: "coins-500", coins: 500, price: 59.99, bonus: 100, label: "Mega Pack" },
+] as const;
+
+/** Marketplace commission rate. */
+export const MARKETPLACE_COMMISSION_RATE = 0.15 as const;
+
+/** Referral program reward structure. */
+export const REFERRAL_REWARDS = {
+  referrerCredit: 5, // $5 credit
+  refereeDiscountPercent: 20, // 20% off first month
+  maxReferralsPerMonth: 10,
+  minPayout: 20, // minimum $20 to withdraw
+} as const;
+
 /** Pricing display variants. */
 export const PRICING_INTERVALS = [
   { label: "Monthly", value: "monthly" },
@@ -123,7 +158,44 @@ export const STYLE_PRESETS = [
   { id: "watercolor", label: "Watercolor", description: "Soft watercolor painted look" },
   { id: "cyberpunk", label: "Cyberpunk", description: "Neon-drenched futuristic style" },
   { id: "ghibli", label: "Ghibli-inspired", description: "Warm, whimsical Studio Ghibli aesthetic" },
+  { id: "ghibli-background", label: "Ghibli Background", description: "Lush, detailed Ghibli-style landscape backgrounds" },
+  { id: "ghibli-character", label: "Ghibli Character", description: "Classic Miyazaki-era Ghibli character design" },
+  { id: "retro-90s", label: "Retro '90s", description: "Vibrant cel-shaded 1990s anime revival aesthetic" },
+  { id: "vhs-anime", label: "VHS Anime", description: "Grainy VHS-tape look with scanlines and warm color bleed" },
   { id: "chibi", label: "Chibi", description: "Cute, proportionally exaggerated characters" },
+  { id: "pixel-anime", label: "Pixel Anime", description: "Pixel-art fusion with anime-style characters and sprites" },
+] as const;
+
+/** Trending styles from market research (used for showcase). */
+export const TRENDING_STYLES = [
+  {
+    id: "retro-90s",
+    label: "Retro '90s Revival",
+    description: "The iconic cel-shaded look of 1990s anime is back — think Science SARU's vibrant aesthetic. High saturation, bold outlines, and nostalgic charm.",
+    gradient: "from-pink-500 to-rose-600",
+    badge: "HOT",
+  },
+  {
+    id: "ghibli",
+    label: "Ghibli-Inspired",
+    description: "Studio Ghibli's warm, whimsical style continues to dominate. From lush forest backdrops to gentle character designs — timeless and beloved.",
+    gradient: "from-emerald-500 to-teal-600",
+    badge: "TRENDING",
+  },
+  {
+    id: "cyberpunk",
+    label: "Cyberpunk Neon",
+    description: "Neon-drenched futurescapes with magenta, cyan, and electric blue on dark backgrounds. The perennial favorite for sci-fi anime art.",
+    gradient: "from-violet-500 to-fuchsia-600",
+    badge: "CLASSIC",
+  },
+  {
+    id: "pixel-anime",
+    label: "Pixel Art Fusion",
+    description: "Blending retro pixel art with anime-style characters — a crossover trend gaining massive traction in indie games and social art.",
+    gradient: "from-amber-500 to-orange-600",
+    badge: "NEW",
+  },
 ] as const;
 
 /** Example artworks for feature showcase. */
