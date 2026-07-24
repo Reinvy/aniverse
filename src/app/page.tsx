@@ -14,13 +14,14 @@ import {
   ArrowRight,
   Star,
   ChevronRight,
+  TrendingUp,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
-import { APP_NAME, APP_TAGLINE, TIERS } from "@/lib/constants";
+import { APP_NAME, APP_TAGLINE, TIERS, TRENDING_STYLES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 const fadeInUp = {
@@ -256,6 +257,88 @@ export default function HomePage() {
                   </motion.div>
                 );
               })}
+            </motion.div>
+          </div>
+        </section>
+
+        {/* ─── Trending Styles Section (from Market Research) ─── */}
+        <section className="relative overflow-hidden py-20 sm:py-28">
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-violet-600/5 via-transparent to-fuchsia-600/5" />
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <motion.div className="mx-auto max-w-2xl text-center" {...fadeInUp}>
+              <Badge variant="secondary" className="mb-4 px-3 py-1">
+                <TrendingUp className="mr-1.5 h-3.5 w-3.5" />
+                Trending Now
+              </Badge>
+              <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+                Anime Art Styles in Demand
+              </h2>
+              <p className="mt-4 text-lg text-zinc-400">
+                Our AI is trained on the latest trends. Here&rsquo;s what&rsquo;s
+                taking over the anime art world right now.
+              </p>
+            </motion.div>
+
+            <motion.div
+              className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4"
+              {...stagger}
+            >
+              {TRENDING_STYLES.map((style) => (
+                <motion.div
+                  key={style.id}
+                  variants={{
+                    initial: { opacity: 0, y: 24 },
+                    whileInView: { opacity: 1, y: 0 },
+                  }}
+                  transition={{ duration: 0.4 }}
+                  className="group relative"
+                >
+                  <Card className="h-full overflow-hidden border-zinc-800/60 transition-all duration-300 hover:border-zinc-700 hover:shadow-lg hover:shadow-violet-600/5">
+                    {/* Gradient header bar */}
+                    <div
+                      className={cn(
+                        "h-2 w-full bg-gradient-to-r",
+                        style.gradient,
+                      )}
+                    />
+                    <CardContent className="p-5">
+                      <div className="mb-3 flex items-center justify-between">
+                        <h3 className="text-base font-semibold text-white">
+                          {style.label}
+                        </h3>
+                        <Badge
+                          variant="outline"
+                          className={cn(
+                            "text-[10px] uppercase tracking-wider",
+                            style.badge === "HOT" &&
+                              "border-rose-700/50 text-rose-400",
+                            style.badge === "TRENDING" &&
+                              "border-emerald-700/50 text-emerald-400",
+                            style.badge === "CLASSIC" &&
+                              "border-violet-700/50 text-violet-400",
+                            style.badge === "NEW" &&
+                              "border-amber-700/50 text-amber-400",
+                          )}
+                        >
+                          {style.badge}
+                        </Badge>
+                      </div>
+                      <p className="text-sm leading-relaxed text-zinc-400">
+                        {style.description}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </motion.div>
+
+            <motion.div className="mt-10 text-center" {...fadeInUp}>
+              <Link href="/dashboard/create">
+                <Button variant="outline" size="lg" className="gap-2">
+                  Try These Styles
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
             </motion.div>
           </div>
         </section>
