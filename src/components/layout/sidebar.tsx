@@ -8,6 +8,7 @@ import {
   Wand2,
   Store,
   DollarSign,
+  Trophy,
   Sparkles,
   LogOut,
 } from "lucide-react";
@@ -20,6 +21,7 @@ const sidebarNav = [
   { label: "Gallery", href: "/dashboard/gallery", icon: Image },
   { label: "Create", href: "/dashboard/create", icon: Wand2 },
   { label: "Marketplace", href: "/dashboard/marketplace", icon: Store },
+  { label: "Challenges", href: "/dashboard/challenges", icon: Trophy },
   { label: "Monetization", href: "/dashboard/monetization", icon: DollarSign },
 ] as const;
 

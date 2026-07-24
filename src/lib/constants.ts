@@ -40,6 +40,11 @@ export const DASHBOARD_NAV = [
     icon: "Store",
   },
   {
+    label: "Challenges",
+    href: "/dashboard/challenges",
+    icon: "Trophy",
+  },
+  {
     label: "Monetization",
     href: "/dashboard/monetization",
     icon: "DollarSign",
