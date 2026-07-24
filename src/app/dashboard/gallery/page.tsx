@@ -22,7 +22,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { formatNumber, timeAgo, cn } from "@/lib/utils";
 import { GALLERY_CATEGORIES } from "@/lib/constants";
-import { dailyArt } from "@/data/daily-art-20260724";
+import { dailyArt } from "@/data/daily-art-20260725";
 
 // Placeholder artwork data
 const artworks = Array.from({ length: 12 }, (_, i) => ({
@@ -92,7 +92,7 @@ export default function GalleryPage() {
                 Today&apos;s Daily Art
               </h2>
               <p className="text-xs text-zinc-500">
-                Curated artwork descriptions — July 24, 2026
+                Curated artwork descriptions — July 25, 2026
               </p>
             </div>
             <button
