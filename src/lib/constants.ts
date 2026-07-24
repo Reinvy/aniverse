@@ -164,6 +164,8 @@ export const STYLE_PRESETS = [
   { id: "vhs-anime", label: "VHS Anime", description: "Grainy VHS-tape look with scanlines and warm color bleed" },
   { id: "chibi", label: "Chibi", description: "Cute, proportionally exaggerated characters" },
   { id: "pixel-anime", label: "Pixel Anime", description: "Pixel-art fusion with anime-style characters and sprites" },
+  { id: "vaporwave", label: "Vaporwave", description: "Retro-futuristic neon-drenched aesthetic with purple and pink hues, glitch effects, and '80s/'90s nostalgia" },
+  { id: "dusty-pastel", label: "Dusty Pastel", description: "Muted, warm fantasy tones inspired by Frieren's soft color palette — perfect for romance and fantasy genres" },
 ] as const;
 
 /** Trending styles from market research (used for showcase). */
@@ -180,6 +182,20 @@ export const TRENDING_STYLES = [
     label: "Ghibli-Inspired",
     description: "Studio Ghibli's warm, whimsical style continues to dominate. From lush forest backdrops to gentle character designs — timeless and beloved.",
     gradient: "from-emerald-500 to-teal-600",
+    badge: "TRENDING",
+  },
+  {
+    id: "vaporwave",
+    label: "Vaporwave Neon",
+    description: "Vaporwave's retro-futuristic aesthetic is surging — neon sunsets, glitch typography, and purple-pink gradients defining 2026's anime art revolution.",
+    gradient: "from-purple-500 to-fuchsia-600",
+    badge: "HOT",
+  },
+  {
+    id: "dusty-pastel",
+    label: "Dusty Pastel",
+    description: "Muted, warm fantasy tones inspired by Frieren's palette — soft lavenders, dusty roses, and sage greens dominating romance and fantasy anime art.",
+    gradient: "from-rose-400 to-orange-400",
     badge: "TRENDING",
   },
   {

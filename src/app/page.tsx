@@ -21,6 +21,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { TrendingPalettes } from "@/components/trending-palettes";
 import { APP_NAME, APP_TAGLINE, TIERS, TRENDING_STYLES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
@@ -280,7 +281,7 @@ export default function HomePage() {
             </motion.div>
 
             <motion.div
-              className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4"
+              className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
               {...stagger}
             >
               {TRENDING_STYLES.map((style) => (
@@ -342,6 +343,8 @@ export default function HomePage() {
             </motion.div>
           </div>
         </section>
+
+        <TrendingPalettes />
 
         {/* ─── Stats Section ─── */}
         <section className="border-y border-zinc-800/60 py-16">
