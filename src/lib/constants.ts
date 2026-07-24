@@ -39,6 +39,11 @@ export const DASHBOARD_NAV = [
     href: "/dashboard/marketplace",
     icon: "Store",
   },
+  {
+    label: "Monetization",
+    href: "/dashboard/monetization",
+    icon: "DollarSign",
+  },
 ] as const;
 
 /** Subscription tier definitions. */
@@ -93,6 +98,31 @@ export const TIERS = {
 } as const;
 
 export type TierId = keyof typeof TIERS;
+
+/** Annual pricing (20% discount applied). */
+export const ANNUAL_PRICES: Record<Exclude<TierId, "FREE">, number> = {
+  PRO: 7.99,
+  STUDIO: 19.99,
+} as const;
+
+/** Coin pack definitions for microtransactions. */
+export const COIN_PACKS = [
+  { id: "coins-10", coins: 10, price: 1.99, bonus: 0, label: "Starter Pack" },
+  { id: "coins-50", coins: 50, price: 7.99, bonus: 5, label: "Creator Pack" },
+  { id: "coins-100", coins: 100, price: 14.99, bonus: 15, label: "Pro Pack" },
+  { id: "coins-500", coins: 500, price: 59.99, bonus: 100, label: "Mega Pack" },
+] as const;
+
+/** Marketplace commission rate. */
+export const MARKETPLACE_COMMISSION_RATE = 0.15 as const;
+
+/** Referral program reward structure. */
+export const REFERRAL_REWARDS = {
+  referrerCredit: 5, // $5 credit
+  refereeDiscountPercent: 20, // 20% off first month
+  maxReferralsPerMonth: 10,
+  minPayout: 20, // minimum $20 to withdraw
+} as const;
 
 /** Pricing display variants. */
 export const PRICING_INTERVALS = [
