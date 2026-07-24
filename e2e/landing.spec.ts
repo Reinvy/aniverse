@@ -24,7 +24,7 @@ test.describe('AniVerse Landing Page', () => {
   });
 
   test('should have pricing section', async ({ page }) => {
-    const pricing = page.locator('text=Free,Pro,Studio,Price,Pricing').first();
+    const pricing = page.getByText(/free|pro|studio|pricing/i).first();
     await expect(pricing).toBeVisible();
   });
 
