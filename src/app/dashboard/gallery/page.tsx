@@ -12,6 +12,9 @@ import {
   Grid3X3,
   List,
   Sparkles,
+  Palette,
+  Star,
+  Sun,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -19,6 +22,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { formatNumber, timeAgo, cn } from "@/lib/utils";
 import { GALLERY_CATEGORIES } from "@/lib/constants";
+import { dailyArt } from "@/data/daily-art-20260724";
 
 // Placeholder artwork data
 const artworks = Array.from({ length: 12 }, (_, i) => ({
@@ -45,10 +49,21 @@ const artworks = Array.from({ length: 12 }, (_, i) => ({
   image: null,
 }));
 
+function ColorSwatch({ color }: { color: string }) {
+  return (
+    <div
+      className="h-6 w-6 rounded-full border border-zinc-700/50 shadow-sm"
+      style={{ backgroundColor: color }}
+      title={color}
+    />
+  );
+}
+
 export default function GalleryPage() {
   const [activeCategory, setActiveCategory] = useState("all");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [searchQuery, setSearchQuery] = useState("");
+  const [showDailyArt, setShowDailyArt] = useState(true);
 
   const filtered = artworks.filter((art) => {
     const matchesCategory =
@@ -61,6 +76,110 @@ export default function GalleryPage() {
 
   return (
     <div className="p-6 lg:p-8">
+      {/* ─── Daily Art Section ─── */}
+      {showDailyArt && (
+        <motion.section
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-10"
+        >
+          <div className="mb-6 flex items-center gap-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-amber-400 to-orange-600 shadow-lg">
+              <Sun className="h-5 w-5 text-white" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-white">
+                Today&apos;s Daily Art
+              </h2>
+              <p className="text-xs text-zinc-500">
+                Curated artwork descriptions — July 24, 2026
+              </p>
+            </div>
+            <button
+              onClick={() => setShowDailyArt(false)}
+              className="ml-auto text-xs text-zinc-600 hover:text-zinc-400 transition-colors"
+            >
+              Dismiss
+            </button>
+          </div>
+
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {dailyArt.map((art, i) => (
+              <motion.div
+                key={art.id}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.05, duration: 0.3 }}
+              >
+                <Card className="group h-full border-zinc-800/60 bg-gradient-to-br from-zinc-900/80 to-zinc-950/80 transition-all duration-200 hover:border-amber-700/50 hover:shadow-lg hover:shadow-amber-600/5">
+                  {/* Thumbnail placeholder with style gradient */}
+                  <div className="flex aspect-[4/3] items-center justify-center rounded-t-xl bg-gradient-to-br from-zinc-800 to-zinc-900 text-zinc-600 overflow-hidden relative">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent z-10" />
+                    <div className="z-20 flex flex-col items-center gap-2">
+                      <Palette className="h-10 w-10 text-amber-500/60" />
+                      <Badge
+                        variant="secondary"
+                        className="bg-black/50 text-[10px] uppercase tracking-wider text-amber-400 border-amber-800/50"
+                      >
+                        {art.style}
+                      </Badge>
+                    </div>
+                    {/* Color palette strip at bottom */}
+                    <div className="absolute bottom-0 left-0 right-0 z-20 flex gap-0.5 p-2">
+                      {art.colorPalette.slice(0, 5).map((color) => (
+                        <div
+                          key={color}
+                          className="h-1.5 flex-1 rounded-full"
+                          style={{ backgroundColor: color }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+
+                  <CardContent className="p-4">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="min-w-0 flex-1">
+                        <h3 className="font-semibold text-white truncate flex items-center gap-1.5">
+                          <Sparkles className="h-3.5 w-3.5 text-amber-400 shrink-0" />
+                          {art.title}
+                        </h3>
+                        <p className="text-xs text-zinc-500 mt-0.5">
+                          by {art.artistAttribution}
+                        </p>
+                      </div>
+                      <Badge
+                        variant="outline"
+                        className="shrink-0 border-zinc-700 text-[10px] uppercase text-zinc-400"
+                      >
+                        {art.genre}
+                      </Badge>
+                    </div>
+
+                    <p className="mt-2 text-xs leading-relaxed text-zinc-500 line-clamp-2">
+                      {art.description}
+                    </p>
+
+                    {/* Theme tag */}
+                    <div className="mt-2 flex flex-wrap gap-1">
+                      <span className="inline-block rounded-full bg-zinc-800/60 px-2 py-0.5 text-[10px] text-zinc-400">
+                        {art.theme}
+                      </span>
+                    </div>
+
+                    {/* Color palette */}
+                    <div className="mt-3 flex items-center gap-1.5">
+                      {art.colorPalette.map((color) => (
+                        <ColorSwatch key={color} color={color} />
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </motion.section>
+      )}
+
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -8 }}
