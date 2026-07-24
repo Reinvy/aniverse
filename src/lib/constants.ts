@@ -40,6 +40,11 @@ export const DASHBOARD_NAV = [
     icon: "Store",
   },
   {
+    label: "Social",
+    href: "/dashboard/social",
+    icon: "Share2",
+  },
+  {
     label: "Challenges",
     href: "/dashboard/challenges",
     icon: "Trophy",
