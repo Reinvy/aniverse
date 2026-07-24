@@ -7,6 +7,7 @@ import {
   Image,
   Wand2,
   Store,
+  Share2,
   Sparkles,
   LogOut,
 } from "lucide-react";
@@ -19,6 +20,7 @@ const sidebarNav = [
   { label: "Gallery", href: "/dashboard/gallery", icon: Image },
   { label: "Create", href: "/dashboard/create", icon: Wand2 },
   { label: "Marketplace", href: "/dashboard/marketplace", icon: Store },
+  { label: "Social", href: "/dashboard/social", icon: Share2 },
 ] as const;
 
 export function Sidebar() {

@@ -39,6 +39,11 @@ export const DASHBOARD_NAV = [
     href: "/dashboard/marketplace",
     icon: "Store",
   },
+  {
+    label: "Social",
+    href: "/dashboard/social",
+    icon: "Share2",
+  },
 ] as const;
 
 /** Subscription tier definitions. */
