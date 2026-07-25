@@ -164,6 +164,8 @@ export const STYLE_PRESETS = [
   { id: "vhs-anime", label: "VHS Anime", description: "Grainy VHS-tape look with scanlines and warm color bleed" },
   { id: "chibi", label: "Chibi", description: "Cute, proportionally exaggerated characters" },
   { id: "pixel-anime", label: "Pixel Anime", description: "Pixel-art fusion with anime-style characters and sprites" },
+  { id: "photo-to-anime", label: "Photo-to-Anime", description: "Transform photos into anime-style illustrations with AI" },
+  { id: "caricature", label: "Anime Caricature", description: "Exaggerated anime caricature style — viral trend" },
 ] as const;
 
 /** Trending styles from market research (used for showcase). */
@@ -195,6 +197,13 @@ export const TRENDING_STYLES = [
     description: "Blending retro pixel art with anime-style characters — a crossover trend gaining massive traction in indie games and social art.",
     gradient: "from-amber-500 to-orange-600",
     badge: "NEW",
+  },
+  {
+    id: "photo-to-anime",
+    label: "Photo-to-Anime",
+    description: "AI-powered photo-to-anime transformation is going viral across social media. Turn any photo into a stunning anime-style illustration in seconds.",
+    gradient: "from-sky-500 to-cyan-600",
+    badge: "HOT",
   },
 ] as const;
 

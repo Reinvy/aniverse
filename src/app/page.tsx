@@ -9,7 +9,7 @@ import {
   Store,
   Palette,
   Zap,
-  Shield,
+  Camera,
   Users,
   ArrowRight,
   Star,
@@ -75,11 +75,11 @@ const features = [
     gradient: "from-emerald-500 to-teal-600",
   },
   {
-    icon: Shield,
-    title: "Safe & Private",
+    icon: Camera,
+    title: "Photo-to-Anime™",
     description:
-      "Your prompts and creations are private by default. Enterprise-grade encryption and optional anonymous mode.",
-    gradient: "from-rose-500 to-red-600",
+      "Upload any photo and watch it transform into an anime-style masterpiece. Our viral AI caricature feature creates shareable anime portraits in seconds.",
+    gradient: "from-sky-500 to-cyan-600",
   },
 ];
 
