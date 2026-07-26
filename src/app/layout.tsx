@@ -27,13 +27,23 @@ export const metadata: Metadata = {
     "AI anime",
     "art platform",
     "creative AI",
+    "AI anime art generator",
+    "anime style transfer",
+    "anime artwork",
+    "AI illustration",
+    "anime character generator",
+    "AI manga",
+    "anime diffusion",
+    "Ghibli-style AI",
+    "anime portrait generator",
   ],
   openGraph: {
     title: "AniVerse — Where AI Meets Anime Art",
     description:
-      "Generate, share, and discover stunning AI-powered anime artwork.",
+      "Generate, share, and discover stunning AI-powered anime artwork. Free plan available.",
     type: "website",
     locale: "en_US",
+    siteName: "AniVerse",
   },
   twitter: {
     card: "summary_large_image",
@@ -44,6 +54,9 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+  },
+  alternates: {
+    canonical: APP_URL,
   },
 };
 
