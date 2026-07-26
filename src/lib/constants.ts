@@ -164,8 +164,8 @@ export const STYLE_PRESETS = [
   { id: "vhs-anime", label: "VHS Anime", description: "Grainy VHS-tape look with scanlines and warm color bleed" },
   { id: "chibi", label: "Chibi", description: "Cute, proportionally exaggerated characters" },
   { id: "pixel-anime", label: "Pixel Anime", description: "Pixel-art fusion with anime-style characters and sprites" },
-  { id: "photo-to-anime", label: "Photo-to-Anime", description: "Transform photos into anime-style illustrations with AI" },
-  { id: "caricature", label: "Anime Caricature", description: "Exaggerated anime caricature style — viral trend" },
+  { id: "vaporwave", label: "Vaporwave", description: "Retro-futuristic neon-drenched aesthetic with purple and pink hues, glitch effects, and '80s/'90s nostalgia" },
+  { id: "dusty-pastel", label: "Dusty Pastel", description: "Muted, warm fantasy tones inspired by Frieren's soft color palette — perfect for romance and fantasy genres" },
 ] as const;
 
 /** Trending styles from market research (used for showcase). */
@@ -185,6 +185,20 @@ export const TRENDING_STYLES = [
     badge: "TRENDING",
   },
   {
+    id: "vaporwave",
+    label: "Vaporwave Neon",
+    description: "Vaporwave's retro-futuristic aesthetic is surging — neon sunsets, glitch typography, and purple-pink gradients defining 2026's anime art revolution.",
+    gradient: "from-purple-500 to-fuchsia-600",
+    badge: "HOT",
+  },
+  {
+    id: "dusty-pastel",
+    label: "Dusty Pastel",
+    description: "Muted, warm fantasy tones inspired by Frieren's palette — soft lavenders, dusty roses, and sage greens dominating romance and fantasy anime art.",
+    gradient: "from-rose-400 to-orange-400",
+    badge: "TRENDING",
+  },
+  {
     id: "cyberpunk",
     label: "Cyberpunk Neon",
     description: "Neon-drenched futurescapes with magenta, cyan, and electric blue on dark backgrounds. The perennial favorite for sci-fi anime art.",
@@ -197,13 +211,6 @@ export const TRENDING_STYLES = [
     description: "Blending retro pixel art with anime-style characters — a crossover trend gaining massive traction in indie games and social art.",
     gradient: "from-amber-500 to-orange-600",
     badge: "NEW",
-  },
-  {
-    id: "photo-to-anime",
-    label: "Photo-to-Anime",
-    description: "AI-powered photo-to-anime transformation is going viral across social media. Turn any photo into a stunning anime-style illustration in seconds.",
-    gradient: "from-sky-500 to-cyan-600",
-    badge: "HOT",
   },
 ] as const;
 
