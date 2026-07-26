@@ -45,7 +45,7 @@ export const pricingTiers = {
   },
   studio: {
     name: "Studio",
-    price: 24.99,
+    price: 19.99,
     description: "For studios and power users.",
     features: [
       "Unlimited AI generations",
@@ -68,20 +68,20 @@ export type PricingTierId = keyof typeof pricingTiers;
 export const annualPrices: Record<PricingTierId, number> = {
   free: 0,
   pro: 7.99, // $95.88/yr — saves $24
-  studio: 19.99, // $239.88/yr — saves $60
+  studio: 15.99, // $191.88/yr — saves $48
 } as const;
 
 /** Annual savings display strings. */
 export const annualSavings: Record<Exclude<PricingTierId, "free">, string> = {
   pro: "Save $24/year",
-  studio: "Save $60/year",
+  studio: "Save $48/year",
 } as const;
 
 /** Per-generation cost breakdown for transparency. */
 export const perGenerationCost = {
   free: { generations: 10, costPerGen: "Free" },
   pro: { generations: 100, costPerGen: "$0.10" },
-  studio: { generations: "Unlimited", costPerGen: "Best value" },
+  studio: { generations: "Unlimited", costPerGen: "~$0.00" },
 } as const;
 
 /** Coin pack pricing (microtransaction model). */
