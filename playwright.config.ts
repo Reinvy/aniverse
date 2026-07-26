@@ -10,7 +10,7 @@ export default defineConfig({
     ['json', { outputFile: '.cron/reports/e2e-report.json' }],
   ],
   use: {
-    baseURL: process.env.URL || 'http://localhost:3000',
+    baseURL: process.env.URL || 'https://aniverse-one-khaki.vercel.app',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },
