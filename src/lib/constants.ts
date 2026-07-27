@@ -169,6 +169,7 @@ export const STYLE_PRESETS = [
   { id: "caricature", label: "Caricature", description: "Exaggerated, playful caricature style with bold features and vibrant colors — inspired by the viral AI caricature trend" },
   { id: "sepia-nostalgia", label: "Sepia Nostalgia", description: "Warm sepia-toned vintage anime aesthetic with film grain texture — retro photo look applied to anime characters" },
   { id: "pastel-goth", label: "Pastel Goth", description: "Dark romance meets soft pastels — muted charcoals paired with blush pinks, lavender, and mint tones" },
+  { id: "monochrome-accent", label: "Monochrome Accent", description: "Dramatic monochrome with a single bold accent color — popular for striking character profile art" },
 ] as const;
 
 /** Trending styles from market research (used for showcase). */
@@ -214,6 +215,13 @@ export const TRENDING_STYLES = [
     description: "Warm sepia-toned vintage anime aesthetic with film grain texture — TikTok's #animeedit community is driving this nostalgic trend to new heights.",
     gradient: "from-yellow-600 to-amber-700",
     badge: "NEW",
+  },
+  {
+    id: "monochrome-accent",
+    label: "Monochrome Accent",
+    description: "Dramatic monochrome compositions with a single electric accent color — red, cyan, or gold on grayscale — trending for character profile art across social platforms.",
+    gradient: "from-slate-600 to-zinc-800",
+    badge: "TRENDING",
   },
 ] as const;
 

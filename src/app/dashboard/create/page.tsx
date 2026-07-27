@@ -53,6 +53,8 @@ const STYLE_PROMPTS: Record<string, string> = {
     "warm sepia-toned vintage anime, film grain, ",
   "pastel-goth":
     "pastel goth, dark romance with soft pastels, muted charcoals, blush pink, ",
+  "monochrome-accent":
+    "monochrome grayscale with a single vibrant accent color, striking contrast, ",
 };
 
 /** Build the Pollinations image URL */

@@ -68,9 +68,17 @@ export default function GalleryPage() {
   const filtered = artworks.filter((art) => {
     const matchesCategory =
       activeCategory === "all" || art.category === activeCategory;
+    const query = searchQuery.toLowerCase().trim();
     const matchesSearch =
-      art.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      art.artist.toLowerCase().includes(searchQuery.toLowerCase());
+      !query ||
+      art.title.toLowerCase().includes(query) ||
+      art.artist.toLowerCase().includes(query) ||
+      ("description" in art &&
+        typeof (art as any).description === "string" &&
+        (art as any).description.toLowerCase().includes(query)) ||
+      ("style" in art &&
+        typeof (art as any).style === "string" &&
+        (art as any).style.toLowerCase().includes(query));
     return matchesCategory && matchesSearch;
   });
 
