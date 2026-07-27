@@ -35,41 +35,41 @@ export default function CreatePage() {
   };
 
   return (
-    <div className="p-6 lg:p-8">
+    <div className="p-4 sm:p-6 lg:p-8">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
       >
-        <h1 className="text-2xl font-bold text-white sm:text-3xl">
+        <h1 className="text-xl font-bold text-white sm:text-2xl lg:text-3xl">
           Create Artwork
         </h1>
-        <p className="mt-1 text-sm text-zinc-400">
+        <p className="mt-0.5 text-sm text-zinc-400">
           Describe your vision and let AI bring it to life.
         </p>
       </motion.div>
 
-      <div className="mt-8 grid gap-8 lg:grid-cols-5">
+      <div className="mt-6 sm:mt-8 grid gap-6 sm:gap-8 lg:grid-cols-5">
         {/* Left: Controls */}
         <motion.div
-          className="lg:col-span-2 space-y-6"
+          className="lg:col-span-2 space-y-4 sm:space-y-6"
           initial={{ opacity: 0, x: -16 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.1, duration: 0.4 }}
         >
           {/* Prompt input */}
           <Card className="border-zinc-800/60">
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
+            <CardHeader className="p-4 sm:p-6">
+              <CardTitle className="text-base sm:text-lg flex items-center gap-2">
                 <Wand2 className="h-4 w-4 text-violet-400" />
                 Prompt
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="px-4 pb-4 sm:px-6 sm:pb-6">
               <textarea
                 placeholder="Describe the anime artwork you want to create..."
-                className="min-h-[120px] w-full rounded-lg border border-zinc-700 bg-zinc-800/50 p-3 text-sm text-zinc-100 placeholder:text-zinc-500 resize-none focus:outline-none focus:ring-2 focus:ring-violet-500"
+                className="min-h-[100px] sm:min-h-[120px] w-full rounded-lg border border-zinc-700 bg-zinc-800/50 p-3 text-sm text-zinc-100 placeholder:text-zinc-500 resize-none focus:outline-none focus:ring-2 focus:ring-violet-500"
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
               />
@@ -86,13 +86,13 @@ export default function CreatePage() {
 
           {/* Style presets */}
           <Card className="border-zinc-800/60">
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
+            <CardHeader className="p-4 sm:p-6">
+              <CardTitle className="text-base sm:text-lg flex items-center gap-2">
                 <Sliders className="h-4 w-4 text-fuchsia-400" />
                 Style
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="px-4 pb-4 sm:px-6 sm:pb-6">
               <div className="grid grid-cols-2 gap-2">
                 {STYLE_PRESETS.map((style) => (
                   <button
@@ -103,16 +103,16 @@ export default function CreatePage() {
                       )
                     }
                     className={cn(
-                      "rounded-lg border p-3 text-left transition-all duration-200",
+                      "rounded-lg border p-3 sm:p-3 text-left transition-all duration-200",
                       selectedStyle === style.id
                         ? "border-violet-600 bg-violet-600/10 ring-1 ring-violet-500"
                         : "border-zinc-800 bg-zinc-800/30 hover:border-zinc-700",
                     )}
                   >
-                    <p className="text-sm font-medium text-white">
+                    <p className="text-xs sm:text-sm font-medium text-white">
                       {style.label}
                     </p>
-                    <p className="mt-0.5 text-xs text-zinc-500">
+                    <p className="mt-0.5 text-[11px] sm:text-xs text-zinc-500">
                       {style.description}
                     </p>
                   </button>
@@ -150,8 +150,8 @@ export default function CreatePage() {
           transition={{ delay: 0.2, duration: 0.4 }}
         >
           <Card className="border-zinc-800/60 h-full">
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="text-lg flex items-center gap-2">
+            <CardHeader className="flex flex-row items-center justify-between p-4 sm:p-6">
+              <CardTitle className="text-base sm:text-lg flex items-center gap-2">
                 <Image className="h-4 w-4 text-blue-400" />
                 Preview
               </CardTitle>
@@ -169,8 +169,8 @@ export default function CreatePage() {
                 </div>
               )}
             </CardHeader>
-            <CardContent>
-              <div className="flex aspect-square items-center justify-center rounded-xl bg-gradient-to-br from-zinc-800/80 to-zinc-900/80">
+            <CardContent className="px-4 pb-4 sm:px-6 sm:pb-6">
+              <div className="flex aspect-square sm:aspect-[4/3] items-center justify-center rounded-xl bg-gradient-to-br from-zinc-800/80 to-zinc-900/80">
                 {isGenerating ? (
                   <div className="text-center">
                     <Loader2 className="mx-auto h-10 w-10 animate-spin text-violet-400" />
@@ -208,7 +208,7 @@ export default function CreatePage() {
                         <button
                           key={ex}
                           onClick={() => setPrompt(ex)}
-                          className="rounded-full border border-zinc-800 bg-zinc-800/30 px-3 py-1 text-xs text-zinc-500 hover:border-zinc-700 hover:text-zinc-300 transition-colors"
+                          className="rounded-full border border-zinc-800 bg-zinc-800/30 px-3 py-1.5 text-xs text-zinc-500 hover:border-zinc-700 hover:text-zinc-300 transition-colors"
                         >
                           {ex}
                         </button>

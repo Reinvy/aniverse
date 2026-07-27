@@ -75,20 +75,20 @@ export default function GalleryPage() {
   });
 
   return (
-    <div className="p-6 lg:p-8">
+    <div className="p-4 sm:p-6 lg:p-8">
       {/* ─── Daily Art Section ─── */}
       {showDailyArt && (
         <motion.section
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-10"
+          className="mb-8 sm:mb-10"
         >
-          <div className="mb-6 flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-amber-400 to-orange-600 shadow-lg">
-              <Sun className="h-5 w-5 text-white" />
+          <div className="mb-4 sm:mb-6 flex items-start sm:items-center gap-3">
+            <div className="flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-amber-400 to-orange-600 shadow-lg">
+              <Sun className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
             </div>
-            <div>
-              <h2 className="text-xl font-bold text-white">
+            <div className="min-w-0 flex-1">
+              <h2 className="text-lg sm:text-xl font-bold text-white">
                 Today&apos;s Daily Art
               </h2>
               <p className="text-xs text-zinc-500">
@@ -97,13 +97,13 @@ export default function GalleryPage() {
             </div>
             <button
               onClick={() => setShowDailyArt(false)}
-              className="ml-auto text-xs text-zinc-600 hover:text-zinc-400 transition-colors"
+              className="shrink-0 text-xs text-zinc-600 hover:text-zinc-400 transition-colors"
             >
               Dismiss
             </button>
           </div>
 
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid gap-4 sm:gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {dailyArt.map((art, i) => (
               <motion.div
                 key={art.id}
@@ -186,12 +186,12 @@ export default function GalleryPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
       >
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-white sm:text-3xl">
+            <h1 className="text-xl font-bold text-white sm:text-2xl lg:text-3xl">
               Gallery
             </h1>
-            <p className="mt-1 text-sm text-zinc-400">
+            <p className="mt-0.5 text-sm text-zinc-400">
               Browse your collection and discover community creations.
             </p>
           </div>
@@ -216,16 +216,16 @@ export default function GalleryPage() {
 
       {/* Filters */}
       <motion.div
-        className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center"
+        className="mt-4 sm:mt-6 flex flex-col gap-3 sm:flex-row sm:items-center"
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1, duration: 0.4 }}
       >
-        <div className="relative flex-1 max-w-md">
+        <div className="relative flex-1 max-w-full sm:max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
           <Input
             placeholder="Search artworks or artists..."
-            className="pl-10"
+            className="pl-10 text-sm"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -236,7 +236,7 @@ export default function GalleryPage() {
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
               className={cn(
-                "rounded-full px-3.5 py-1.5 text-xs font-medium transition-all duration-200",
+                "rounded-full px-3 py-1.5 text-xs font-medium transition-all duration-200 tap-highlight-transparent",
                 activeCategory === cat.id
                   ? "bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-md"
                   : "bg-zinc-800/60 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200",
@@ -251,10 +251,10 @@ export default function GalleryPage() {
       {/* Artwork Grid */}
       <motion.div
         className={cn(
-          "mt-8",
+          "mt-6 sm:mt-8",
           viewMode === "grid"
-            ? "grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-            : "space-y-4",
+            ? "grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+            : "space-y-3 sm:space-y-4",
         )}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

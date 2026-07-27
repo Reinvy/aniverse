@@ -64,23 +64,23 @@ export default function MarketplacePage() {
   });
 
   return (
-    <div className="p-6 lg:p-8">
+    <div className="p-4 sm:p-6 lg:p-8">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
       >
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-white sm:text-3xl">
+            <h1 className="text-xl font-bold text-white sm:text-2xl lg:text-3xl">
               Marketplace
             </h1>
-            <p className="mt-1 text-sm text-zinc-400">
+            <p className="mt-0.5 text-sm text-zinc-400">
               Buy, sell, and license AI-generated anime art.
             </p>
           </div>
-          <Button className="gap-2">
+          <Button className="w-full sm:w-auto gap-2">
             <Store className="h-4 w-4" />
             List Your Art
           </Button>
@@ -89,7 +89,7 @@ export default function MarketplacePage() {
 
       {/* Stats bar */}
       <motion.div
-        className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4"
+        className="mt-6 grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-4"
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1, duration: 0.4 }}
@@ -104,13 +104,13 @@ export default function MarketplacePage() {
           return (
             <div
               key={stat.label}
-              className="rounded-xl border border-zinc-800/60 bg-zinc-900/50 p-4"
+              className="rounded-xl border border-zinc-800/60 bg-zinc-900/50 p-3 sm:p-4"
             >
               <div className="flex items-center gap-2">
-                <StatIcon className="h-4 w-4 text-zinc-500" />
-                <span className="text-xs text-zinc-500">{stat.label}</span>
+                <StatIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-zinc-500" />
+                <span className="text-[11px] sm:text-xs text-zinc-500">{stat.label}</span>
               </div>
-              <p className="mt-2 text-xl font-bold text-white">{stat.value}</p>
+              <p className="mt-1.5 sm:mt-2 text-lg sm:text-xl font-bold text-white">{stat.value}</p>
             </div>
           );
         })}
@@ -118,16 +118,16 @@ export default function MarketplacePage() {
 
       {/* Filters */}
       <motion.div
-        className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center"
+        className="mt-4 sm:mt-6 flex flex-col gap-3 sm:flex-row sm:items-center"
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.15, duration: 0.4 }}
       >
-        <div className="relative flex-1 max-w-md">
+        <div className="relative flex-1 max-w-full sm:max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
           <Input
             placeholder="Search marketplace..."
-            className="pl-10"
+            className="pl-10 text-sm"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -137,7 +137,7 @@ export default function MarketplacePage() {
             <button
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
-              className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition-all duration-200 ${
+              className={`rounded-full px-3 py-1.5 text-xs font-medium transition-all duration-200 tap-highlight-transparent ${
                 activeCategory === cat.id
                   ? "bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-md"
                   : "bg-zinc-800/60 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200"
@@ -151,7 +151,7 @@ export default function MarketplacePage() {
 
       {/* Listings grid */}
       <motion.div
-        className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+        className="mt-6 sm:mt-8 grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2, duration: 0.4 }}
