@@ -46,7 +46,7 @@ export const pricingTiers = {
   studio: {
     name: "Studio",
     price: 19.99,
-    description: "For studios and power users.",
+    description: "For studios and power users — now more affordable.",
     features: [
       "Unlimited AI generations",
       "4K resolution (2048×2048)",
