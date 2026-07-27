@@ -59,12 +59,12 @@ export default function ChallengesPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
       >
-        <div className="relative overflow-hidden rounded-2xl border border-violet-700/30 bg-gradient-to-br from-violet-950/40 via-zinc-900 to-fuchsia-950/30">
+        <div className="relative overflow-hidden rounded-2xl border border-violet-700/30 bg-gradient-to-br from-violet-950/40 via-zinc-900 to-fuchsia-950/30 corner-accents">
           {/* Decorative gradient orbs */}
           <div className="pointer-events-none absolute -right-20 -top-20 h-60 w-60 rounded-full bg-violet-600/10 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-20 -left-20 h-60 w-60 rounded-full bg-fuchsia-600/10 blur-3xl" />
 
-          <div className="relative p-5 sm:p-6 lg:p-8">
+          <div className="relative p-5 sm:p-6 lg:p-8 angled-bar">
             <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
               <div className="flex-1">
                 <div className="flex items-center gap-3">
@@ -73,6 +73,7 @@ export default function ChallengesPage() {
                   </div>
                   <div className="min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
+                      <span className="sys-label-gold text-[10px] sm:text-xs">DAILY</span>
                       <Badge className="bg-gradient-to-r from-amber-500 to-orange-600 text-[10px] sm:text-xs">
                         DAILY CHALLENGE
                       </Badge>
@@ -176,12 +177,12 @@ export default function ChallengesPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.4 }}
       >
-        <div className="relative overflow-hidden rounded-2xl border border-amber-700/30 bg-gradient-to-br from-amber-950/30 via-zinc-900 to-orange-950/20">
+        <div className="relative overflow-hidden rounded-2xl border border-amber-700/30 bg-gradient-to-br from-amber-950/30 via-zinc-900 to-orange-950/20 corner-accents">
           {/* Decorative gradient orbs */}
           <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-amber-600/10 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-16 -left-16 h-48 w-48 rounded-full bg-orange-600/10 blur-3xl" />
 
-          <div className="relative p-6 sm:p-8">
+          <div className="relative p-6 sm:p-8 angled-bar">
             <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
               <div className="flex-1">
                 <div className="flex items-center gap-3">
@@ -190,6 +191,7 @@ export default function ChallengesPage() {
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
+                      <span className="sys-label text-xs">WEEKLY</span>
                       <Badge className="bg-gradient-to-r from-amber-500 to-orange-600 text-xs">
                         WEEKLY CHALLENGE
                       </Badge>

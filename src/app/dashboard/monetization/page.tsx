@@ -101,6 +101,7 @@ export default function MonetizationPage() {
           return (
             <motion.div
               key={stat.title}
+              className="glow-gold"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.08, duration: 0.4 }}
@@ -136,14 +137,17 @@ export default function MonetizationPage() {
 
       {/* Pricing Tiers Overview */}
       <motion.div
-        className="mt-6 sm:mt-8"
+        className="mt-6 sm:mt-8 corner-accents"
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.4 }}
       >
-        <Card className="border-zinc-800/60">
+        <Card className="border-zinc-800/60 angled-bar">
           <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 p-4 sm:p-6">
-            <CardTitle className="text-base sm:text-lg">Pricing Tiers</CardTitle>
+            <div>
+              <span className="sys-label mb-1 block text-[10px] tracking-[0.2em] text-zinc-500">PRICING // TIERS</span>
+              <CardTitle className="text-base sm:text-lg">Pricing Tiers</CardTitle>
+            </div>
             <Badge variant="secondary" className="text-xs shrink-0">Target Audience: ~1,288 users</Badge>
           </CardHeader>
           <CardContent className="px-4 pb-4 sm:px-6 sm:pb-6">
@@ -200,8 +204,9 @@ export default function MonetizationPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.4 }}
         >
-          <Card className="border-zinc-800/60">
+          <Card className="border-zinc-800/60 angled-bar">
             <CardHeader className="p-4 sm:p-6">
+              <span className="sys-label mb-1 block text-[10px] tracking-[0.2em] text-zinc-500">CONVERSION // GOALS</span>
               <CardTitle className="text-base sm:text-lg">Conversion Goals</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 sm:space-y-5 px-4 pb-4 sm:px-6 sm:pb-6">
@@ -239,9 +244,12 @@ export default function MonetizationPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35, duration: 0.4 }}
         >
-          <Card className="border-zinc-800/60">
+          <Card className="border-zinc-800/60 corner-accents">
             <CardHeader className="flex flex-row items-center justify-between p-4 sm:p-6">
-              <CardTitle className="text-base sm:text-lg">Coin Packs</CardTitle>
+              <div>
+                <span className="sys-label mb-1 block text-[10px] tracking-[0.2em] text-zinc-500">COIN // PACKS</span>
+                <CardTitle className="text-base sm:text-lg">Coin Packs</CardTitle>
+              </div>
               <Badge variant="secondary" className="text-xs">Microtransactions</Badge>
             </CardHeader>
             <CardContent className="px-4 pb-4 sm:px-6 sm:pb-6">
@@ -290,7 +298,7 @@ export default function MonetizationPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.4 }}
         >
-          <Card className="border-zinc-800/60">
+          <Card className="border-zinc-800/60 corner-accents">
             <CardHeader className="p-4 sm:p-6">
               <CardTitle className="text-base sm:text-lg">Referral Program</CardTitle>
             </CardHeader>

@@ -198,6 +198,7 @@ export default function SocialDashboardPage() {
           return (
             <motion.div
               key={stat.label}
+              className="glow-gold"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.08, duration: 0.4 }}
@@ -221,6 +222,7 @@ export default function SocialDashboardPage() {
       </motion.div>
 
       {/* Platform Cards */}
+      <div className="sys-label text-xs tracking-widest text-zinc-500 mb-3 uppercase">PLATFORMS // CHANNELS</div>
       <motion.div
         className="mt-6 sm:mt-8 grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
         initial={{ opacity: 0, y: 16 }}
@@ -232,6 +234,7 @@ export default function SocialDashboardPage() {
           return (
             <motion.div
               key={platform.name}
+              className="corner-accents energy-sweep"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 + i * 0.08, duration: 0.4 }}
@@ -278,13 +281,14 @@ export default function SocialDashboardPage() {
       </motion.div>
 
       {/* Schedule Timeline */}
+      <div className="sys-label text-xs tracking-widest text-zinc-500 mb-3 uppercase">SCHEDULE // TODAY</div>
       <motion.div
         className="mt-6 sm:mt-8"
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3, duration: 0.4 }}
       >
-        <Card className="border-zinc-800/60">
+        <Card className="corner-accents border-zinc-800/60">
           <CardHeader className="flex flex-row items-center justify-between p-4 sm:p-6">
             <CardTitle className="text-base sm:text-lg">Today&apos;s Posting Schedule</CardTitle>
             <Badge variant="secondary" className="text-xs">
