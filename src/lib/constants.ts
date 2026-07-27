@@ -12,9 +12,9 @@ export const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000
 /** Navigation links for the public site header. */
 export const MAIN_NAV_LINKS = [
   { label: "Features", href: "/#features" },
-  { label: "Gallery", href: "/gallery" },
+  { label: "Gallery", href: "/dashboard/gallery" },
   { label: "Pricing", href: "/#pricing" },
-  { label: "Marketplace", href: "/marketplace" },
+  { label: "Marketplace", href: "/dashboard/marketplace" },
 ] as const;
 
 /** Dashboard sidebar navigation items. */

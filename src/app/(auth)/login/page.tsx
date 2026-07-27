@@ -3,15 +3,55 @@
 import Link from "next/link";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Sparkles, LogIn, Eye, EyeOff, Code2, AtSign } from "lucide-react";
+import { Sparkles, LogIn, Eye, EyeOff, Code2, AtSign, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { APP_NAME } from "@/lib/constants";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 export default function LoginPage() {
+  const { login } = useAuth();
+
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isLoading, setIsLoading] = useState(false);
+
+  function validate(): Record<string, string> {
+    const errs: Record<string, string> = {};
+    if (!email.trim()) {
+      errs.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      errs.email = "Please enter a valid email address";
+    }
+    if (!password) {
+      errs.password = "Password is required";
+    }
+    return errs;
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setErrors({});
+
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    setIsLoading(true);
+
+    const result = await login(email.trim(), password);
+
+    if (!result.ok) {
+      setErrors({ _form: result.error || "Login failed" });
+      setIsLoading(false);
+    }
+    // Success redirect happens inside login() via router.push
+  }
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-zinc-950 px-4">
@@ -43,11 +83,11 @@ export default function LoginPage() {
           <CardContent className="space-y-4">
             {/* Social buttons */}
             <div className="grid grid-cols-2 gap-3">
-              <Button variant="outline" className="gap-2">
+              <Button variant="outline" className="gap-2" type="button" disabled>
                 <Code2 className="h-4 w-4" />
                 Github
               </Button>
-              <Button variant="outline" className="gap-2">
+              <Button variant="outline" className="gap-2" type="button" disabled>
                 <AtSign className="h-4 w-4" />
                 Twitter
               </Button>
@@ -64,7 +104,14 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <div className="space-y-3">
+            <form onSubmit={handleSubmit} className="space-y-3">
+              {/* Form-level error */}
+              {errors._form && (
+                <div className="rounded-lg border border-red-800/40 bg-red-950/40 px-3 py-2 text-sm text-red-400">
+                  {errors._form}
+                </div>
+              )}
+
               <div>
                 <label
                   htmlFor="email"
@@ -77,7 +124,13 @@ export default function LoginPage() {
                   type="email"
                   placeholder="you@example.com"
                   autoComplete="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={isLoading}
                 />
+                {errors.email && (
+                  <p className="mt-1 text-xs text-red-400">{errors.email}</p>
+                )}
               </div>
               <div>
                 <label
@@ -91,6 +144,9 @@ export default function LoginPage() {
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
                   autoComplete="current-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  disabled={isLoading}
                   endIcon={
                     <button
                       type="button"
@@ -106,6 +162,9 @@ export default function LoginPage() {
                     </button>
                   }
                 />
+                {errors.password && (
+                  <p className="mt-1 text-xs text-red-400">{errors.password}</p>
+                )}
               </div>
               <div className="flex items-center justify-between">
                 <label className="flex items-center gap-2 text-sm text-zinc-400">
@@ -115,19 +174,17 @@ export default function LoginPage() {
                   />
                   Remember me
                 </label>
-                <Link
-                  href="/forgot-password"
-                  className="text-sm text-violet-400 hover:text-violet-300 transition-colors"
-                >
-                  Forgot password?
-                </Link>
               </div>
-            </div>
 
-            <Button className="w-full gap-2" size="lg">
-              <LogIn className="h-4 w-4" />
-              Sign In
-            </Button>
+              <Button className="w-full gap-2" size="lg" type="submit" disabled={isLoading}>
+                {isLoading ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <LogIn className="h-4 w-4" />
+                )}
+                {isLoading ? "Signing in..." : "Sign In"}
+              </Button>
+            </form>
 
             <p className="text-center text-sm text-zinc-500">
               Don&apos;t have an account?{" "}

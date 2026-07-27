@@ -3,15 +3,75 @@
 import Link from "next/link";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Sparkles, UserPlus, Eye, EyeOff, Code2, AtSign } from "lucide-react";
+import { Sparkles, UserPlus, Eye, EyeOff, Code2, AtSign, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { APP_NAME } from "@/lib/constants";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 export default function RegisterPage() {
+  const { register } = useAuth();
+
   const [showPassword, setShowPassword] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [agreeToTerms, setAgreeToTerms] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isLoading, setIsLoading] = useState(false);
+
+  function validate(): Record<string, string> {
+    const errs: Record<string, string> = {};
+    if (!firstName.trim()) {
+      errs.firstName = "First name is required";
+    }
+    if (!lastName.trim()) {
+      errs.lastName = "Last name is required";
+    }
+    if (!email.trim()) {
+      errs.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      errs.email = "Please enter a valid email address";
+    }
+    if (!password) {
+      errs.password = "Password is required";
+    } else if (password.length < 6) {
+      errs.password = "Password must be at least 6 characters";
+    }
+    if (!agreeToTerms) {
+      errs.agreeToTerms = "You must agree to the Terms of Service and Privacy Policy";
+    }
+    return errs;
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setErrors({});
+
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    setIsLoading(true);
+
+    const result = await register({
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
+      email: email.trim(),
+      password,
+    });
+
+    if (!result.ok) {
+      setErrors({ _form: result.error || "Registration failed" });
+      setIsLoading(false);
+    }
+    // Success redirect happens inside register() via router.push
+  }
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-zinc-950 px-4">
@@ -46,11 +106,11 @@ export default function RegisterPage() {
           <CardContent className="space-y-4">
             {/* Social buttons */}
             <div className="grid grid-cols-2 gap-3">
-              <Button variant="outline" className="gap-2">
+              <Button variant="outline" className="gap-2" type="button" disabled>
                 <Code2 className="h-4 w-4" />
                 Github
               </Button>
-              <Button variant="outline" className="gap-2">
+              <Button variant="outline" className="gap-2" type="button" disabled>
                 <AtSign className="h-4 w-4" />
                 Twitter
               </Button>
@@ -67,7 +127,14 @@ export default function RegisterPage() {
               </div>
             </div>
 
-            <div className="space-y-3">
+            <form onSubmit={handleSubmit} className="space-y-3">
+              {/* Form-level error */}
+              {errors._form && (
+                <div className="rounded-lg border border-red-800/40 bg-red-950/40 px-3 py-2 text-sm text-red-400">
+                  {errors._form}
+                </div>
+              )}
+
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label
@@ -76,7 +143,16 @@ export default function RegisterPage() {
                   >
                     First name
                   </label>
-                  <Input id="firstName" placeholder="John" />
+                  <Input
+                    id="firstName"
+                    placeholder="John"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    disabled={isLoading}
+                  />
+                  {errors.firstName && (
+                    <p className="mt-1 text-xs text-red-400">{errors.firstName}</p>
+                  )}
                 </div>
                 <div>
                   <label
@@ -85,7 +161,16 @@ export default function RegisterPage() {
                   >
                     Last name
                   </label>
-                  <Input id="lastName" placeholder="Doe" />
+                  <Input
+                    id="lastName"
+                    placeholder="Doe"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    disabled={isLoading}
+                  />
+                  {errors.lastName && (
+                    <p className="mt-1 text-xs text-red-400">{errors.lastName}</p>
+                  )}
                 </div>
               </div>
               <div>
@@ -100,7 +185,13 @@ export default function RegisterPage() {
                   type="email"
                   placeholder="you@example.com"
                   autoComplete="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={isLoading}
                 />
+                {errors.email && (
+                  <p className="mt-1 text-xs text-red-400">{errors.email}</p>
+                )}
               </div>
               <div>
                 <label
@@ -114,6 +205,9 @@ export default function RegisterPage() {
                   type={showPassword ? "text" : "password"}
                   placeholder="Create a strong password"
                   autoComplete="new-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  disabled={isLoading}
                   endIcon={
                     <button
                       type="button"
@@ -129,30 +223,42 @@ export default function RegisterPage() {
                     </button>
                   }
                 />
+                {errors.password && (
+                  <p className="mt-1 text-xs text-red-400">{errors.password}</p>
+                )}
               </div>
-            </div>
 
-            <div className="flex items-start gap-2 text-sm text-zinc-500">
-              <input
-                type="checkbox"
-                className="mt-0.5 rounded border-zinc-700 bg-zinc-800 text-violet-600 focus:ring-violet-500"
-              />
-              <span>
-                I agree to the{" "}
-                <Link href="/terms" className="text-violet-400 hover:text-violet-300">
-                  Terms of Service
-                </Link>{" "}
-                and{" "}
-                <Link href="/privacy" className="text-violet-400 hover:text-violet-300">
-                  Privacy Policy
-                </Link>
-              </span>
-            </div>
+              <div className="flex items-start gap-2 text-sm">
+                <input
+                  id="agreeToTerms"
+                  type="checkbox"
+                  checked={agreeToTerms}
+                  onChange={(e) => setAgreeToTerms(e.target.checked)}
+                  className="mt-0.5 rounded border-zinc-700 bg-zinc-800 text-violet-600 focus:ring-violet-500"
+                  disabled={isLoading}
+                />
+                <div>
+                  <label htmlFor="agreeToTerms" className="text-zinc-500 cursor-pointer">
+                    I agree to the{" "}
+                    <span className="text-violet-400">Terms of Service</span>{" "}
+                    and{" "}
+                    <span className="text-violet-400">Privacy Policy</span>
+                  </label>
+                  {errors.agreeToTerms && (
+                    <p className="mt-1 text-xs text-red-400">{errors.agreeToTerms}</p>
+                  )}
+                </div>
+              </div>
 
-            <Button className="w-full gap-2" size="lg">
-              <UserPlus className="h-4 w-4" />
-              Create Account
-            </Button>
+              <Button className="w-full gap-2" size="lg" type="submit" disabled={isLoading}>
+                {isLoading ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <UserPlus className="h-4 w-4" />
+                )}
+                {isLoading ? "Creating account..." : "Create Account"}
+              </Button>
+            </form>
 
             <p className="text-center text-sm text-zinc-500">
               Already have an account?{" "}
