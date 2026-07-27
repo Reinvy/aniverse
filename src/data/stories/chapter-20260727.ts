@@ -103,5 +103,5 @@ export const chapter: StoryChapter = {
 
     "Secangkir kopi di Senin pagi, hati yang saling terhubung, dan janji bahwa cinta sering kali datang dari tempat yang paling tidak kita duga.\n",
   ].join("\n"),
-  wordCount: 823,
+  wordCount: 835,
 };
