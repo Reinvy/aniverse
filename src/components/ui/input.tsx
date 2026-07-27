@@ -3,9 +3,7 @@ import { cn } from "@/lib/utils";
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
-  /** Optional icon element rendered at the start of the input. */
   startIcon?: React.ReactNode;
-  /** Optional icon element rendered at the end of the input. */
   endIcon?: React.ReactNode;
 }
 
@@ -14,17 +12,19 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="relative w-full">
         {startIcon && (
-          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-500">
+          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-white/40">
             {startIcon}
           </div>
         )}
         <input
           type={type}
           className={cn(
-            "flex h-10 w-full rounded-lg border border-zinc-700 bg-zinc-800/50 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500",
-            "file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-zinc-100",
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-0",
+            "flex h-10 w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/85 placeholder:text-white/30",
+            "backdrop-blur-xl",
+            "file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-white/70",
+            "focus-visible:outline-none focus-visible:border-[rgba(243,198,105,0.4)] focus-visible:shadow-[0_0_15px_rgba(243,198,105,0.08)]",
             "disabled:cursor-not-allowed disabled:opacity-50",
+            "transition-all duration-200",
             startIcon && "pl-10",
             endIcon && "pr-10",
             className,
@@ -33,7 +33,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {...props}
         />
         {endIcon && (
-          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-zinc-500">
+          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-white/40">
             {endIcon}
           </div>
         )}

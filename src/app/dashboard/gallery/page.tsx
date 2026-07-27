@@ -81,7 +81,7 @@ export default function GalleryPage() {
         <motion.section
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-8 sm:mb-10"
+          className="mb-8 sm:mb-10 corner-accents"
         >
           <div className="mb-4 sm:mb-6 flex items-start sm:items-center gap-3">
             <div className="flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-amber-400 to-orange-600 shadow-lg">
@@ -91,7 +91,7 @@ export default function GalleryPage() {
               <h2 className="text-lg sm:text-xl font-bold text-white">
                 Today&apos;s Daily Art
               </h2>
-              <p className="text-xs text-zinc-500">
+              <p className="sys-label text-xs text-zinc-500">
                 Curated artwork descriptions — July 27, 2026
               </p>
             </div>
@@ -103,6 +103,8 @@ export default function GalleryPage() {
             </button>
           </div>
 
+          <div className="angled-bar mb-6 h-0.5 w-full rounded-full bg-gradient-to-r from-amber-500/40 via-amber-400/20 to-transparent" />
+
           <div className="grid gap-4 sm:gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {dailyArt.map((art, i) => (
               <motion.div
@@ -110,6 +112,7 @@ export default function GalleryPage() {
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.05, duration: 0.3 }}
+                className="energy-sweep"
               >
                 <Card className="group h-full border-zinc-800/60 bg-gradient-to-br from-zinc-900/80 to-zinc-950/80 transition-all duration-200 hover:border-amber-700/50 hover:shadow-lg hover:shadow-amber-600/5">
                   {/* Thumbnail placeholder with style gradient */}
@@ -277,6 +280,7 @@ export default function GalleryPage() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05, duration: 0.3 }}
+              className="energy-sweep"
             >
               <Card
                 className={cn(

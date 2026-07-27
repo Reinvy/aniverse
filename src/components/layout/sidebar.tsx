@@ -46,19 +46,24 @@ export function Sidebar({
 
   const sidebarContent = (
     <>
-      {/* Logo */}
-      <div className="flex h-16 items-center justify-between border-b border-zinc-800/60 px-6">
-        <Link href="/" className="flex items-center gap-2 group">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-violet-600 to-fuchsia-600 shadow-lg shadow-violet-600/20">
-            <Sparkles className="h-4 w-4 text-white" />
+      {/* Logo / Brand — Game-style header */}
+      <div className="relative flex h-16 items-center justify-between border-b border-white/5 px-5">
+        <Link href="/" className="flex items-center gap-3 group">
+          <div className="relative flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[rgba(243,198,105,0.3)] to-[rgba(243,198,105,0.1)] border border-[rgba(243,198,105,0.3)] shadow-[0_0_15px_rgba(243,198,105,0.1)]">
+            <Sparkles className="h-4 w-4 text-[#f3c669]" />
+            {/* Corner accent dots */}
+            <span className="absolute -top-0.5 -right-0.5 h-1.5 w-1.5 rounded-full bg-[#f3c669] shadow-[0_0_6px_rgba(243,198,105,0.6)]" />
           </div>
-          <span className="text-lg font-bold text-white tracking-tight">
-            {APP_NAME}
-          </span>
+          <div className="flex flex-col">
+            <span className="text-base font-bold tracking-tight text-white">
+              {APP_NAME}
+            </span>
+            <span className="sys-label-gold -mt-0.5">v2.4 // SYS-ACTIVE</span>
+          </div>
         </Link>
         <button
           onClick={onClose}
-          className="flex h-9 w-9 lg:h-8 lg:w-8 items-center justify-center rounded-lg text-zinc-500 hover:bg-zinc-800 hover:text-zinc-200 transition-colors lg:hidden"
+          className="flex h-9 w-9 lg:h-8 lg:w-8 items-center justify-center rounded-lg text-white/40 hover:bg-white/5 hover:text-white/70 transition-colors lg:hidden"
           aria-label="Close sidebar"
         >
           <X className="h-5 w-5 lg:h-4 lg:w-4" />
@@ -66,7 +71,8 @@ export function Sidebar({
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 space-y-1 px-3 py-6 overflow-y-auto">
+      <nav className="flex-1 space-y-1 px-3 py-5 overflow-y-auto">
+        <span className="sys-label block px-3 pb-2">NAVIGATION // MAIN</span>
         {sidebarNav.map((item) => {
           const isActive =
             pathname === item.href ||
@@ -78,21 +84,26 @@ export function Sidebar({
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-3 lg:py-2.5 text-sm font-medium transition-all duration-150",
+                "nav-active-indicator relative flex items-center gap-3 rounded-lg px-3 py-3 lg:py-2.5 text-sm font-medium transition-all duration-200",
                 isActive
-                  ? "bg-gradient-to-r from-violet-600/20 to-fuchsia-600/10 text-white shadow-sm"
-                  : "text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-200",
+                  ? "bg-[rgba(243,198,105,0.08)] text-[#f3c669] border border-[rgba(243,198,105,0.15)] shadow-[0_0_15px_rgba(243,198,105,0.05)]"
+                  : "text-white/40 hover:bg-white/5 hover:text-white/70",
               )}
             >
               <Icon
                 className={cn(
-                  "h-4 w-4 shrink-0",
-                  isActive ? "text-violet-400" : "text-zinc-500",
+                  "h-4 w-4 shrink-0 transition-colors duration-200",
+                  isActive ? "text-[#f3c669]" : "text-white/30",
                 )}
               />
-              {item.label}
+              <span>{item.label}</span>
               {isActive && (
-                <div className="ml-auto h-1.5 w-1.5 shrink-0 rounded-full bg-violet-500" />
+                <>
+                  <span className="ml-auto h-1.5 w-1.5 rounded-full bg-[#f3c669] shadow-[0_0_8px_rgba(243,198,105,0.6)]" />
+                  {/* Corner decoration on active item */}
+                  <span className="absolute top-0 right-0 h-3 w-3 border-t border-r border-[rgba(243,198,105,0.3)] pointer-events-none" />
+                  <span className="absolute bottom-0 left-0 h-3 w-3 border-b border-l border-[rgba(243,198,105,0.3)] pointer-events-none" />
+                </>
               )}
             </Link>
           );
@@ -100,25 +111,26 @@ export function Sidebar({
       </nav>
 
       {/* User area / Logout */}
-      <div className="border-t border-zinc-800/60 p-4">
-        <div className="mb-3 flex items-center gap-3 rounded-lg bg-zinc-800/40 p-2.5">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-600 to-fuchsia-600 text-xs font-bold text-white">
+      <div className="border-t border-white/5 p-4">
+        <span className="sys-label block px-1 pb-2">ACCOUNT // NODE</span>
+        <div className="mb-3 flex items-center gap-3 rounded-lg bg-white/5 border border-white/5 p-2.5">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-gradient-to-br from-[rgba(243,198,105,0.3)] to-[rgba(243,198,105,0.1)] border border-[rgba(243,198,105,0.2)] text-xs font-bold text-[#f3c669]">
             U
           </div>
           <div className="flex-1 min-w-0">
-            <p className="truncate text-sm font-medium text-zinc-200">
+            <p className="truncate text-sm font-medium text-white/80">
               User
             </p>
-            <p className="truncate text-xs text-zinc-500">Free Plan</p>
+            <p className="sys-label">TIER // FREE</p>
           </div>
         </div>
         <Button
           variant="ghost"
           size="sm"
-          className="w-full justify-start gap-2 text-zinc-400"
+          className="w-full justify-start gap-2 text-white/40 hover:text-white/70"
         >
           <LogOut className="h-4 w-4 shrink-0" />
-          Sign Out
+          <span className="text-xs tracking-wider uppercase">Disconnect</span>
         </Button>
       </div>
     </>
@@ -129,7 +141,7 @@ export function Sidebar({
       {/* Mobile overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/60 lg:hidden"
+          className="fixed inset-0 z-40 bg-black/70 lg:hidden"
           onClick={onClose}
           aria-hidden="true"
         />
@@ -138,7 +150,7 @@ export function Sidebar({
       {/* Mobile sidebar (slide-in) */}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-50 flex w-72 max-w-[85vw] flex-col border-r border-zinc-800/60 bg-zinc-950 transition-transform duration-300 ease-in-out lg:hidden",
+          "fixed inset-y-0 left-0 z-50 flex w-72 max-w-[85vw] flex-col border-r border-white/5 bg-[#0B0F19] shadow-2xl shadow-[rgba(0,0,0,0.5)] transition-transform duration-300 ease-in-out lg:hidden",
           isOpen ? "translate-x-0" : "-translate-x-full",
         )}
       >
@@ -146,7 +158,7 @@ export function Sidebar({
       </aside>
 
       {/* Desktop sidebar (always visible) */}
-      <aside className="hidden lg:flex lg:fixed lg:inset-y-0 lg:left-0 lg:z-40 lg:w-64 lg:flex-col lg:border-r lg:border-zinc-800/60 lg:bg-zinc-950/90 lg:backdrop-blur-xl">
+      <aside className="hidden lg:flex lg:fixed lg:inset-y-0 lg:left-0 lg:z-40 lg:w-64 lg:flex-col lg:border-r lg:border-white/5 lg:bg-[#0B0F19]">
         {sidebarContent}
       </aside>
     </>

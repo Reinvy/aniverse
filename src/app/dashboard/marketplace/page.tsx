@@ -76,7 +76,7 @@ export default function MarketplacePage() {
             <h1 className="text-xl font-bold text-white sm:text-2xl lg:text-3xl">
               Marketplace
             </h1>
-            <p className="mt-0.5 text-sm text-zinc-400">
+            <p className="mt-0.5 text-sm text-zinc-400 sys-label">
               Buy, sell, and license AI-generated anime art.
             </p>
           </div>
@@ -89,7 +89,7 @@ export default function MarketplacePage() {
 
       {/* Stats bar */}
       <motion.div
-        className="mt-6 grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-4"
+        className="mt-6 grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-4 corner-accents"
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1, duration: 0.4 }}
@@ -104,7 +104,7 @@ export default function MarketplacePage() {
           return (
             <div
               key={stat.label}
-              className="rounded-xl border border-zinc-800/60 bg-zinc-900/50 p-3 sm:p-4"
+              className="rounded-xl border border-zinc-800/60 bg-zinc-900/50 p-3 sm:p-4 glow-gold"
             >
               <div className="flex items-center gap-2">
                 <StatIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-zinc-500" />
@@ -118,7 +118,7 @@ export default function MarketplacePage() {
 
       {/* Filters */}
       <motion.div
-        className="mt-4 sm:mt-6 flex flex-col gap-3 sm:flex-row sm:items-center"
+        className="mt-4 sm:mt-6 flex flex-col gap-3 sm:flex-row sm:items-center corner-accents"
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.15, duration: 0.4 }}
@@ -170,6 +170,7 @@ export default function MarketplacePage() {
           filtered.map((item, i) => (
             <motion.div
               key={item.id}
+              className="energy-sweep"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05, duration: 0.3 }}
