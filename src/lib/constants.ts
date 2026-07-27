@@ -166,10 +166,20 @@ export const STYLE_PRESETS = [
   { id: "pixel-anime", label: "Pixel Anime", description: "Pixel-art fusion with anime-style characters and sprites" },
   { id: "vaporwave", label: "Vaporwave", description: "Retro-futuristic neon-drenched aesthetic with purple and pink hues, glitch effects, and '80s/'90s nostalgia" },
   { id: "dusty-pastel", label: "Dusty Pastel", description: "Muted, warm fantasy tones inspired by Frieren's soft color palette — perfect for romance and fantasy genres" },
+  { id: "caricature", label: "Caricature", description: "Exaggerated, playful caricature style with bold features and vibrant colors — inspired by the viral AI caricature trend" },
+  { id: "sepia-nostalgia", label: "Sepia Nostalgia", description: "Warm sepia-toned vintage anime aesthetic with film grain texture — retro photo look applied to anime characters" },
+  { id: "pastel-goth", label: "Pastel Goth", description: "Dark romance meets soft pastels — muted charcoals paired with blush pinks, lavender, and mint tones" },
 ] as const;
 
 /** Trending styles from market research (used for showcase). */
 export const TRENDING_STYLES = [
+  {
+    id: "caricature",
+    label: "AI Caricature",
+    description: "The viral AI caricature trend is exploding — exaggerated features, bold colors, and playful expressions turning photos into anime-style portraits.",
+    gradient: "from-orange-500 to-red-600",
+    badge: "HOT",
+  },
   {
     id: "retro-90s",
     label: "Retro '90s Revival",
@@ -199,17 +209,10 @@ export const TRENDING_STYLES = [
     badge: "TRENDING",
   },
   {
-    id: "cyberpunk",
-    label: "Cyberpunk Neon",
-    description: "Neon-drenched futurescapes with magenta, cyan, and electric blue on dark backgrounds. The perennial favorite for sci-fi anime art.",
-    gradient: "from-violet-500 to-fuchsia-600",
-    badge: "CLASSIC",
-  },
-  {
-    id: "pixel-anime",
-    label: "Pixel Art Fusion",
-    description: "Blending retro pixel art with anime-style characters — a crossover trend gaining massive traction in indie games and social art.",
-    gradient: "from-amber-500 to-orange-600",
+    id: "sepia-nostalgia",
+    label: "Sepia Nostalgia",
+    description: "Warm sepia-toned vintage anime aesthetic with film grain texture — TikTok's #animeedit community is driving this nostalgic trend to new heights.",
+    gradient: "from-yellow-600 to-amber-700",
     badge: "NEW",
   },
 ] as const;

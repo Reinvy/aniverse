@@ -15,6 +15,9 @@ import {
   Star,
   ChevronRight,
   TrendingUp,
+  PenLine,
+  Share2,
+  MousePointerClick,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -262,6 +265,98 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* ─── How It Works Section ─── */}
+        <section className="relative overflow-hidden py-20 sm:py-28">
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-emerald-600/5 via-transparent to-violet-600/5" />
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <motion.div className="mx-auto max-w-2xl text-center" {...fadeInUp}>
+              <Badge variant="secondary" className="mb-4 px-3 py-1">
+                <MousePointerClick className="mr-1.5 h-3.5 w-3.5" />
+                How It Works
+              </Badge>
+              <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+                Create in three simple steps
+              </h2>
+              <p className="mt-4 text-lg text-zinc-400">
+                No complex software needed. Just your imagination and a few clicks.
+              </p>
+            </motion.div>
+
+            <motion.div
+              className="mt-14 grid gap-6 sm:grid-cols-3"
+              {...stagger}
+            >
+              {[
+                {
+                  step: "01",
+                  icon: Palette,
+                  title: "Choose Your Style",
+                  description:
+                    "Browse our curated collection of trending anime styles — from Ghibli-inspired warmth to cyberpunk neon, retro 90s, and viral AI caricature.",
+                  gradient: "from-violet-500 to-purple-600",
+                },
+                {
+                  step: "02",
+                  icon: PenLine,
+                  title: "Describe Your Vision",
+                  description:
+                    "Write a text prompt or use our quick-suggestion templates. Our AI understands anime art terminology — character archetypes, color palettes, and scene composition.",
+                  gradient: "from-fuchsia-500 to-pink-600",
+                },
+                {
+                  step: "03",
+                  icon: Share2,
+                  title: "Generate & Share",
+                  description:
+                    "Get your artwork in seconds at up to 4K resolution. Share with the community, sell in the marketplace, or export for your next creative project.",
+                  gradient: "from-emerald-500 to-teal-600",
+                },
+              ].map((item) => {
+                const ItemIcon = item.icon;
+                return (
+                  <motion.div
+                    key={item.step}
+                    variants={{
+                      initial: { opacity: 0, y: 24 },
+                      whileInView: { opacity: 1, y: 0 },
+                    }}
+                    transition={{ duration: 0.4 }}
+                    className="group relative"
+                  >
+                    <Card className="h-full border-zinc-800/60 transition-all duration-300 hover:border-zinc-700 hover:shadow-lg hover:shadow-violet-600/5">
+                      <CardContent className="p-6 text-center">
+                        <div className="mb-2 text-4xl font-bold text-zinc-800 select-none">
+                          {item.step}
+                        </div>
+                        <div
+                          className={cn(
+                            "mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br shadow-lg transition-transform duration-300 group-hover:scale-110",
+                            item.gradient,
+                          )}
+                        >
+                          <ItemIcon className="h-7 w-7 text-white" />
+                        </div>
+                        <h3 className="text-lg font-semibold text-white">
+                          {item.title}
+                        </h3>
+                        <p className="mt-2 text-sm leading-relaxed text-zinc-400">
+                          {item.description}
+                        </p>
+                      </CardContent>
+                    </Card>
+                    {/* Connector arrow (hidden on mobile) */}
+                    {item.step !== "03" && (
+                      <div className="absolute -right-3 top-1/2 hidden -translate-y-1/2 text-zinc-700 sm:block">
+                        <ChevronRight className="h-6 w-6" />
+                      </div>
+                    )}
+                  </motion.div>
+                );
+              })}
+            </motion.div>
+          </div>
+        </section>
+
         {/* ─── Trending Styles Section (from Market Research) ─── */}
         <section className="relative overflow-hidden py-20 sm:py-28">
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-violet-600/5 via-transparent to-fuchsia-600/5" />
@@ -315,8 +410,6 @@ export default function HomePage() {
                               "border-rose-700/50 text-rose-400",
                             style.badge === "TRENDING" &&
                               "border-emerald-700/50 text-emerald-400",
-                            style.badge === "CLASSIC" &&
-                              "border-violet-700/50 text-violet-400",
                             style.badge === "NEW" &&
                               "border-amber-700/50 text-amber-400",
                           )}
