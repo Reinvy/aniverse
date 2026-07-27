@@ -23,29 +23,29 @@ import { weeklyChallenge } from "@/data/challenges/weekly-20260724";
 
 export default function ChallengesPage() {
   return (
-    <div className="p-6 lg:p-8">
+    <div className="p-4 sm:p-6 lg:p-8">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
       >
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-white sm:text-3xl">
+            <h1 className="text-xl font-bold text-white sm:text-2xl lg:text-3xl">
               Daily & Weekly Challenges
             </h1>
-            <p className="mt-1 text-sm text-zinc-400">
+            <p className="mt-0.5 text-sm text-zinc-400">
               Create, compete, and earn rewards. New challenges every day.
             </p>
           </div>
-          <div className="flex items-center gap-3">
-            <Badge variant="secondary" className="gap-1 border-0 bg-zinc-800 px-3 py-1.5">
-              <Coins className="h-3.5 w-3.5 text-amber-400" />
+          <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+            <Badge variant="secondary" className="gap-1 border-0 bg-zinc-800 px-2.5 sm:px-3 py-1.5">
+              <Coins className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-amber-400" />
               <span>Season 1</span>
             </Badge>
-            <Badge variant="default" className="gap-1 px-3 py-1.5">
-              <TrendingUp className="h-3.5 w-3.5" />
+            <Badge variant="default" className="gap-1 px-2.5 sm:px-3 py-1.5">
+              <TrendingUp className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
               <span>24 Participants Today</span>
             </Badge>
           </div>
@@ -54,7 +54,7 @@ export default function ChallengesPage() {
 
       {/* ─── Daily Challenge ─── */}
       <motion.div
-        className="mt-8"
+        className="mt-6 sm:mt-8"
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
@@ -64,19 +64,19 @@ export default function ChallengesPage() {
           <div className="pointer-events-none absolute -right-20 -top-20 h-60 w-60 rounded-full bg-violet-600/10 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-20 -left-20 h-60 w-60 rounded-full bg-fuchsia-600/10 blur-3xl" />
 
-          <div className="relative p-6 sm:p-8">
+          <div className="relative p-5 sm:p-6 lg:p-8">
             <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
               <div className="flex-1">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 shadow-lg shadow-violet-600/30">
-                    <Trophy className="h-6 w-6 text-white" />
+                  <div className="flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 shadow-lg shadow-violet-600/30">
+                    <Trophy className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                   </div>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <Badge className="bg-gradient-to-r from-amber-500 to-orange-600 text-xs">
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <Badge className="bg-gradient-to-r from-amber-500 to-orange-600 text-[10px] sm:text-xs">
                         DAILY CHALLENGE
                       </Badge>
-                      <Badge variant="warning" className="text-xs">24h remaining</Badge>
+                      <Badge variant="warning" className="text-[10px] sm:text-xs">24h remaining</Badge>
                     </div>
                     <h2 className="mt-2 text-2xl font-bold text-white sm:text-3xl">
                       {dailyChallenge.title}
@@ -137,25 +137,27 @@ export default function ChallengesPage() {
               </div>
 
               {/* Prize Card */}
-              <div className="shrink-0 lg:w-72">
+              <div className="shrink-0 w-full lg:w-72">
                 <Card className="border-zinc-700/50 bg-zinc-800/40">
-                  <CardContent className="p-5">
+                  <CardContent className="p-4 sm:p-5">
                     <div className="flex items-center gap-2">
-                      <Award className="h-5 w-5 text-amber-400" />
+                      <Award className="h-5 w-5 text-amber-400 shrink-0" />
                       <span className="text-sm font-semibold text-white">Prize</span>
                     </div>
-                    <p className="mt-3 text-sm leading-relaxed text-zinc-300 whitespace-pre-line">
+                    <p className="mt-2 sm:mt-3 text-xs sm:text-sm leading-relaxed text-zinc-300 whitespace-pre-line">
                       {dailyChallenge.prize}
                     </p>
-                    <div className="mt-4 flex items-center gap-2 text-xs text-zinc-500">
-                      <Users className="h-3.5 w-3.5" />
-                      <span>{dailyChallenge.participants} participants so far</span>
+                    <div className="mt-3 sm:mt-4 flex items-center gap-2 text-xs text-zinc-500 flex-wrap">
+                      <span className="flex items-center gap-1">
+                        <Users className="h-3.5 w-3.5" />
+                        <span>{dailyChallenge.participants} participants so far</span>
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Clock className="h-3.5 w-3.5" />
+                        <span>{dailyChallenge.timeLeft} left</span>
+                      </span>
                     </div>
-                    <div className="mt-2 flex items-center gap-2 text-xs text-zinc-500">
-                      <Clock className="h-3.5 w-3.5" />
-                      <span>{dailyChallenge.timeLeft} left</span>
-                    </div>
-                    <Button className="mt-5 w-full gap-2 shadow-lg shadow-violet-600/20">
+                    <Button className="mt-4 sm:mt-5 w-full gap-2 shadow-lg shadow-violet-600/20">
                       <Sparkles className="h-4 w-4" />
                       Submit Entry
                     </Button>
@@ -234,10 +236,10 @@ export default function ChallengesPage() {
                           key={i}
                           className="flex items-center gap-3 rounded-lg border border-zinc-800/60 bg-zinc-800/30 p-3"
                         >
-                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-900/40 text-xs font-bold text-amber-400">
+                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-amber-900/40 text-xs font-bold text-amber-400">
                             {ms.participants}
                           </div>
-                          <span className="text-sm text-zinc-300">{ms.reward}</span>
+                          <span className="text-xs sm:text-sm text-zinc-300">{ms.reward}</span>
                         </div>
                       ))}
                     </div>
@@ -246,25 +248,27 @@ export default function ChallengesPage() {
               </div>
 
               {/* Prize Card */}
-              <div className="shrink-0 lg:w-72">
+              <div className="shrink-0 w-full lg:w-72">
                 <Card className="border-zinc-700/50 bg-zinc-800/40">
-                  <CardContent className="p-5">
+                  <CardContent className="p-4 sm:p-5">
                     <div className="flex items-center gap-2">
-                      <Trophy className="h-5 w-5 text-amber-400" />
+                      <Trophy className="h-5 w-5 text-amber-400 shrink-0" />
                       <span className="text-sm font-semibold text-white">Prizes</span>
                     </div>
-                    <p className="mt-3 text-sm leading-relaxed text-zinc-300 whitespace-pre-line">
+                    <p className="mt-2 sm:mt-3 text-xs sm:text-sm leading-relaxed text-zinc-300 whitespace-pre-line">
                       {weeklyChallenge.prize}
                     </p>
-                    <div className="mt-4 flex items-center gap-2 text-xs text-zinc-500">
-                      <Calendar className="h-3.5 w-3.5" />
-                      <span>Jul 24 – Jul 30</span>
+                    <div className="mt-3 sm:mt-4 flex items-center gap-2 text-xs text-zinc-500 flex-wrap">
+                      <span className="flex items-center gap-1">
+                        <Calendar className="h-3.5 w-3.5" />
+                        <span>Jul 24 – Jul 30</span>
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Users className="h-3.5 w-3.5" />
+                        <span>{weeklyChallenge.participants} participants so far</span>
+                      </span>
                     </div>
-                    <div className="mt-2 flex items-center gap-2 text-xs text-zinc-500">
-                      <Users className="h-3.5 w-3.5" />
-                      <span>{weeklyChallenge.participants} participants so far</span>
-                    </div>
-                    <Button className="mt-5 w-full gap-2 border-amber-600/50 text-amber-300 shadow-lg shadow-amber-600/10 hover:bg-amber-950/30" variant="outline">
+                    <Button className="mt-4 sm:mt-5 w-full gap-2 border-amber-600/50 text-amber-300 shadow-lg shadow-amber-600/10 hover:bg-amber-950/30" variant="outline">
                       <Sparkles className="h-4 w-4" />
                       Join Weekly Challenge
                     </Button>
@@ -278,35 +282,35 @@ export default function ChallengesPage() {
 
       {/* ─── Challenge History ─── */}
       <motion.div
-        className="mt-10"
+        className="mt-8 sm:mt-10"
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3, duration: 0.4 }}
       >
         <Card className="border-zinc-800/60">
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="text-lg">Previous Challenges</CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between p-4 sm:p-6">
+            <CardTitle className="text-base sm:text-lg">Previous Challenges</CardTitle>
             <Badge variant="secondary" className="text-xs">Past 7 Days</Badge>
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-4 pb-4 sm:px-6 sm:pb-6">
             <div className="divide-y divide-zinc-800/60">
               {pastChallenges.map((challenge, i) => (
                 <div
                   key={i}
-                  className="flex items-center justify-between py-3 first:pt-0 last:pb-0"
+                  className="flex items-center justify-between py-2.5 sm:py-3 first:pt-0 last:pb-0 gap-3"
                 >
-                  <div className="flex items-center gap-3">
-                    <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${challenge.color} shadow-sm`}>
-                      <Trophy className="h-4 w-4 text-white" />
+                  <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+                    <div className={`flex h-7 w-7 sm:h-8 sm:w-8 shrink-0 items-center justify-center rounded-lg ${challenge.color} shadow-sm`}>
+                      <Trophy className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-white" />
                     </div>
-                    <div>
-                      <p className="text-sm font-medium text-zinc-200">{challenge.title}</p>
-                      <p className="text-xs text-zinc-500">{challenge.date} · {challenge.participants} participants</p>
+                    <div className="min-w-0">
+                      <p className="text-xs sm:text-sm font-medium text-zinc-200 truncate">{challenge.title}</p>
+                      <p className="text-[11px] sm:text-xs text-zinc-500">{challenge.date} · {challenge.participants} participants</p>
                     </div>
                   </div>
                   <Badge
                     variant={challenge.winner ? "success" : "secondary"}
-                    className="text-xs"
+                    className="text-[10px] sm:text-xs shrink-0"
                   >
                     {challenge.winner ? `${challenge.winner} won` : "Closed"}
                   </Badge>
