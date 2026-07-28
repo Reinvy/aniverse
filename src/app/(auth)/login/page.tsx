@@ -54,10 +54,11 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-zinc-950 px-4">
-      {/* Background */}
-      <div className="pointer-events-none absolute inset-0 bg-grid-pattern" />
-      <div className="pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 w-[600px] h-[500px] bg-gradient-to-b from-violet-600/15 via-fuchsia-600/10 to-transparent blur-3xl" />
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-navy-900 px-4">
+      {/* Background effects */}
+      <div className="pointer-events-none absolute inset-0 bg-starfield" />
+      <div className="pointer-events-none absolute inset-0 bg-grid opacity-20" />
+      <div className="pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 w-[600px] h-[500px] bg-gradient-to-b from-gold-400/10 via-cyan-400/5 to-transparent blur-3xl" />
 
       <motion.div
         initial={{ opacity: 0, y: 24 }}
@@ -65,16 +66,23 @@ export default function LoginPage() {
         transition={{ duration: 0.5 }}
         className="relative w-full max-w-md"
       >
-        {/* Logo */}
-        <Link href="/" className="flex items-center justify-center gap-2 mb-8">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-fuchsia-600 shadow-lg shadow-violet-600/20">
-            <Sparkles className="h-5 w-5 text-white" />
+        {/* Logo — Game HUD style */}
+        <Link href="/" className="flex items-center justify-center gap-2 mb-8 group">
+          <div className="relative flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-[rgba(243,198,105,0.3)] to-[rgba(243,198,105,0.1)] border border-stroke-gold shadow-[0_0_15px_rgba(243,198,105,0.1)] group-hover:shadow-[0_0_25px_rgba(243,198,105,0.2)] transition-all duration-300">
+            <Sparkles className="h-5 w-5 text-gold-400" />
+            <span className="absolute -top-0.5 -right-0.5 h-1.5 w-1.5 rounded-full bg-gold-400 shadow-[0_0_6px_rgba(243,198,105,0.6)]" />
           </div>
-          <span className="text-xl font-bold text-white">{APP_NAME}</span>
+          <div className="flex flex-col items-start">
+            <span className="text-xl font-bold text-white group-hover:text-gold-300 transition-colors">
+              {APP_NAME}
+            </span>
+            <span className="sys-label-gold -mt-0.5">v2.4 // AUTH-NODE</span>
+          </div>
         </Link>
 
-        <Card className="border-zinc-800/60">
+        <Card className="cut-corner">
           <CardHeader className="text-center">
+            <span className="sys-label mb-1">AUTHENTICATION // LOGIN</span>
             <CardTitle className="text-2xl">Welcome back</CardTitle>
             <CardDescription>
               Sign in to your account to continue
@@ -95,11 +103,11 @@ export default function LoginPage() {
 
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t border-zinc-800" />
+                <span className="w-full border-t border-stroke-white" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-zinc-900 px-2 text-zinc-500">
-                  Or continue with email
+                <span className="bg-navy-900 px-2 text-white/30 sys-label">
+                  OR CONTINUE WITH EMAIL
                 </span>
               </div>
             </div>
@@ -107,7 +115,7 @@ export default function LoginPage() {
             <form onSubmit={handleSubmit} className="space-y-3">
               {/* Form-level error */}
               {errors._form && (
-                <div className="rounded-lg border border-red-800/40 bg-red-950/40 px-3 py-2 text-sm text-red-400">
+                <div className="rounded-lg border border-[rgba(239,68,68,0.3)] bg-[rgba(239,68,68,0.1)] px-3 py-2 text-sm text-red-400">
                   {errors._form}
                 </div>
               )}
@@ -115,9 +123,9 @@ export default function LoginPage() {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-zinc-300 mb-1.5"
+                  className="sys-label block mb-1.5"
                 >
-                  Email
+                  EMAIL // ADDRESS
                 </label>
                 <Input
                   id="email"
@@ -135,9 +143,9 @@ export default function LoginPage() {
               <div>
                 <label
                   htmlFor="password"
-                  className="block text-sm font-medium text-zinc-300 mb-1.5"
+                  className="sys-label block mb-1.5"
                 >
-                  Password
+                  PASSWORD // SECURE
                 </label>
                 <Input
                   id="password"
@@ -151,7 +159,7 @@ export default function LoginPage() {
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="text-zinc-500 hover:text-zinc-300 transition-colors"
+                      className="text-white/40 hover:text-gold-300 transition-colors"
                       tabIndex={-1}
                     >
                       {showPassword ? (
@@ -167,16 +175,16 @@ export default function LoginPage() {
                 )}
               </div>
               <div className="flex items-center justify-between">
-                <label className="flex items-center gap-2 text-sm text-zinc-400">
+                <label className="flex items-center gap-2 text-sm text-white/40">
                   <input
                     type="checkbox"
-                    className="rounded border-zinc-700 bg-zinc-800 text-violet-600 focus:ring-violet-500"
+                    className="rounded border-stroke-white bg-glass-200 text-gold-400 focus:ring-gold-400/30"
                   />
                   Remember me
                 </label>
               </div>
 
-              <Button className="w-full gap-2" size="lg" type="submit" disabled={isLoading}>
+              <Button className="w-full gap-2" size="lg" type="submit" disabled={isLoading} variant="primary">
                 {isLoading ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
@@ -186,11 +194,11 @@ export default function LoginPage() {
               </Button>
             </form>
 
-            <p className="text-center text-sm text-zinc-500">
+            <p className="text-center text-sm text-white/40">
               Don&apos;t have an account?{" "}
               <Link
                 href="/register"
-                className="text-violet-400 hover:text-violet-300 transition-colors font-medium"
+                className="text-gold-400 hover:text-gold-300 transition-colors font-medium"
               >
                 Create one
               </Link>
