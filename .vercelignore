@@ -1,0 +1,9 @@
+# AniVerse — Vercel Ignore
+# Exclude large dev/test directories from Vercel upload
+browsers/
+node_modules/
+.next/
+.cron/
+e2e/
+.cache/
+test-results/
