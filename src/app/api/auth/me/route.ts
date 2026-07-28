@@ -1,29 +1,19 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { extractBearerToken, verifyToken } from "@/lib/auth";
+import {
+  authenticateRequest,
+  cachedJsonResponse,
+  errorResponse,
+  notFoundResponse,
+} from "@/lib/api-helpers";
 
 export async function GET(request: NextRequest) {
   try {
-    const authHeader = request.headers.get("authorization");
-    const token = extractBearerToken(authHeader);
-
-    if (!token) {
-      return NextResponse.json(
-        { error: "Authentication required" },
-        { status: 401 },
-      );
-    }
-
-    const payload = await verifyToken(token);
-    if (!payload) {
-      return NextResponse.json(
-        { error: "Invalid or expired token" },
-        { status: 401 },
-      );
-    }
+    const auth = await authenticateRequest(request);
+    if (!auth.authenticated) return auth.response;
 
     const user = await prisma.user.findUnique({
-      where: { id: payload.userId },
+      where: { id: auth.payload.userId },
       select: {
         id: true,
         name: true,
@@ -39,18 +29,12 @@ export async function GET(request: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json(
-        { error: "User not found" },
-        { status: 404 },
-      );
+      return notFoundResponse("User not found");
     }
 
-    return NextResponse.json({ user });
+    return cachedJsonResponse({ user }, { cache: "no-store" });
   } catch (error) {
     console.error("Me error:", error);
-    return NextResponse.json(
-      { error: "An unexpected error occurred" },
-      { status: 500 },
-    );
+    return errorResponse("An unexpected error occurred", 500);
   }
 }
