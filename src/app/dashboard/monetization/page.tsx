@@ -78,8 +78,8 @@ export default function MonetizationPage() {
             <h1 className="text-xl font-bold text-white sm:text-2xl lg:text-3xl">
               Monetization
             </h1>
-            <p className="mt-0.5 text-sm text-zinc-400">
-              Revenue tracking, pricing, and growth metrics.
+            <p className="mt-0.5 text-sm text-white/40 sys-label">
+              REVENUE // TRACKING — Pricing, sales, and growth metrics
             </p>
           </div>
           <Badge variant="secondary" className="gap-1 border-0 bg-amber-900/40 px-3 py-1.5 text-amber-400 self-start sm:self-auto">

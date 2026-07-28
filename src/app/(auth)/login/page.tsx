@@ -80,7 +80,7 @@ export default function LoginPage() {
           </div>
         </Link>
 
-        <Card className="cut-corner">
+        <Card className="cut-corner diamond-indicator">
           <CardHeader className="text-center">
             <span className="sys-label mb-1">AUTHENTICATION // LOGIN</span>
             <CardTitle className="text-2xl">Welcome back</CardTitle>

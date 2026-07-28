@@ -167,14 +167,8 @@ export default function SocialDashboardPage() {
             <h1 className="text-xl font-bold text-white sm:text-2xl lg:text-3xl">
               Social Media Empire
             </h1>
-            <p className="mt-0.5 text-sm text-zinc-400">
-              Agent A7 — Daily social media posting dashboard.{" "}
-              {new Date().toLocaleDateString("en-US", {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
+            <p className="mt-0.5 text-sm text-white/40 sys-label">
+              SOCIAL // POSTING — Agent A7 daily social media automation
             </p>
           </div>
           <Link href={APP_URL} target="_blank" className="w-full sm:w-auto">

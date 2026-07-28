@@ -18,6 +18,8 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { StatCardSkeleton, ListItemSkeleton } from "@/components/ui/skeleton";
+import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { timeAgo } from "@/lib/utils";
 import Link from "next/link";
 import { useAuth } from "@/components/auth/AuthProvider";
@@ -161,60 +163,99 @@ export default function DashboardPage() {
         </div>
       </motion.div>
 
-      {/* Loading State */}
+      {/* Loading State — Game style skeleton grid */}
       {loadState === "loading" && (
-        <div className="mt-20 flex flex-col items-center justify-center text-center">
-          <Loader2 className="h-8 w-8 animate-spin text-violet-400" />
-          <p className="mt-4 text-sm text-zinc-500">
-            Loading your dashboard...
-          </p>
+        <div className="mt-6 sm:mt-8">
+          <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <StatCardSkeleton key={i} />
+            ))}
+          </div>
+          <div className="mt-6 sm:mt-8 grid gap-4 sm:gap-6 lg:grid-cols-3">
+            <div className="lg:col-span-2">
+              <div className="glass rounded-[4px] cut-corner p-4 sm:p-6 relative overflow-hidden
+                before:absolute before:inset-0 before:-translate-x-full
+                before:bg-gradient-to-r before:from-transparent before:via-[rgba(230,194,128,0.06)] before:to-transparent
+                before:animate-[shimmer_1.8s_infinite]">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="h-5 w-36 rounded bg-[rgba(255,255,255,0.04)]" />
+                    <div className="h-5 w-20 rounded-full bg-[rgba(255,255,255,0.04)]" />
+                  </div>
+                  <div className="space-y-3">
+                    {Array.from({ length: 4 }).map((_, j) => (
+                      <ListItemSkeleton key={j} />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="glass rounded-[4px] cut-corner p-4 sm:p-6 relative overflow-hidden
+              before:absolute before:inset-0 before:-translate-x-full
+              before:bg-gradient-to-r before:from-transparent before:via-[rgba(230,194,128,0.06)] before:to-transparent
+              before:animate-[shimmer_1.8s_infinite]">
+              <div className="space-y-3">
+                <div className="h-5 w-28 rounded bg-[rgba(255,255,255,0.04)]" />
+                <div className="h-9 w-full rounded bg-[rgba(255,255,255,0.04)]" />
+                <div className="h-9 w-full rounded bg-[rgba(255,255,255,0.04)]" />
+                <div className="h-9 w-full rounded bg-[rgba(255,255,255,0.04)]" />
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
-      {/* Error State */}
+      {/* Error State — Game style */}
       {loadState === "error" && (
-        <div className="mt-20 flex flex-col items-center justify-center text-center">
-          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-red-900/30">
-            <TrendingUp className="h-7 w-7 text-red-400" />
+        <div className="mt-8 sm:mt-12">
+          <div className="glass rounded-[4px] cut-corner diamond-indicator p-6 sm:p-8 border border-[rgba(239,68,68,0.15)] relative overflow-hidden text-center">
+            <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-red-500/5 blur-3xl" />
+            <div className="relative z-10">
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-[rgba(239,68,68,0.2)] bg-[rgba(239,68,68,0.1)]">
+                <TrendingUp className="h-7 w-7 text-red-400" />
+              </div>
+              <p className="mt-4 text-lg font-semibold text-red-400">
+                Could not load dashboard
+              </p>
+              <p className="mt-1 text-sm text-white/40">
+                Please make sure you are logged in and try again.
+              </p>
+              <Button
+                variant="outline"
+                className="mt-6 gap-2"
+                onClick={() => {
+                  setLoadState("loading");
+                  const token = getToken();
+                  if (!token) {
+                    setLoadState("error");
+                    return;
+                  }
+                  fetch("/api/dashboard/stats", {
+                    headers: { Authorization: `Bearer ${token}` },
+                  })
+                    .then((res) => {
+                      if (!res.ok) throw new Error("Failed");
+                      return res.json();
+                    })
+                    .then((data) => {
+                      setStats(data.stats);
+                      setActivity(data.activity || []);
+                      setLoadState("loaded");
+                    })
+                    .catch(() => setLoadState("error"));
+                }}
+              >
+                <Loader2 className="h-4 w-4" />
+                Try Again
+              </Button>
+            </div>
           </div>
-          <p className="mt-4 text-lg font-medium text-zinc-300">
-            Could not load dashboard
-          </p>
-          <p className="mt-1 text-sm text-zinc-500">
-            Please make sure you are logged in and try again.
-          </p>
-          <Button
-            variant="outline"
-            className="mt-6"
-            onClick={() => {
-              setLoadState("loading");
-              const token = getToken();
-              if (!token) {
-                setLoadState("error");
-                return;
-              }
-              fetch("/api/dashboard/stats", {
-                headers: { Authorization: `Bearer ${token}` },
-              })
-                .then((res) => {
-                  if (!res.ok) throw new Error("Failed");
-                  return res.json();
-                })
-                .then((data) => {
-                  setStats(data.stats);
-                  setActivity(data.activity || []);
-                  setLoadState("loaded");
-                })
-                .catch(() => setLoadState("error"));
-            }}
-          >
-            Try Again
-          </Button>
         </div>
       )}
 
       {/* Stats Grid */}
       {loadState === "loaded" && stats && (
+        <ErrorBoundary compact message="Failed to load stats">
         <motion.div
           className="mt-6 grid gap-3 sm:mt-8 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
           initial={{ opacity: 0, y: 16 }}
@@ -230,7 +271,7 @@ export default function DashboardPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.08, duration: 0.4 }}
               >
-                <Card className="group border-zinc-800/60 transition-all duration-200 hover:border-zinc-700">
+                <Card className="group diamond-indicator crosshair-mark">
                   <CardContent className="p-4 sm:p-5">
                     <div className="flex items-start justify-between">
                       <div
@@ -253,7 +294,7 @@ export default function DashboardPage() {
                     <p className="mt-3 sm:mt-4 text-xl sm:text-2xl font-bold text-white">
                       {stat.value}
                     </p>
-                    <p className="mt-0.5 text-xs sm:text-sm text-zinc-500">
+                    <p className="mt-0.5 text-xs sm:text-sm text-white/40">
                       {stat.subtext}
                     </p>
                   </CardContent>
@@ -262,10 +303,12 @@ export default function DashboardPage() {
             );
           })}
         </motion.div>
+        </ErrorBoundary>
       )}
 
       {/* Recent Activity + Quick Actions */}
       {loadState === "loaded" && (
+        <ErrorBoundary compact message="Failed to load activity">
         <div className="mt-6 sm:mt-8 grid gap-4 sm:gap-6 lg:grid-cols-3">
           {/* Recent Activity */}
           <motion.div
@@ -274,7 +317,7 @@ export default function DashboardPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.4 }}
           >
-            <Card className="border-zinc-800/60">
+            <Card className="diamond-indicator">
               <CardHeader className="flex flex-row items-center justify-between p-4 sm:p-6">
                 <CardTitle className="text-base sm:text-lg">
                   Recent Activity
@@ -286,8 +329,8 @@ export default function DashboardPage() {
               <CardContent className="px-4 pb-4 sm:px-6 sm:pb-6">
                 {activity.length === 0 ? (
                   <div className="flex flex-col items-center py-8 text-center">
-                    <Sparkles className="h-8 w-8 text-zinc-700" />
-                    <p className="mt-3 text-sm text-zinc-500">
+                    <Sparkles className="h-8 w-8 text-white/20" />
+                    <p className="mt-3 text-sm text-white/40">
                       No activity yet. Start by creating your first artwork!
                     </p>
                     <Link href="/dashboard/create" className="mt-4">
@@ -302,9 +345,9 @@ export default function DashboardPage() {
                     {activity.map((item, i) => (
                       <div
                         key={i}
-                        className="flex items-center gap-3 sm:gap-4 border-b border-zinc-800/40 pb-3 sm:pb-4 last:border-0 last:pb-0"
+                        className="flex items-center gap-3 sm:gap-4 border-b border-white/5 pb-3 sm:pb-4 last:border-0 last:pb-0 group/activity"
                       >
-                        <div className="flex h-7 w-7 sm:h-8 sm:w-8 shrink-0 items-center justify-center rounded-full bg-zinc-800">
+                        <div className="flex h-7 w-7 sm:h-8 sm:w-8 shrink-0 items-center justify-center rounded-full bg-[rgba(255,255,255,0.05)]">
                           {item.type === "create" && (
                             <Wand2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-violet-400" />
                           )}
@@ -319,14 +362,14 @@ export default function DashboardPage() {
                           )}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-xs sm:text-sm text-zinc-200">
+                          <p className="text-xs sm:text-sm text-white/80">
                             {item.action}
                           </p>
-                          <p className="text-[11px] sm:text-xs text-zinc-500 truncate">
+                          <p className="text-[11px] sm:text-xs text-white/30 truncate">
                             {item.detail}
                           </p>
                         </div>
-                        <span className="shrink-0 text-[11px] sm:text-xs text-zinc-600">
+                        <span className="shrink-0 text-[11px] sm:text-xs text-white/20">
                           {timeAgo(new Date(item.time))}
                         </span>
                       </div>
@@ -343,7 +386,7 @@ export default function DashboardPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.4 }}
           >
-            <Card className="border-zinc-800/60">
+            <Card className="crosshair-mark">
               <CardHeader className="p-4 sm:p-6">
                 <CardTitle className="text-base sm:text-lg">
                   Quick Actions
@@ -377,11 +420,11 @@ export default function DashboardPage() {
                     Marketplace
                   </Button>
                 </Link>
-                <hr className="border-zinc-800" />
-                <div className="rounded-lg bg-zinc-800/40 p-3">
+                <hr className="border-white/5" />
+                <div className="rounded-[4px] bg-[rgba(0,0,0,0.3)] p-3 border border-white/5">
                   <div className="flex items-center gap-2 text-xs sm:text-sm">
                     <Clock className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-amber-400" />
-                    <span className="text-zinc-300">
+                    <span className="text-white/60">
                       {stats
                         ? stats.isUnlimited
                           ? "Unlimited generations"
@@ -391,7 +434,7 @@ export default function DashboardPage() {
                   </div>
                   {stats && !stats.isUnlimited && (
                     <>
-                      <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-zinc-700">
+                      <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-[rgba(255,255,255,0.08)]">
                         <div
                           className="h-full rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500"
                           style={{
@@ -399,7 +442,7 @@ export default function DashboardPage() {
                           }}
                         />
                       </div>
-                      <p className="mt-1.5 text-xs text-zinc-500">
+                      <p className="mt-1.5 text-xs text-white/30">
                         Resets in {stats.daysUntilReset} day
                         {stats.daysUntilReset !== 1 ? "s" : ""}
                       </p>
@@ -410,6 +453,7 @@ export default function DashboardPage() {
             </Card>
           </motion.div>
         </div>
+        </ErrorBoundary>
       )}
     </div>
   );

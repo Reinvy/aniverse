@@ -17,6 +17,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { STYLE_PRESETS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/components/auth/AuthProvider";
@@ -208,12 +209,13 @@ export default function CreatePage() {
         <h1 className="text-xl font-bold text-white sm:text-2xl lg:text-3xl">
           Create Artwork
         </h1>
-        <p className="mt-0.5 text-sm text-zinc-400">
-          Describe your vision and let Pollinations AI bring it to life.
+        <p className="mt-0.5 text-sm text-white/40 sys-label">
+          GENERATE // PROMPT — Describe your vision and let AI bring it to life
         </p>
       </motion.div>
 
       <div className="mt-6 sm:mt-8 grid gap-6 sm:gap-8 lg:grid-cols-5">
+        <ErrorBoundary compact message="Failed to load controls">
         {/* Left: Controls */}
         <motion.div
           className="lg:col-span-2 space-y-4 sm:space-y-6"
@@ -222,22 +224,30 @@ export default function CreatePage() {
           transition={{ delay: 0.1, duration: 0.4 }}
         >
           {/* Prompt input */}
-          <Card className="border-zinc-800/60">
+          <Card>
             <CardHeader className="p-4 sm:p-6">
               <CardTitle className="text-base sm:text-lg flex items-center gap-2">
-                <Wand2 className="h-4 w-4 text-violet-400" />
+                <Wand2 className="h-4 w-4 text-gold-400" />
                 Prompt
               </CardTitle>
             </CardHeader>
             <CardContent className="px-4 pb-4 sm:px-6 sm:pb-6">
               <textarea
                 placeholder="Describe the anime artwork you want to create..."
-                className="min-h-[100px] sm:min-h-[120px] w-full rounded-lg border border-zinc-700 bg-zinc-800/50 p-3 text-sm text-zinc-100 placeholder:text-zinc-500 resize-none focus:outline-none focus:ring-2 focus:ring-violet-500"
+                className={cn(
+                  "min-h-[100px] sm:min-h-[120px] w-full rounded-[4px]",
+                  "border border-white/10 bg-[rgba(0,0,0,0.4)]",
+                  "p-3 text-sm text-white/85 placeholder:text-white/25",
+                  "backdrop-blur-xl resize-none",
+                  "focus-visible:outline-none focus-visible:border-[rgba(230,194,128,0.4)]",
+                  "focus-visible:shadow-[0_0_0_1px_rgba(230,194,128,0.2),_inset_0_0_12px_rgba(230,194,128,0.15)]",
+                  "transition-all duration-300",
+                )}
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
               />
               <div className="mt-2 flex items-center justify-between">
-                <span className="text-xs text-zinc-600">
+                <span className="text-xs text-white/30">
                   {prompt.length} characters
                 </span>
                 <Badge variant="secondary" className="text-xs">
@@ -248,10 +258,10 @@ export default function CreatePage() {
           </Card>
 
           {/* Style presets */}
-          <Card className="border-zinc-800/60">
+          <Card>
             <CardHeader className="p-4 sm:p-6">
               <CardTitle className="text-base sm:text-lg flex items-center gap-2">
-                <Sliders className="h-4 w-4 text-fuchsia-400" />
+                <Sliders className="h-4 w-4 text-cyan-400" />
                 Style
               </CardTitle>
             </CardHeader>
@@ -266,16 +276,16 @@ export default function CreatePage() {
                       )
                     }
                     className={cn(
-                      "rounded-lg border p-3 sm:p-3 text-left transition-all duration-200",
+                      "rounded-[4px] border p-3 sm:p-3 text-left transition-all duration-300 premium-transition",
                       selectedStyle === style.id
-                        ? "border-violet-600 bg-violet-600/10 ring-1 ring-violet-500"
-                        : "border-zinc-800 bg-zinc-800/30 hover:border-zinc-700",
+                        ? "border-[rgba(230,194,128,0.4)] bg-[rgba(230,194,128,0.08)] shadow-[inset_0_0_12px_rgba(230,194,128,0.1)]"
+                        : "border-white/10 bg-[rgba(0,0,0,0.2)] hover:border-white/20 hover:bg-[rgba(255,255,255,0.03)] ",
                     )}
                   >
                     <p className="text-xs sm:text-sm font-medium text-white">
                       {style.label}
                     </p>
-                    <p className="mt-0.5 text-[11px] sm:text-xs text-zinc-500">
+                    <p className="mt-0.5 text-[11px] sm:text-xs text-white/30">
                       {style.description}
                     </p>
                   </button>
@@ -285,10 +295,10 @@ export default function CreatePage() {
           </Card>
 
           {/* Resolution selector */}
-          <Card className="border-zinc-800/60">
+          <Card>
             <CardHeader className="p-4 sm:p-6">
               <CardTitle className="text-base sm:text-lg flex items-center gap-2">
-                <Image className="h-4 w-4 text-blue-400" />
+                <Image className="h-4 w-4 text-gold-400" />
                 Resolution
               </CardTitle>
             </CardHeader>
@@ -305,11 +315,11 @@ export default function CreatePage() {
                       setImageDimensions({ width: res.w, height: res.h })
                     }
                     className={cn(
-                      "rounded-lg border p-2 text-center transition-all",
+                      "rounded-[4px] border p-2 text-center transition-all duration-300 premium-transition",
                       imageDimensions.width === res.w &&
                         imageDimensions.height === res.h
-                        ? "border-violet-600 bg-violet-600/10 ring-1 ring-violet-500"
-                        : "border-zinc-800 bg-zinc-800/30 hover:border-zinc-700",
+                        ? "border-[rgba(230,194,128,0.4)] bg-[rgba(230,194,128,0.08)] shadow-[inset_0_0_12px_rgba(230,194,128,0.1)]"
+                        : "border-white/10 bg-[rgba(0,0,0,0.2)] hover:border-white/20 hover:bg-[rgba(255,255,255,0.03)]",
                     )}
                   >
                     <p className="text-xs font-medium text-white">
@@ -323,7 +333,8 @@ export default function CreatePage() {
 
           {/* Generate button */}
           <Button
-            className="w-full gap-2 shadow-xl shadow-violet-600/20"
+            variant="primary"
+            className="w-full gap-2 glow-gold"
             size="lg"
             disabled={!prompt.trim() || isGenerating}
             onClick={handleGenerate}
@@ -349,10 +360,10 @@ export default function CreatePage() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2, duration: 0.4 }}
         >
-          <Card className="border-zinc-800/60 h-full">
+          <Card className="h-full">
             <CardHeader className="flex flex-row items-center justify-between p-4 sm:p-6">
               <CardTitle className="text-base sm:text-lg flex items-center gap-2">
-                <Image className="h-4 w-4 text-blue-400" />
+                <Image className="h-4 w-4 text-cyan-400" />
                 Preview
               </CardTitle>
               {generatedImage && (
@@ -393,25 +404,39 @@ export default function CreatePage() {
             </CardHeader>
             <CardContent className="px-4 pb-4 sm:px-6 sm:pb-6">
               {saveState === "saved" && (
-                <div className="mb-4 flex items-center gap-2 rounded-lg bg-emerald-500/10 p-3 text-sm text-emerald-400">
+                <div className="mb-4 flex items-center gap-2 rounded-[4px] border border-[rgba(34,197,94,0.3)] bg-[rgba(34,197,94,0.1)] p-3 text-sm text-emerald-400">
                   <CheckCircle2 className="h-4 w-4 shrink-0" />
                   <span>Saved to your gallery!</span>
                 </div>
               )}
               {saveState === "error" && (
-                <div className="mb-4 flex items-center gap-2 rounded-lg bg-red-500/10 p-3 text-sm text-red-400">
+                <div className="mb-4 flex items-center gap-2 rounded-[4px] border border-[rgba(239,68,68,0.3)] bg-[rgba(239,68,68,0.1)] p-3 text-sm text-red-400">
                   <XCircle className="h-4 w-4 shrink-0" />
                   <span>{saveError || "Failed to save artwork"}</span>
                 </div>
               )}
 
-              <div className="flex aspect-square sm:aspect-[4/3] items-center justify-center rounded-xl bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 overflow-hidden">
+              <div className="relative flex aspect-square sm:aspect-[4/3] items-center justify-center rounded-[4px] bg-[rgba(0,0,0,0.4)] border border-white/5 overflow-hidden cut-corner">
                 {isGenerating ? (
-                  <div className="text-center">
-                    <Loader2 className="mx-auto h-10 w-10 animate-spin text-violet-400" />
-                    <p className="mt-4 text-sm text-zinc-500">
-                      Pollinations AI is creating your masterpiece...
-                    </p>
+                  <div className="text-center relative w-full h-full flex flex-col items-center justify-center">
+                    <div className="relative w-full h-full absolute inset-0 overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-br from-[rgba(230,194,128,0.03)] to-transparent" />
+                      <div className="absolute inset-0 bg-grid opacity-10" />
+                      <div className="absolute inset-0 bg-[repeating-linear-gradient(0deg,transparent,transparent_2px,rgba(255,255,255,0.01)_2px,rgba(255,255,255,0.01)_4px)]" />
+                    </div>
+                    <div className="relative z-10">
+                      <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-[rgba(230,194,128,0.2)] bg-[rgba(230,194,128,0.06)]">
+                        <Loader2 className="h-8 w-8 animate-spin text-gold-400" />
+                      </div>
+                      <p className="mt-4 text-sm text-white/40">
+                        Pollinations AI is creating...
+                      </p>
+                      <div className="mt-3 flex justify-center gap-1">
+                        <span className="h-1.5 w-1.5 rounded-full bg-gold-400 animate-energy-pulse" />
+                        <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 animate-energy-pulse" style={{ animationDelay: "0.5s" }} />
+                        <span className="h-1.5 w-1.5 rounded-full bg-gold-400 animate-energy-pulse" style={{ animationDelay: "1s" }} />
+                      </div>
+                    </div>
                   </div>
                 ) : generatedImage ? (
                   <div className="relative w-full h-full group">
@@ -419,13 +444,13 @@ export default function CreatePage() {
                     <img
                       src={generatedImage}
                       alt={generatedTitle || "Generated artwork"}
-                      className="w-full h-full object-contain rounded-xl"
+                      className="w-full h-full object-contain rounded-[4px]"
                     />
                     {/* Prompt overlay on hover */}
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 opacity-0 group-hover:opacity-100 transition-opacity rounded-b-xl">
-                      <p className="text-xs text-zinc-300 truncate">
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-[4px]">
+                      <p className="text-xs text-white/60 truncate">
                         {selectedPreset && (
-                          <span className="text-violet-400 font-medium">
+                          <span className="text-gold-400 font-medium">
                             {selectedPreset.label}
                             {" — "}
                           </span>
@@ -436,13 +461,15 @@ export default function CreatePage() {
                   </div>
                 ) : (
                   <div className="text-center px-8">
-                    <Wand2 className="mx-auto h-12 w-12 text-zinc-700" />
-                    <p className="mt-4 text-sm text-zinc-500">
+                    <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-[rgba(0,0,0,0.3)]">
+                      <Wand2 className="h-7 w-7 text-white/20" />
+                    </div>
+                    <p className="mt-4 text-sm text-white/30">
                       Enter a prompt and select a style, then hit{" "}
-                      <span className="text-violet-400 font-medium">
+                      <span className="text-gold-400 font-medium">
                         Generate
                       </span>{" "}
-                      to create your AI artwork using Pollinations.
+                      to create your AI artwork.
                     </p>
                     <div className="mt-6 flex flex-wrap justify-center gap-2">
                       {[
@@ -454,7 +481,7 @@ export default function CreatePage() {
                         <button
                           key={ex}
                           onClick={() => setPrompt(ex)}
-                          className="rounded-full border border-zinc-800 bg-zinc-800/30 px-3 py-1.5 text-xs text-zinc-500 hover:border-zinc-700 hover:text-zinc-300 transition-colors"
+                          className="rounded-[4px] border border-white/10 bg-[rgba(0,0,0,0.3)] px-3 py-1.5 text-xs text-white/30 hover:border-[rgba(230,194,128,0.3)] hover:text-gold-400 transition-all duration-300"
                         >
                           {ex}
                         </button>
@@ -489,6 +516,7 @@ export default function CreatePage() {
             </CardContent>
           </Card>
         </motion.div>
+        </ErrorBoundary>
       </div>
     </div>
   );

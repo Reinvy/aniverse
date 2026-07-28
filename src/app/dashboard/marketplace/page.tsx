@@ -76,11 +76,11 @@ export default function MarketplacePage() {
             <h1 className="text-xl font-bold text-white sm:text-2xl lg:text-3xl">
               Marketplace
             </h1>
-            <p className="mt-0.5 text-sm text-zinc-400 sys-label">
-              Buy, sell, and license AI-generated anime art.
+            <p className="mt-0.5 text-sm text-white/40 sys-label">
+              BUY // SELL — AI-generated anime art marketplace
             </p>
           </div>
-          <Button className="w-full sm:w-auto gap-2">
+          <Button variant="primary" className="w-full sm:w-auto gap-2 glow-gold">
             <Store className="h-4 w-4" />
             List Your Art
           </Button>
@@ -89,7 +89,7 @@ export default function MarketplacePage() {
 
       {/* Stats bar */}
       <motion.div
-        className="mt-6 grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-4 corner-accents"
+        className="mt-6 grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-4"
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1, duration: 0.4 }}
@@ -104,11 +104,11 @@ export default function MarketplacePage() {
           return (
             <div
               key={stat.label}
-              className="rounded-xl border border-zinc-800/60 bg-zinc-900/50 p-3 sm:p-4 glow-gold"
+              className="glass rounded-[4px] cut-corner p-3 sm:p-4 crosshair-mark"
             >
               <div className="flex items-center gap-2">
-                <StatIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-zinc-500" />
-                <span className="text-[11px] sm:text-xs text-zinc-500">{stat.label}</span>
+                <StatIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-white/30" />
+                <span className="sys-label">{stat.label}</span>
               </div>
               <p className="mt-1.5 sm:mt-2 text-lg sm:text-xl font-bold text-white">{stat.value}</p>
             </div>
@@ -118,13 +118,13 @@ export default function MarketplacePage() {
 
       {/* Filters */}
       <motion.div
-        className="mt-4 sm:mt-6 flex flex-col gap-3 sm:flex-row sm:items-center corner-accents"
+        className="mt-4 sm:mt-6 flex flex-col gap-3 sm:flex-row sm:items-center"
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.15, duration: 0.4 }}
       >
         <div className="relative flex-1 max-w-full sm:max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/30" />
           <Input
             placeholder="Search marketplace..."
             className="pl-10 text-sm"
@@ -137,10 +137,10 @@ export default function MarketplacePage() {
             <button
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
-              className={`rounded-full px-3 py-1.5 text-xs font-medium transition-all duration-200 tap-highlight-transparent ${
+              className={`rounded-[4px] px-3 py-1.5 text-xs font-medium transition-all duration-300 premium-transition ${
                 activeCategory === cat.id
-                  ? "bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-md"
-                  : "bg-zinc-800/60 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200"
+                  ? "border border-[rgba(230,194,128,0.3)] bg-[rgba(230,194,128,0.1)] text-gold-400"
+                  : "border border-white/10 bg-[rgba(0,0,0,0.2)] text-white/40 hover:border-white/20 hover:text-white/60"
               }`}
             >
               {cat.label}
@@ -158,11 +158,13 @@ export default function MarketplacePage() {
       >
         {filtered.length === 0 ? (
           <div className="col-span-full flex flex-col items-center justify-center py-20 text-center">
-            <Store className="h-12 w-12 text-zinc-700" />
-            <p className="mt-4 text-lg font-medium text-zinc-400">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-[rgba(0,0,0,0.3)]">
+              <Store className="h-7 w-7 text-white/20" />
+            </div>
+            <p className="mt-4 text-lg font-semibold text-white/60">
               No listings found
             </p>
-            <p className="mt-1 text-sm text-zinc-600">
+            <p className="mt-1 text-sm text-white/30">
               Try adjusting your search or filters.
             </p>
           </div>
@@ -175,9 +177,9 @@ export default function MarketplacePage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05, duration: 0.3 }}
             >
-              <Card className="group cursor-pointer border-zinc-800/60 transition-all duration-200 hover:border-zinc-700 hover:shadow-lg hover:shadow-violet-600/5 overflow-hidden">
+              <Card className="group cursor-pointer diamond-indicator overflow-hidden">
                 {/* Thumbnail */}
-                <div className="aspect-[4/3] flex items-center justify-center bg-gradient-to-br from-zinc-800 to-zinc-900 text-zinc-600">
+                <div className="aspect-[4/3] flex items-center justify-center bg-[rgba(0,0,0,0.3)] text-white/10 border-b border-white/5">
                   <Image className="h-10 w-10" />
                 </div>
 
@@ -187,11 +189,11 @@ export default function MarketplacePage() {
                       <h3 className="font-semibold text-white truncate">
                         {item.title}
                       </h3>
-                      <p className="text-xs text-zinc-500 mt-0.5">
+                      <p className="text-xs text-white/30 mt-0.5">
                         by {item.creator}
                       </p>
                     </div>
-                    <button className="shrink-0 text-zinc-500 hover:text-rose-400 transition-colors">
+                    <button className="shrink-0 text-white/20 hover:text-rose-400 transition-colors duration-200">
                       <Heart className="h-4 w-4" />
                     </button>
                   </div>
@@ -202,7 +204,7 @@ export default function MarketplacePage() {
                       ${item.price.toFixed(2)}
                     </span>
                     {item.originalPrice && (
-                      <span className="text-sm text-zinc-600 line-through">
+                      <span className="text-sm text-white/20 line-through">
                         ${item.originalPrice.toFixed(2)}
                       </span>
                     )}
@@ -218,9 +220,9 @@ export default function MarketplacePage() {
                   </div>
 
                   {/* Meta */}
-                  <div className="mt-3 flex items-center gap-3 text-xs text-zinc-500">
+                  <div className="mt-3 flex items-center gap-3 text-xs text-white/30">
                     <span className="flex items-center gap-1">
-                      <Star className="h-3.5 w-3.5 text-amber-400 fill-amber-400" />
+                      <Star className="h-3.5 w-3.5 text-gold-400 fill-gold-400" />
                       {item.rating}
                     </span>
                     <span className="flex items-center gap-1">
