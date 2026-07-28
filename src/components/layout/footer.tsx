@@ -6,20 +6,23 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-zinc-800/60 bg-zinc-950">
+    <footer className="border-t border-stroke-white bg-navy-900">
+      {/* Angled bar accent */}
+      <div className="angled-bar" />
+
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
-            <Link href="/" className="flex items-center gap-2 mb-4">
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-violet-600 to-fuchsia-600">
-                <Sparkles className="h-3.5 w-3.5 text-white" />
+            <Link href="/" className="flex items-center gap-2 mb-4 group">
+              <div className="relative flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-[rgba(243,198,105,0.3)] to-[rgba(243,198,105,0.1)] border border-stroke-gold">
+                <Sparkles className="h-3.5 w-3.5 text-gold-400" />
               </div>
-              <span className="text-base font-bold text-white">
+              <span className="text-base font-bold text-white group-hover:text-gold-300 transition-colors">
                 {APP_NAME}
               </span>
             </Link>
-            <p className="text-sm text-zinc-500 leading-relaxed max-w-xs">
+            <p className="text-sm text-white/40 leading-relaxed max-w-xs">
               Where AI meets anime art. Generate, share, and discover stunning
               anime artwork powered by cutting-edge AI.
             </p>
@@ -27,15 +30,13 @@ export function Footer() {
 
           {/* Product */}
           <div>
-            <h3 className="text-sm font-semibold text-zinc-200 mb-3">
-              Product
-            </h3>
+            <h3 className="sys-label mb-3">PRODUCT // NODE</h3>
             <ul className="space-y-2">
-              {["Features", "Pricing", "Gallery", "API"].map((item) => (
+              {["Features", "Gallery", "Pricing", "API"].map((item) => (
                 <li key={item}>
                   <Link
                     href={`/${item.toLowerCase()}`}
-                    className="text-sm text-zinc-500 hover:text-zinc-300 transition-colors"
+                    className="text-sm text-white/40 hover:text-gold-300 transition-colors"
                   >
                     {item}
                   </Link>
@@ -46,16 +47,14 @@ export function Footer() {
 
           {/* Resources */}
           <div>
-            <h3 className="text-sm font-semibold text-zinc-200 mb-3">
-              Resources
-            </h3>
+            <h3 className="sys-label mb-3">RESOURCES // NODE</h3>
             <ul className="space-y-2">
               {["Documentation", "Tutorials", "Community", "Blog"].map(
                 (item) => (
                   <li key={item}>
                     <Link
                       href={`/${item.toLowerCase()}`}
-                      className="text-sm text-zinc-500 hover:text-zinc-300 transition-colors"
+                      className="text-sm text-white/40 hover:text-gold-300 transition-colors"
                     >
                       {item}
                     </Link>
@@ -67,15 +66,13 @@ export function Footer() {
 
           {/* Legal */}
           <div>
-            <h3 className="text-sm font-semibold text-zinc-200 mb-3">
-              Legal
-            </h3>
+            <h3 className="sys-label mb-3">LEGAL // NODE</h3>
             <ul className="space-y-2">
               {["Privacy", "Terms", "License", "Guidelines"].map((item) => (
                 <li key={item}>
                   <Link
                     href={`/${item.toLowerCase()}`}
-                    className="text-sm text-zinc-500 hover:text-zinc-300 transition-colors"
+                    className="text-sm text-white/40 hover:text-gold-300 transition-colors"
                   >
                     {item}
                   </Link>
@@ -86,16 +83,16 @@ export function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-10 flex flex-col items-center gap-4 border-t border-zinc-800/60 pt-8 sm:flex-row sm:justify-between">
-          <p className="text-xs text-zinc-600">
-            &copy; {year} {APP_NAME}. All rights reserved.
+        <div className="mt-10 flex flex-col items-center gap-4 border-t border-stroke-white pt-8 sm:flex-row sm:justify-between">
+          <p className="sys-label">
+            &copy; {year} {APP_NAME} // ALL RIGHTS RESERVED
           </p>
           <div className="flex items-center gap-4">
             <Link
               href="https://github.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-zinc-500 hover:text-zinc-300 transition-colors"
+              className="text-white/30 hover:text-gold-400 transition-colors"
             >
               <Code2 className="h-4 w-4" />
             </Link>
@@ -103,13 +100,12 @@ export function Footer() {
               href="https://twitter.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-zinc-500 hover:text-zinc-300 transition-colors"
+              className="text-white/30 hover:text-gold-400 transition-colors"
             >
               <AtSign className="h-4 w-4" />
             </Link>
-            <span className="flex items-center gap-1 text-xs text-zinc-600">
-              Made with <Heart className="h-3 w-3 text-red-500 fill-red-500" /> by
-              AniVerse Team
+            <span className="flex items-center gap-1 sys-label">
+              MADE WITH <Heart className="h-3 w-3 text-gold-400" /> BY ANIVERSE TEAM
             </span>
           </div>
         </div>

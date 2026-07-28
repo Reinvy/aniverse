@@ -108,7 +108,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="min-h-full bg-zinc-950 font-sans text-zinc-100">
+      <body className="min-h-full bg-navy-900 font-sans text-white/85 bg-starfield scanline">
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
