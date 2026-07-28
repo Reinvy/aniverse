@@ -52,7 +52,7 @@ const artworks = Array.from({ length: 12 }, (_, i) => ({
 function ColorSwatch({ color }: { color: string }) {
   return (
     <div
-      className="h-6 w-6 rounded-full border border-zinc-700/50 shadow-sm"
+      className="h-5 w-5 rounded-full border border-white/10 shadow-sm transition-transform duration-200 hover:scale-125"
       style={{ backgroundColor: color }}
       title={color}
     />
@@ -81,23 +81,23 @@ export default function GalleryPage() {
         <motion.section
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-8 sm:mb-10 corner-accents"
+          className="mb-8 sm:mb-10"
         >
           <div className="mb-4 sm:mb-6 flex items-start sm:items-center gap-3">
-            <div className="flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-amber-400 to-orange-600 shadow-lg">
+            <div className="flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-[4px] bg-gradient-to-br from-amber-400 to-orange-600 shadow-lg">
               <Sun className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
             </div>
             <div className="min-w-0 flex-1">
               <h2 className="text-lg sm:text-xl font-bold text-white">
                 Today&apos;s Daily Art
               </h2>
-              <p className="sys-label text-xs text-zinc-500">
-                Curated artwork descriptions — July 27, 2026
+              <p className="sys-label text-xs text-white/30">
+                CURATED // July 27, 2026
               </p>
             </div>
             <button
               onClick={() => setShowDailyArt(false)}
-              className="shrink-0 text-xs text-zinc-600 hover:text-zinc-400 transition-colors"
+              className="shrink-0 text-xs text-white/20 hover:text-white/40 transition-colors duration-200"
             >
               Dismiss
             </button>
@@ -112,17 +112,16 @@ export default function GalleryPage() {
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.05, duration: 0.3 }}
-                className="energy-sweep"
               >
-                <Card className="group h-full border-zinc-800/60 bg-gradient-to-br from-zinc-900/80 to-zinc-950/80 transition-all duration-200 hover:border-amber-700/50 hover:shadow-lg hover:shadow-amber-600/5">
+                <Card className="group h-full diamond-indicator">
                   {/* Thumbnail placeholder with style gradient */}
-                  <div className="flex aspect-[4/3] items-center justify-center rounded-t-xl bg-gradient-to-br from-zinc-800 to-zinc-900 text-zinc-600 overflow-hidden relative">
+                  <div className="flex aspect-[4/3] items-center justify-center rounded-t-[4px] bg-[rgba(0,0,0,0.3)] border-b border-white/5 text-white/10 overflow-hidden relative">
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent z-10" />
                     <div className="z-20 flex flex-col items-center gap-2">
                       <Palette className="h-10 w-10 text-amber-500/60" />
                       <Badge
                         variant="secondary"
-                        className="bg-black/50 text-[10px] uppercase tracking-wider text-amber-400 border-amber-800/50"
+                        className="bg-black/50 text-[10px] uppercase tracking-wider text-amber-400"
                       >
                         {art.style}
                       </Badge>
@@ -143,28 +142,28 @@ export default function GalleryPage() {
                     <div className="flex items-start justify-between gap-2">
                       <div className="min-w-0 flex-1">
                         <h3 className="font-semibold text-white truncate flex items-center gap-1.5">
-                          <Sparkles className="h-3.5 w-3.5 text-amber-400 shrink-0" />
+                          <Sparkles className="h-3.5 w-3.5 text-gold-400 shrink-0" />
                           {art.title}
                         </h3>
-                        <p className="text-xs text-zinc-500 mt-0.5">
+                        <p className="text-xs text-white/30 mt-0.5">
                           by {art.artistAttribution}
                         </p>
                       </div>
                       <Badge
-                        variant="outline"
-                        className="shrink-0 border-zinc-700 text-[10px] uppercase text-zinc-400"
+                        variant="secondary"
+                        className="shrink-0 text-[10px] uppercase"
                       >
                         {art.genre}
                       </Badge>
                     </div>
 
-                    <p className="mt-2 text-xs leading-relaxed text-zinc-500 line-clamp-2">
+                    <p className="mt-2 text-xs leading-relaxed text-white/30 line-clamp-2">
                       {art.description}
                     </p>
 
                     {/* Theme tag */}
                     <div className="mt-2 flex flex-wrap gap-1">
-                      <span className="inline-block rounded-full bg-zinc-800/60 px-2 py-0.5 text-[10px] text-zinc-400">
+                      <span className="inline-block rounded-[4px] bg-[rgba(0,0,0,0.3)] border border-white/5 px-2 py-0.5 text-[10px] text-white/30">
                         {art.theme}
                       </span>
                     </div>
@@ -194,8 +193,8 @@ export default function GalleryPage() {
             <h1 className="text-xl font-bold text-white sm:text-2xl lg:text-3xl">
               Gallery
             </h1>
-            <p className="mt-0.5 text-sm text-zinc-400">
-              Browse your collection and discover community creations.
+            <p className="mt-0.5 text-sm text-white/40 sys-label">
+              COLLECTION // Browse and discover community creations
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -225,7 +224,7 @@ export default function GalleryPage() {
         transition={{ delay: 0.1, duration: 0.4 }}
       >
         <div className="relative flex-1 max-w-full sm:max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/30" />
           <Input
             placeholder="Search artworks or artists..."
             className="pl-10 text-sm"
@@ -239,10 +238,10 @@ export default function GalleryPage() {
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
               className={cn(
-                "rounded-full px-3 py-1.5 text-xs font-medium transition-all duration-200 tap-highlight-transparent",
+                "rounded-[4px] px-3 py-1.5 text-xs font-medium transition-all duration-300 premium-transition",
                 activeCategory === cat.id
-                  ? "bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-md"
-                  : "bg-zinc-800/60 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200",
+                  ? "border border-[rgba(230,194,128,0.3)] bg-[rgba(230,194,128,0.1)] text-gold-400"
+                  : "border border-white/10 bg-[rgba(0,0,0,0.2)] text-white/40 hover:border-white/20 hover:text-white/60",
               )}
             >
               {cat.label}
@@ -265,11 +264,13 @@ export default function GalleryPage() {
       >
         {filtered.length === 0 ? (
           <div className="col-span-full flex flex-col items-center justify-center py-20 text-center">
-            <Image className="h-12 w-12 text-zinc-700" />
-            <p className="mt-4 text-lg font-medium text-zinc-400">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-[rgba(0,0,0,0.3)]">
+              <Image className="h-7 w-7 text-white/20" />
+            </div>
+            <p className="mt-4 text-lg font-semibold text-white/60">
               No artworks found
             </p>
-            <p className="mt-1 text-sm text-zinc-600">
+            <p className="mt-1 text-sm text-white/30">
               Try adjusting your search or filters.
             </p>
           </div>
@@ -280,21 +281,20 @@ export default function GalleryPage() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05, duration: 0.3 }}
-              className="energy-sweep"
             >
               <Card
                 className={cn(
-                  "group cursor-pointer border-zinc-800/60 transition-all duration-200 hover:border-zinc-700 hover:shadow-lg hover:shadow-violet-600/5",
+                  "group cursor-pointer diamond-indicator",
                   viewMode === "list" && "flex items-center gap-4 p-3",
                 )}
               >
                 {/* Thumbnail placeholder */}
                 <div
                   className={cn(
-                    "flex items-center justify-center bg-gradient-to-br from-zinc-800 to-zinc-900 text-zinc-600",
+                    "flex items-center justify-center bg-[rgba(0,0,0,0.3)] text-white/10",
                     viewMode === "grid"
-                      ? "aspect-[4/3] rounded-t-xl"
-                      : "h-20 w-20 shrink-0 rounded-lg",
+                      ? "aspect-[4/3] rounded-t-[4px] border-b border-white/5"
+                      : "h-20 w-20 shrink-0 rounded-[4px] border border-white/5",
                   )}
                 >
                   <Image className="h-8 w-8" />
@@ -310,7 +310,7 @@ export default function GalleryPage() {
                       <h3 className="font-semibold text-white truncate">
                         {art.title}
                       </h3>
-                      <p className="text-xs text-zinc-500 mt-0.5">
+                      <p className="text-xs text-white/30 mt-0.5">
                         by {art.artist}
                       </p>
                     </div>
@@ -319,7 +319,7 @@ export default function GalleryPage() {
                     </Badge>
                   </div>
 
-                  <div className="mt-3 flex items-center gap-4 text-xs text-zinc-500">
+                  <div className="mt-3 flex items-center gap-4 text-xs text-white/30">
                     <span className="flex items-center gap-1">
                       <Heart className="h-3.5 w-3.5 text-rose-400" />
                       {formatNumber(art.likes)}

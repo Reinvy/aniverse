@@ -100,7 +100,7 @@ export default function RegisterPage() {
           </div>
         </Link>
 
-        <Card className="cut-corner">
+        <Card className="cut-corner diamond-indicator">
           <CardHeader className="text-center">
             <Badge variant="secondary" className="mb-2 mx-auto w-fit px-3 py-1 text-xs">
               FREE PLAN INCLUDED

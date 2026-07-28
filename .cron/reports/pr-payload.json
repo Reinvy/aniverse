@@ -1,0 +1,7 @@
+{
+  "title": "feat: add Monochrome Accent style + enhanced gallery search",
+  "head": "feat/aniverse-trending-styles-and-search",
+  "base": "main",
+  "body": "## What\n\nAdded a new Monochrome Accent style preset and enhanced the gallery search, based on A1 Market Research insights.\n\n### Changes\n\n1. New Style Preset - Monochrome Accent (src/lib/constants.ts)\n   - Added to STYLE_PRESETS and TRENDING_STYLES showcase\n   - Gradient: from-slate-600 to-zinc-800\n\n2. New Pollinations.ai Prompt Prefix (src/app/dashboard/create/page.tsx)\n   - Added monochrome grayscale prompt prefix\n\n3. Enhanced Gallery Search (src/app/dashboard/gallery/page.tsx)\n   - Search now also matches descriptions and style names\n\n## Why\n\nFrom A1 Market Research (2026-07-27):\n- Monochrome with Accent Color identified as emerging trend\n- Semantic Search identified as Priority 4\n\n## How to Test\n\n1. Go to /dashboard/create and verify Monochrome Accent appears\n2. Select it and generate artwork\n3. Go to /dashboard/gallery and search by description keywords\n\n## Environment Variables\n\nNone.",
+  "maintainer_can_modify": true
+}

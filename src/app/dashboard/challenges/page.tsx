@@ -35,8 +35,8 @@ export default function ChallengesPage() {
             <h1 className="text-xl font-bold text-white sm:text-2xl lg:text-3xl">
               Daily & Weekly Challenges
             </h1>
-            <p className="mt-0.5 text-sm text-zinc-400">
-              Create, compete, and earn rewards. New challenges every day.
+            <p className="mt-0.5 text-sm text-white/40 sys-label">
+              CREATE // COMPETE — Earn rewards. New challenges every day.
             </p>
           </div>
           <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
