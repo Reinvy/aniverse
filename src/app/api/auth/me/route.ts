@@ -6,9 +6,13 @@ import {
   errorResponse,
   notFoundResponse,
 } from "@/lib/api-helpers";
+import { applyRateLimit, readLimiter } from "@/lib/rate-limiter";
 
 export async function GET(request: NextRequest) {
   try {
+    const rateCheck = applyRateLimit(request, "auth-me", readLimiter);
+    if (rateCheck) return rateCheck;
+
     const auth = await authenticateRequest(request);
     if (!auth.authenticated) return auth.response;
 

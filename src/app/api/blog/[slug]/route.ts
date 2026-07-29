@@ -5,6 +5,7 @@ import {
   notFoundResponse,
 } from "@/lib/api-helpers";
 import { findArticleBySlug } from "@/lib/services/blog.service";
+import { applyRateLimit, readLimiter } from "@/lib/rate-limiter";
 
 /** GET /api/blog/[slug] — Get a single published article by slug */
 export async function GET(
@@ -12,6 +13,9 @@ export async function GET(
   { params }: { params: Promise<{ slug: string }> },
 ) {
   try {
+    const rateCheck = applyRateLimit(_request, "blog-article", readLimiter);
+    if (rateCheck) return rateCheck;
+
     const { slug } = await params;
     const article = await findArticleBySlug(slug);
 

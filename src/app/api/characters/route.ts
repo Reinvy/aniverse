@@ -10,10 +10,14 @@ import {
   findPublicCharacters,
   findCharacterById,
 } from "@/lib/services/character.service";
+import { applyRateLimit, readLimiter } from "@/lib/rate-limiter";
 
 /** GET /api/characters — List public characters */
 export async function GET(request: NextRequest) {
   try {
+    const rateCheck = applyRateLimit(request, "characters", readLimiter);
+    if (rateCheck) return rateCheck;
+
     const { searchParams } = new URL(request.url);
     const pagination = parsePagination(searchParams, { sort: "createdAt", order: "desc" });
 

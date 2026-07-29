@@ -6,9 +6,13 @@ import {
   notFoundResponse,
 } from "@/lib/api-helpers";
 import { getDashboardStats } from "@/lib/services/dashboard.service";
+import { applyRateLimit, readLimiter } from "@/lib/rate-limiter";
 
 export async function GET(request: NextRequest) {
   try {
+    const rateCheck = applyRateLimit(request, "dashboard-stats", readLimiter);
+    if (rateCheck) return rateCheck;
+
     const auth = await authenticateRequest(request);
     if (!auth.authenticated) return auth.response;
 

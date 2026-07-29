@@ -11,10 +11,14 @@ import {
   createArtwork,
   findUserArtworks,
 } from "@/lib/services/artwork.service";
+import { applyRateLimit, writeLimiter, readLimiter } from "@/lib/rate-limiter";
 
 /** POST /api/artworks — Save a new artwork after generation */
 export async function POST(request: NextRequest) {
   try {
+    const rateCheck = applyRateLimit(request, "artworks-create", writeLimiter);
+    if (rateCheck) return rateCheck;
+
     const auth = await authenticateRequest(request);
     if (!auth.authenticated) return auth.response;
 
@@ -50,6 +54,9 @@ export async function POST(request: NextRequest) {
 /** GET /api/artworks — List user's artworks with pagination, sorting, and filtering */
 export async function GET(request: NextRequest) {
   try {
+    const rateCheck = applyRateLimit(request, "artworks-list", readLimiter);
+    if (rateCheck) return rateCheck;
+
     const auth = await authenticateRequest(request);
     if (!auth.authenticated) return auth.response;
 
