@@ -17,6 +17,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { PageHeader } from "@/components/ui/page-header";
 import Link from "next/link";
 import { dailyChallenge } from "@/data/challenges/daily-20260724";
 import { weeklyChallenge } from "@/data/challenges/weekly-20260724";
@@ -25,20 +26,10 @@ export default function ChallengesPage() {
   return (
     <div className="p-4 sm:p-6 lg:p-8">
       {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-      >
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h1 className="text-xl font-bold text-white sm:text-2xl lg:text-3xl">
-              Daily & Weekly Challenges
-            </h1>
-            <p className="mt-0.5 text-sm text-white/40 sys-label">
-              CREATE // COMPETE — Earn rewards. New challenges every day.
-            </p>
-          </div>
+      <PageHeader
+        title="Daily & Weekly Challenges"
+        description="CREATE // COMPETE — Earn rewards. New challenges every day."
+        actions={
           <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
             <Badge variant="secondary" className="gap-1 border-0 bg-zinc-800 px-2.5 sm:px-3 py-1.5">
               <Coins className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-amber-400" />
@@ -49,8 +40,8 @@ export default function ChallengesPage() {
               <span>24 Participants Today</span>
             </Badge>
           </div>
-        </div>
-      </motion.div>
+        }
+      />
 
       {/* ─── Daily Challenge ─── */}
       <motion.div

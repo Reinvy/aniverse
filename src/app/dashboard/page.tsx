@@ -20,6 +20,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { StatCardSkeleton, ListItemSkeleton } from "@/components/ui/skeleton";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
+import { PageHeader } from "@/components/ui/page-header";
 import { timeAgo } from "@/lib/utils";
 import Link from "next/link";
 import { useAuth } from "@/components/auth/AuthProvider";
@@ -147,29 +148,18 @@ export default function DashboardPage() {
   return (
     <div className="p-4 sm:p-6 lg:p-8">
       {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-      >
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h1 className="text-xl font-bold text-white sm:text-2xl lg:text-3xl">
-              Dashboard
-            </h1>
-            <p className="mt-0.5 text-sm text-zinc-400">
-              Welcome back{user?.name ? `, ${user.name.split(" ")[0]}` : ""}!
-              Here&apos;s an overview of your activity.
-            </p>
-          </div>
+      <PageHeader
+        title="Dashboard"
+        description={`Welcome back${user?.name ? `, ${user.name.split(" ")[0]}` : ""}! Here&apos;s an overview of your activity.`}
+        actions={
           <Link href="/dashboard/create" className="w-full sm:w-auto">
             <Button className="w-full gap-2 sm:w-auto shadow-lg shadow-violet-600/20">
               <Sparkles className="h-4 w-4" />
               Create New
             </Button>
           </Link>
-        </div>
-      </motion.div>
+        }
+      />
 
       {/* Loading State — Game style skeleton grid */}
       {loadState === "loading" && (
