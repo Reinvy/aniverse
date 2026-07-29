@@ -20,6 +20,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PageHeader } from "@/components/ui/page-header";
 import { formatNumber, timeAgo, cn } from "@/lib/utils";
 import { GALLERY_CATEGORIES } from "@/lib/constants";
 import { dailyArt } from "@/data/daily-art-20260727";
@@ -183,20 +184,10 @@ export default function GalleryPage() {
       )}
 
       {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-      >
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h1 className="text-xl font-bold text-white sm:text-2xl lg:text-3xl">
-              Gallery
-            </h1>
-            <p className="mt-0.5 text-sm text-white/40 sys-label">
-              COLLECTION // Browse and discover community creations
-            </p>
-          </div>
+      <PageHeader
+        title="Gallery"
+        description="COLLECTION // Browse and discover community creations"
+        actions={
           <div className="flex items-center gap-2">
             <Button
               variant={viewMode === "grid" ? "default" : "ghost"}
@@ -213,8 +204,8 @@ export default function GalleryPage() {
               <List className="h-4 w-4" />
             </Button>
           </div>
-        </div>
-      </motion.div>
+        }
+      />
 
       {/* Filters */}
       <motion.div

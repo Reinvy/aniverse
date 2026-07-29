@@ -1062,9 +1062,63 @@ body {
   border: 1px solid transparent;
 }
 
-/* ══════════════════════════════════════════════════════════════
-   SPATIAL CANVAS — Viewport-locked navigation
+/* ─── ══════════════════════════════════════════════════════════
+   🎯 ENHANCED MICRO-INTERACTIONS v2.5
    ══════════════════════════════════════════════════════════════ */
+
+/* Focus ring glow — for interactive elements */
+.focus-ring-gold:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(230, 194, 128, 0.3), 0 0 15px rgba(230, 194, 128, 0.1);
+}
+.focus-ring-cyan:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(66, 232, 224, 0.3), 0 0 15px rgba(66, 232, 224, 0.1);
+}
+
+/* Subtle hover lift — for cards and interactive panels */
+.hover-lift {
+  transition: transform 0.3s var(--ease-cinematic), box-shadow 0.3s var(--ease-cinematic);
+}
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(230, 194, 128, 0.08);
+}
+
+/* Scale tap feedback — for touch targets */
+.tap-scale:active {
+  transform: scale(0.96);
+}
+
+/* Border glow on hover — for filter chips and buttons */
+.hover-border-glow {
+  transition: border-color 0.3s var(--ease-cinematic), box-shadow 0.3s var(--ease-cinematic);
+}
+.hover-border-glow:hover {
+  border-color: rgba(230, 194, 128, 0.3);
+  box-shadow: 0 0 15px rgba(230, 194, 128, 0.08);
+}
+
+/* Smooth entrance transitions for page sections */
+.section-fade-in {
+  animation: section-fade-in 0.6s var(--ease-cinematic) both;
+}
+@keyframes section-fade-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Pulse ring for notification dots */
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(230, 194, 128, 0.4); }
+  70% { box-shadow: 0 0 0 6px rgba(230, 194, 128, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(230, 194, 128, 0); }
+}
+.pulse-ring {
+  animation: pulse-ring 2s ease-out infinite;
+}
+
+/* ─── SPATIAL CANVAS — Viewport-locked navigation ─────────────────── */
 
 /* Prevent body scroll */
 html.spatial-active,

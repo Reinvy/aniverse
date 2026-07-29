@@ -17,7 +17,9 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
+import { PageHeader } from "@/components/ui/page-header";
 import { STYLE_PRESETS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/components/auth/AuthProvider";
@@ -201,18 +203,10 @@ export default function CreatePage() {
   return (
     <div className="p-4 sm:p-6 lg:p-8">
       {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-      >
-        <h1 className="text-xl font-bold text-white sm:text-2xl lg:text-3xl">
-          Create Artwork
-        </h1>
-        <p className="mt-0.5 text-sm text-white/40 sys-label">
-          GENERATE // PROMPT — Describe your vision and let AI bring it to life
-        </p>
-      </motion.div>
+      <PageHeader
+        title="Create Artwork"
+        description="GENERATE // PROMPT — Describe your vision and let AI bring it to life"
+      />
 
       <div className="mt-6 sm:mt-8 grid gap-6 sm:gap-8 lg:grid-cols-5">
         <ErrorBoundary compact message="Failed to load controls">
@@ -232,23 +226,15 @@ export default function CreatePage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="px-4 pb-4 sm:px-6 sm:pb-6">
-              <textarea
+              <Textarea
                 placeholder="Describe the anime artwork you want to create..."
-                className={cn(
-                  "min-h-[100px] sm:min-h-[120px] w-full rounded-[4px]",
-                  "border border-white/10 bg-[rgba(0,0,0,0.4)]",
-                  "p-3 text-sm text-white/85 placeholder:text-white/25",
-                  "backdrop-blur-xl resize-none",
-                  "focus-visible:outline-none focus-visible:border-[rgba(230,194,128,0.4)]",
-                  "focus-visible:shadow-[0_0_0_1px_rgba(230,194,128,0.2),_inset_0_0_12px_rgba(230,194,128,0.15)]",
-                  "transition-all duration-300",
-                )}
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
+                showCount
               />
               <div className="mt-2 flex items-center justify-between">
                 <span className="text-xs text-white/30">
-                  {prompt.length} characters
+                  {/* Additional info like generation credits */}
                 </span>
                 <Badge variant="secondary" className="text-xs">
                   1 generation credit

@@ -15,6 +15,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { PageHeader } from "@/components/ui/page-header";
 import { formatNumber } from "@/lib/utils";
 import { pricingTiers, coinPacks, REFERRAL_REWARDS, MARKETPLACE_COMMISSION } from "@/lib/pricing";
 import Link from "next/link";
@@ -68,26 +69,16 @@ export default function MonetizationPage() {
   return (
     <div className="p-4 sm:p-6 lg:p-8">
       {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-      >
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h1 className="text-xl font-bold text-white sm:text-2xl lg:text-3xl">
-              Monetization
-            </h1>
-            <p className="mt-0.5 text-sm text-white/40 sys-label">
-              REVENUE // TRACKING — Pricing, sales, and growth metrics
-            </p>
-          </div>
+      <PageHeader
+        title="Monetization"
+        description="REVENUE // TRACKING — Pricing, sales, and growth metrics"
+        actions={
           <Badge variant="secondary" className="gap-1 border-0 bg-amber-900/40 px-3 py-1.5 text-amber-400 self-start sm:self-auto">
             <Sparkles className="h-3.5 w-3.5" />
             Pre-Launch
           </Badge>
-        </div>
-      </motion.div>
+        }
+      />
 
       {/* Revenue Stats */}
       <motion.div

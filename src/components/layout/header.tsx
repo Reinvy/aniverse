@@ -20,7 +20,7 @@ export function Header() {
   const pathname = usePathname();
 
   return (
-    <header className="fixed left-4 right-4 top-0 z-50 glass-obsidian mt-3 rounded-none chamfered glow-ambient bg-noise">
+    <header className="fixed inset-x-0 top-0 z-50 glass-obsidian mt-3 mx-3 sm:mx-4 rounded-none chamfered glow-ambient bg-noise">
 
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8 animate-stagger">
         {/* ── HUD Status Display (replaces plain logo) ── */}
