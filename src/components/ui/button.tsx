@@ -13,23 +13,24 @@ const buttonVariants = cva(
     // Astral Luxury: chamfered corners + light sweep
     "chamfered-sm",
     "light-sweep",
+    "backdrop-blur-sm",
   ].join(" "),
   {
     variants: {
       variant: {
         default:
-          "chamfered-sm border border-[rgba(230,194,128,0.25)] text-[#e6c280] shadow-sm",
+          "chamfered-sm border border-[rgba(229,197,135,0.25)] text-[#e5c587] shadow-sm bg-gradient-to-r from-[rgba(229,197,135,0.12)] to-[rgba(229,197,135,0.04)]",
         primary:
-          "chamfered-sm border border-[rgba(230,194,128,0.35)] text-white font-semibold",
+          "chamfered-sm border border-[rgba(229,197,135,0.5)] text-white font-semibold bg-gradient-to-r from-[rgba(229,197,135,0.2)] to-[rgba(229,197,135,0.08)]",
         destructive:
           "bg-[rgba(239,68,68,0.15)] border border-[rgba(239,68,68,0.3)] text-red-400 hover:bg-[rgba(239,68,68,0.25)] hover:border-[rgba(239,68,68,0.5)]",
         outline:
-          "border border-white/10 text-white/70 hover:bg-white/5 hover:border-white/20 hover:text-white",
+          "border border-white/10 text-white/70 hover:bg-white/5 hover:border-white/20 hover:text-white bg-white/[0.03]",
         secondary:
           "bg-white/5 border border-white/5 text-white/70 hover:bg-white/10 hover:text-white",
         ghost:
           "text-white/50 hover:bg-white/5 hover:text-white/80",
-        link: "text-[#e6c280] underline-offset-4 hover:underline",
+        link: "text-[#e5c587] underline-offset-4 hover:underline",
       },
       size: {
         default: "h-10 px-4 py-2 rounded-[4px]",

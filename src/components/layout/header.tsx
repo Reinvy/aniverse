@@ -20,7 +20,7 @@ export function Header() {
   const pathname = usePathname();
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 glass-obsidian mx-4 mt-3 rounded-none chamfered glow-ambient bg-noise">
+    <header className="fixed left-4 right-4 top-0 z-50 glass-obsidian mt-3 rounded-none chamfered glow-ambient bg-noise">
 
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8 animate-stagger">
         {/* ── HUD Status Display (replaces plain logo) ── */}
@@ -41,7 +41,7 @@ export function Header() {
             </div>
 
             {/* CREDITS / GENERATIONS indicator bar (mock for public landing) */}
-            <div className="hud-bar gap-2 mt-0.5">
+            <div className="hud-bar gap-2 mt-0.5 hidden md:flex">
               <span className="text-[0.6rem] tracking-wider text-white/40">CREDITS</span>
               <span className="hud-value text-[0.65rem]">10/10 FREE</span>
               <span className="hud-bar-fill min-w-[48px]">
@@ -59,7 +59,7 @@ export function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={cn("nav-diamond text-xs", isActive && "active")}
+                className={cn("nav-diamond text-sm font-medium tracking-wide", isActive && "active")}
               >
                 {link.label}
               </Link>
@@ -71,7 +71,7 @@ export function Header() {
         <div className="hidden md:flex items-center gap-3 animate-stagger">
           {/* System status badge */}
           <span className="badge-neon text-[0.6rem] px-2 py-0.5 gap-1.5">
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#00F0FF] shadow-[0_0_6px_#00F0FF] animate-pulse" />
+            <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#2DD4BF] shadow-[0_0_6px_#2DD4BF] animate-pulse" />
             SYS.ONLINE
           </span>
 
@@ -107,7 +107,7 @@ export function Header() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
-            className="overflow-hidden border-t border-stroke-white glass-strong"
+            className="overflow-x-hidden border-t border-stroke-white glass-strong max-w-[calc(100vw-2rem)]"
           >
             <div className="space-y-1 px-4 py-4">
               <span className="sys-label block px-3 pb-2">NAVIGATION // MAIN</span>

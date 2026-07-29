@@ -121,9 +121,9 @@ export default function HomePage() {
           <div className="pointer-events-none absolute inset-0 bg-starfield" />
           <div className="pointer-events-none absolute inset-0 bg-grid opacity-20" />
 
-          {/* Cyan/gold glow orbs */}
-          <div className="pointer-events-none absolute left-1/4 top-0 w-[600px] h-[600px] bg-gradient-to-b from-[#00F0FF]/10 via-transparent to-transparent blur-3xl" />
-          <div className="pointer-events-none absolute right-0 top-40 w-[400px] h-[400px] bg-gradient-to-bl from-[#FFE600]/10 to-transparent blur-3xl" />
+          {/* Gold/cyan glow orbs — subtle elegance */}
+          <div className="pointer-events-none absolute left-1/4 top-0 w-[600px] h-[600px] bg-gradient-to-b from-[#E5C587]/8 via-transparent to-transparent blur-3xl" />
+          <div className="pointer-events-none absolute right-0 top-40 w-[400px] h-[400px] bg-gradient-to-bl from-[#2DD4BF]/5 to-transparent blur-3xl" />
 
           <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <motion.div
@@ -146,11 +146,11 @@ export default function HomePage() {
               </motion.div>
               <span className="sys-node">[SYS.00]</span>
 
-              {/* Hero heading — vibrant cyan-to-gold gradient */}
+              {/* Hero heading — elegant gold-to-pearl gradient */}
               <h1 className="mt-6 text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
                 <span className="text-white">Where AI Meets</span>
                 <br />
-                <span className="bg-gradient-to-r from-[#00F0FF] via-[#FFE600] to-[#FF2D78] bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-[#E5C587] via-[#F1F5F9] to-[#94A3B8] bg-clip-text text-transparent">
                   Anime Art
                 </span>
               </h1>
@@ -198,7 +198,7 @@ export default function HomePage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 0.6 }}
             >
-              <div className="terminal-frame bracket-corner glow-ambient rounded-xl overflow-hidden">
+              <div className="terminal-frame bracket-corner rounded-xl overflow-hidden">
                 {/* Scanning line */}
                 <div className="scan-line" />
 
@@ -213,7 +213,7 @@ export default function HomePage() {
                     <div className="h-3 w-3 rounded-full bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.5)]" />
                   </div>
                   <div className="ml-4 flex gap-1 sys-label">
-                    <span className="rounded bg-white/10 px-2 py-0.5 text-[#00F0FF]">aniverse</span>
+                    <span className="rounded bg-white/10 px-2 py-0.5 text-[#2DD4BF]">aniverse</span>
                     <span className="text-white/20">/</span>
                     <span className="text-white/40">create</span>
                   </div>
@@ -221,7 +221,7 @@ export default function HomePage() {
                   {/* Floating tech badges */}
                   <div className="ml-auto hidden sm:flex items-center gap-2">
                     <span className="badge-neon text-[0.55rem] px-2 py-0.5 gap-1">
-                      <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#00F0FF] shadow-[0_0_6px_#00F0FF]" />
+                      <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#2DD4BF] shadow-[0_0_6px_#2DD4BF]" />
                       LATENCY // 0.4s
                     </span>
                     <span className="badge-neon-gold text-[0.55rem] px-2 py-0.5">
@@ -235,23 +235,23 @@ export default function HomePage() {
                 <div className="relative p-6 sm:p-10">
                   <div className="grid gap-4 sm:grid-cols-2">
                     {/* Prompt panel */}
-                    <div className="rounded-lg border border-[rgba(0,240,255,0.12)] bg-[rgba(0,0,0,0.3)] p-6 aspect-square flex items-center justify-center">
+                    <div className="rounded-lg border border-[rgba(45,212,191,0.12)] bg-[rgba(0,0,0,0.3)] p-6 aspect-square flex items-center justify-center">
                       <div className="text-center">
                         <div className="tech-icon mx-auto mb-4">
                           <PenLine className="h-5 w-5" />
                         </div>
-                        <p className="text-sm text-[#00F0FF]/60 font-mono tracking-wider">
+                        <p className="text-sm text-[#2DD4BF]/60 font-mono tracking-wider">
                           &ldquo;samurai neon city, cyberpunk anime&rdquo;
                         </p>
-                        <Badge variant="default" className="mt-4 border-[#00F0FF]/30 bg-[#00F0FF]/5 text-[#00F0FF]/70">
+                        <Badge variant="default" className="mt-4 border-[#2DD4BF]/30 bg-[#2DD4BF]/5 text-[#2DD4BF]/70">
                           PROMPT // ACTIVE
                         </Badge>
                       </div>
                     </div>
                     {/* Output panel */}
-                    <div className="rounded-lg border border-[rgba(255,230,0,0.12)] bg-[rgba(0,0,0,0.3)] p-6 aspect-square flex items-center justify-center relative">
+                    <div className="rounded-lg border border-[rgba(229,197,135,0.12)] bg-[rgba(0,0,0,0.3)] p-6 aspect-square flex items-center justify-center relative">
                       <div className="text-center">
-                        <div className="tech-icon mx-auto mb-4" style={{ borderColor: 'rgba(255,230,0,0.2)', background: 'rgba(255,230,0,0.05)', color: 'rgba(255,230,0,0.7)' }}>
+                        <div className="tech-icon mx-auto mb-4" style={{ borderColor: 'rgba(229,197,135,0.2)', background: 'rgba(229,197,135,0.05)', color: 'rgba(229,197,135,0.7)' }}>
                           <Image className="h-5 w-5" />
                         </div>
                         <p className="text-sm text-white/40">
@@ -259,8 +259,8 @@ export default function HomePage() {
                         </p>
                       </div>
                       {/* Corner accent decorative */}
-                      <span className="absolute top-2 right-2 h-4 w-4 border-t border-r border-[#FFE600]/30 pointer-events-none" />
-                      <span className="absolute bottom-2 left-2 h-4 w-4 border-b border-l border-[#00F0FF]/30 pointer-events-none" />
+                      <span className="absolute top-2 right-2 h-4 w-4 border-t border-r border-[#E5C587]/30 pointer-events-none" />
+                      <span className="absolute bottom-2 left-2 h-4 w-4 border-b border-l border-[#2DD4BF]/30 pointer-events-none" />
                     </div>
                   </div>
                 </div>
@@ -270,18 +270,18 @@ export default function HomePage() {
         </section>
 
         {/* ─── TRENDING STYLES ─── */}
-        <section className="relative py-16 sm:py-20">
+        <section className="relative py-20 sm:py-28">
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-white/[0.02] to-transparent" />
           <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <motion.div {...fadeInUp}>
               <div className="micro-lang" data-en="TRENDING" data-ja="トレンド" />
               <div className="flex items-center gap-3 mb-8">
-                <TrendingUp className="h-5 w-5 text-[#00F0FF]" />
+                <TrendingUp className="h-5 w-5 text-[#2DD4BF]" />
                 <h2 className="text-xl font-bold tracking-tight text-white">
                   Trending Styles
                 </h2>
                 <span className="badge-neon text-[0.6rem] px-2 py-0.5 gap-1">
-                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#FF2D78] shadow-[0_0_6px_#FF2D78] animate-pulse" />
+                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#D9467B]/80 shadow-[0_0_6px_rgba(217,70,123,0.5)] animate-pulse" />
                   LIVE // 2026
                 </span>
               </div>
@@ -297,14 +297,19 @@ export default function HomePage() {
                       transition={{ delay: i * 0.08, duration: 0.4 }}
                       viewport={{ once: true }}
                       className={cn(
-                        "card-element p-5 rounded-lg",
+                        "card-element p-5 rounded-lg group",
                         isGold
-                          ? "card-element-gold"
+                          ? "card-element-gold hover:shadow-[0_0_30px_rgba(229,197,135,0.12)]"
                           : isNew
-                            ? "card-element-pink"
-                            : "card-element-cyan",
+                            ? "card-element-pink hover:shadow-[0_0_30px_rgba(217,70,123,0.1)]"
+                            : "card-element-cyan hover:shadow-[0_0_30px_rgba(45,212,191,0.1)]",
                       )}
                     >
+                      {/* Gradient background overlay using style's own palette */}
+                      <div className={cn(
+                        "pointer-events-none absolute inset-0 rounded-lg opacity-[0.04] bg-gradient-to-br",
+                        style.gradient,
+                      )} />
                       {/* Gradient stripe */}
                       <div className={cn(
                         "h-1.5 w-full rounded-full mb-4 bg-gradient-to-r",
@@ -315,7 +320,7 @@ export default function HomePage() {
                         <span className={cn(
                           "badge-neon text-[0.55rem] px-2 py-0.5 leading-none",
                           isGold && "badge-neon-gold",
-                          isNew && "border-[#FF2D78]/30 bg-[#FF2D78]/5 text-[#FF2D78]/70",
+                          isNew && "border-[#D9467B]/30 bg-[#D9467B]/5 text-[#D9467B]/70",
                         )}>
                           {style.badge}
                         </span>
@@ -382,8 +387,8 @@ export default function HomePage() {
                           className={cn(
                             "tech-icon mb-4",
                             isGold
-                              ? "border-[#FFE600]/20 bg-[#FFE600]/5 text-[#FFE600]/70"
-                              : "border-[#00F0FF]/20 bg-[#00F0FF]/5 text-[#00F0FF]/70",
+                              ? "border-[#E5C587]/20 bg-[#E5C587]/5 text-[#E5C587]/70"
+                              : "border-[#2DD4BF]/20 bg-[#2DD4BF]/5 text-[#2DD4BF]/70",
                           )}
                         >
                           <Icon className="h-5 w-5" />
@@ -405,7 +410,7 @@ export default function HomePage() {
 
         {/* ─── HOW IT WORKS ─── */}
         <section className="relative overflow-hidden py-20 sm:py-28">
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#00F0FF]/5 via-transparent to-[#FFE600]/5" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#2DD4BF]/5 via-transparent to-[#E5C587]/5" />
           <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <motion.div className="mx-auto max-w-2xl text-center" {...fadeInUp}>
               <div className="micro-lang">PROTOCOL // プロトコル</div>
@@ -442,7 +447,7 @@ export default function HomePage() {
 
                     {/* Tech icon node */}
                     <div className="mx-auto flex items-center justify-center mb-6">
-                      <div className="tech-icon w-16 h-16 border-[#00F0FF]/30 bg-[#00F0FF]/5 text-[#00F0FF]/70">
+                      <div className="tech-icon w-16 h-16 border-[#2DD4BF]/30 bg-[#2DD4BF]/5 text-[#2DD4BF]/70">
                         <Icon className="h-7 w-7" />
                       </div>
                     </div>
@@ -507,12 +512,12 @@ export default function HomePage() {
                     {tier.popular && (
                       <>
                         <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
-                          <Badge variant="default" className="px-3 py-1 text-xs bg-[#FFE600]/20 text-[#FFE600] border-[#FFE600]/30">
+                          <Badge variant="default" className="px-3 py-1 text-xs bg-[#E5C587]/20 text-[#E5C587] border-[#E5C587]/30">
                             MOST POPULAR
                           </Badge>
                         </div>
-                        <span className="absolute top-2 right-2 h-3 w-3 border-t border-r border-[#FFE600]/40 pointer-events-none" />
-                        <span className="absolute bottom-2 left-2 h-3 w-3 border-b border-l border-[#FFE600]/40 pointer-events-none" />
+                        <span className="absolute top-2 right-2 h-3 w-3 border-t border-r border-[#E5C587]/40 pointer-events-none" />
+                        <span className="absolute bottom-2 left-2 h-3 w-3 border-b border-l border-[#E5C587]/40 pointer-events-none" />
                       </>
                     )}
                     {tier.id === "studio" && (
@@ -533,7 +538,7 @@ export default function HomePage() {
                     </div>
                     <h3 className={cn(
                       "text-xl font-bold text-white",
-                      tier.popular && "text-[#FFE600]",
+                      tier.popular && "text-[#E5C587]",
                       tier.id === "studio" && "text-[#8b5cf6]",
                     )}>
                       {tier.name}
@@ -586,7 +591,7 @@ export default function HomePage() {
         {/* ─── CTA FINAL ─── */}
         <section className="relative py-20 sm:py-28">
           <div className="pointer-events-none absolute inset-0 bg-grid opacity-10" />
-          <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-gradient-to-b from-[#FFE600]/10 via-[#00F0FF]/5 to-transparent blur-3xl" />
+          <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-gradient-to-b from-[#E5C587]/8 via-[#2DD4BF]/4 to-transparent blur-3xl" />
 
           <motion.div
             className="relative mx-auto max-w-3xl text-center px-4"
@@ -597,12 +602,12 @@ export default function HomePage() {
               <div className="scan-line" />
 
               <div className="relative">
-                <Badge variant="default" className="mb-4 px-3 py-1 border-[#00F0FF]/30 bg-[#00F0FF]/5 text-[#00F0FF]/70">
+                <Badge variant="default" className="mb-4 px-3 py-1 border-[#2DD4BF]/30 bg-[#2DD4BF]/5 text-[#2DD4BF]/70">
                   <Sparkles className="mr-1.5 h-3.5 w-3.5" />
                   GET STARTED // NODE
                 </Badge>
                 <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-                  <span className="bg-gradient-to-r from-[#00F0FF] via-[#FFE600] to-[#FF2D78] bg-clip-text text-transparent">
+                  <span className="bg-gradient-to-r from-[#E5C587] via-[#F1F5F9] to-[#94A3B8] bg-clip-text text-transparent">
                     Ready to create your masterpiece?
                   </span>
                 </h2>
