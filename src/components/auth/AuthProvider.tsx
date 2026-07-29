@@ -69,14 +69,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (res.ok) {
         const data = await res.json();
         setUser(data.user);
+        setIsLoading(false);
+        return true;
       } else {
         setStoredToken(null);
         setUser(null);
+        setIsLoading(false);
+        return false;
       }
     } catch {
       setUser(null);
-    } finally {
       setIsLoading(false);
+      return false;
     }
   }, []);
 
@@ -112,14 +116,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
 
         setStoredToken(data.token);
-        setUser(data.user);
-        // Navigation happens in the login page after this returns
+        // Await user fetch BEFORE returning — ensures user is set before navigation
+        const userOk = await fetchUser(data.token);
+        if (!userOk) {
+          return { ok: false, error: "Failed to verify session" };
+        }
         return { ok: true };
       } catch {
         return { ok: false, error: "Network error. Please try again." };
       }
     },
-    [],
+    [fetchUser],
   );
 
   // ── Register ────────────────────────────────────────────────
@@ -151,14 +158,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
 
         setStoredToken(result.token);
-        setUser(result.user);
-        // Navigation happens in the register page after this returns
+        // Await user fetch BEFORE returning
+        const userOk = await fetchUser(result.token);
+        if (!userOk) {
+          return { ok: false, error: "Failed to verify session" };
+        }
         return { ok: true };
       } catch {
         return { ok: false, error: "Network error. Please try again." };
       }
     },
-    [],
+    [fetchUser],
   );
 
   // ── Logout ──────────────────────────────────────────────────
