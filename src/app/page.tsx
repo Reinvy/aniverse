@@ -116,7 +116,7 @@ export default function HomePage() {
       <Header />
       <main>
         {/* ─── HERO SECTION ─── */}
-        <section className="relative overflow-hidden pt-28 pb-20 sm:pt-36 sm:pb-28">
+        <section className="relative overflow-hidden pt-28 pb-20 sm:pt-36 sm:pb-28 animate-stagger">
           {/* Deep space background */}
           <div className="pointer-events-none absolute inset-0 bg-starfield" />
           <div className="pointer-events-none absolute inset-0 bg-grid opacity-20" />
@@ -144,6 +144,7 @@ export default function HomePage() {
                   <span className="text-[11px] tracking-wider">NOW IN OPEN BETA // v2.4</span>
                 </div>
               </motion.div>
+              <span className="sys-node">[SYS.00]</span>
 
               {/* Hero heading — vibrant cyan-to-gold gradient */}
               <h1 className="mt-6 text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
@@ -197,7 +198,7 @@ export default function HomePage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 0.6 }}
             >
-              <div className="terminal-frame rounded-xl overflow-hidden">
+              <div className="terminal-frame bracket-corner glow-ambient rounded-xl overflow-hidden">
                 {/* Scanning line */}
                 <div className="scan-line" />
 
@@ -216,6 +217,7 @@ export default function HomePage() {
                     <span className="text-white/20">/</span>
                     <span className="text-white/40">create</span>
                   </div>
+                  <span className="sys-node">[SYS.01]</span>
                   {/* Floating tech badges */}
                   <div className="ml-auto hidden sm:flex items-center gap-2">
                     <span className="badge-neon text-[0.55rem] px-2 py-0.5 gap-1">
@@ -272,6 +274,7 @@ export default function HomePage() {
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-white/[0.02] to-transparent" />
           <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <motion.div {...fadeInUp}>
+              <div className="micro-lang" data-en="TRENDING" data-ja="トレンド" />
               <div className="flex items-center gap-3 mb-8">
                 <TrendingUp className="h-5 w-5 text-[#00F0FF]" />
                 <h2 className="text-xl font-bold tracking-tight text-white">
@@ -339,6 +342,7 @@ export default function HomePage() {
               className="mx-auto max-w-2xl text-center"
               {...fadeInUp}
             >
+              <div className="micro-lang">FEATURES // 特徴</div>
               <Badge variant="secondary" className="mb-4 px-3 py-1">
                 FEATURES // SYSTEM
               </Badge>
@@ -352,7 +356,7 @@ export default function HomePage() {
             </motion.div>
 
             <motion.div
-              className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
+              className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 animate-stagger"
               {...stagger}
             >
               {features.map((feature) => {
@@ -404,6 +408,7 @@ export default function HomePage() {
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#00F0FF]/5 via-transparent to-[#FFE600]/5" />
           <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <motion.div className="mx-auto max-w-2xl text-center" {...fadeInUp}>
+              <div className="micro-lang">PROTOCOL // プロトコル</div>
               <Badge variant="primary" className="mb-4 px-3 py-1">
                 <MousePointerClick className="mr-1.5 h-3.5 w-3.5" />
                 HOW IT WORKS // PROTOCOL
@@ -464,8 +469,9 @@ export default function HomePage() {
         {/* ─── PRICING SECTION ─── */}
         <section id="pricing" className="relative py-20 sm:py-28">
           <div className="pointer-events-none absolute inset-0 bg-starfield opacity-20" />
-          <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 watermark-crest">
             <motion.div className="mx-auto max-w-2xl text-center" {...fadeInUp}>
+              <div className="micro-lang">SUPPLY PASS // 供給パス</div>
               <Badge variant="default" className="mb-4 px-3 py-1">
                 <Star className="mr-1.5 h-3.5 w-3.5" />
                 PRICING // TIER
@@ -479,7 +485,7 @@ export default function HomePage() {
             </motion.div>
 
             <motion.div
-              className="mt-14 grid gap-6 sm:grid-cols-3 max-w-5xl mx-auto"
+              className="mt-14 grid gap-6 sm:grid-cols-3 max-w-5xl mx-auto animate-stagger"
               {...stagger}
             >
               {tierEntries.map((tier) => (
@@ -493,7 +499,7 @@ export default function HomePage() {
                 >
                   <div
                     className={cn(
-                      "card-supply h-full p-6 flex flex-col",
+                      "card-supply bracket-corner h-full p-6 flex flex-col",
                       tier.popular && "card-supply-gold",
                       tier.id === "studio" && "border-[#8b5cf6]/20",
                     )}
@@ -586,7 +592,7 @@ export default function HomePage() {
             className="relative mx-auto max-w-3xl text-center px-4"
             {...fadeInUp}
           >
-            <div className="terminal-frame rounded-xl p-10 sm:p-14">
+            <div className="terminal-frame bracket-corner bracket-corner-br rounded-xl p-10 sm:p-14">
               {/* Scanning line */}
               <div className="scan-line" />
 

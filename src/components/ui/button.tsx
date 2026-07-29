@@ -6,20 +6,21 @@ const buttonVariants = cva(
   [
     "inline-flex items-center justify-center whitespace-nowrap",
     "text-sm font-medium transition-all duration-300",
-    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(230,194,128,0.4)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0B0E14]",
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(229,197,135,0.4)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05080F]",
     "disabled:pointer-events-none disabled:opacity-40",
     "active:scale-[0.97]",
     "relative overflow-hidden",
-    // Energy sweep on hover
-    "energy-sweep",
+    // Astral Luxury: chamfered corners + light sweep
+    "chamfered-sm",
+    "light-sweep",
   ].join(" "),
   {
     variants: {
       variant: {
         default:
-          "btn-glow-sweep border border-[rgba(230,194,128,0.25)] text-[#e6c280] shadow-sm",
+          "chamfered-sm border border-[rgba(230,194,128,0.25)] text-[#e6c280] shadow-sm",
         primary:
-          "btn-glow-sweep border border-[rgba(230,194,128,0.35)] text-white font-semibold",
+          "chamfered-sm border border-[rgba(230,194,128,0.35)] text-white font-semibold",
         destructive:
           "bg-[rgba(239,68,68,0.15)] border border-[rgba(239,68,68,0.3)] text-red-400 hover:bg-[rgba(239,68,68,0.25)] hover:border-[rgba(239,68,68,0.5)]",
         outline:
