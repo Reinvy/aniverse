@@ -19,10 +19,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         <input
           type={type}
           className={cn(
-            "flex h-10 w-full rounded-[4px] border border-white/10 bg-[rgba(0,0,0,0.4)] px-3 py-2 text-sm text-white/85 placeholder:text-white/25",
+            "flex h-10 w-full rounded-[4px] border border-white/[0.06] bg-[rgba(0,0,0,0.5)] px-3 py-2 text-sm text-white/85 placeholder:text-white/25",
             "backdrop-blur-xl",
             "file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-white/70",
-            "focus-visible:outline-none focus-visible:border-[rgba(230,194,128,0.4)] focus-visible:shadow-[0_0_0_1px_rgba(230,194,128,0.2),_inset_0_0_12px_rgba(230,194,128,0.15)]",
+            "input-astral",
+            "focus-visible:outline-none focus-visible:border-[rgba(66,232,224,0.5)] focus-visible:shadow-[inset_0_2px_4px_rgba(0,0,0,0.3),_0_2px_0_rgba(66,232,224,0.15)]",
             "disabled:cursor-not-allowed disabled:opacity-50",
             "transition-all duration-300",
             startIcon && "pl-10",

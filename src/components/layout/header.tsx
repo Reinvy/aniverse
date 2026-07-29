@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Menu,
@@ -11,24 +12,23 @@ import {
   UserPlus,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { APP_NAME, MAIN_NAV_LINKS } from "@/lib/constants";
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 glass backdrop-blur-xl border-b border-stroke-white"
-      style={{ background: "rgba(11, 13, 20, 0.85)" }}>
-      {/* Bottom gradient border — cyan/gold sweep */}
-      <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#00F0FF] via-[#FFE600] to-transparent opacity-60" />
+    <header className="fixed inset-x-0 top-0 z-50 glass-obsidian mx-4 mt-3 rounded-none chamfered glow-ambient bg-noise">
 
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8 animate-stagger">
         {/* ── HUD Status Display (replaces plain logo) ── */}
         <Link href="/" className="flex items-center gap-4 group shrink-0">
           {/* Logo emblem */}
-          <div className="relative flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-[rgba(243,198,105,0.3)] to-[rgba(243,198,105,0.1)] border border-stroke-gold shadow-[0_0_15px_rgba(243,198,105,0.1)] group-hover:shadow-[0_0_25px_rgba(243,198,105,0.2)] transition-all duration-300">
+          <div className="relative flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-[rgba(229,197,135,0.3)] to-[rgba(229,197,135,0.1)] border border-stroke-gold shadow-[0_0_15px_rgba(229,197,135,0.1)] group-hover:shadow-[0_0_25px_rgba(229,197,135,0.2)] transition-all duration-300">
             <Sparkles className="h-4.5 w-4.5 text-gold-400" />
-            <span className="absolute -top-0.5 -right-0.5 h-1.5 w-1.5 rounded-full bg-gold-400 shadow-[0_0_6px_rgba(243,198,105,0.6)]" />
+            <span className="absolute -top-0.5 -right-0.5 h-1.5 w-1.5 rounded-full bg-gold-400 shadow-[0_0_6px_rgba(229,197,135,0.6)]" />
           </div>
 
           {/* Logo text + sys version */}
@@ -51,21 +51,24 @@ export function Header() {
           </div>
         </Link>
 
-        {/* Desktop nav — HSR Geometric Tabs */}
+        {/* Desktop nav — Astral Diamond Navigation */}
         <nav className="hidden md:flex items-center gap-1">
-          {MAIN_NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="tab-geometric text-xs"
-            >
-              {link.label}
-            </Link>
-          ))}
+          {MAIN_NAV_LINKS.map((link) => {
+            const isActive = pathname === link.href || (link.href.length > 1 && pathname.startsWith(link.href));
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={cn("nav-diamond text-xs", isActive && "active")}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
         </nav>
 
         {/* Desktop actions */}
-        <div className="hidden md:flex items-center gap-3">
+        <div className="hidden md:flex items-center gap-3 animate-stagger">
           {/* System status badge */}
           <span className="badge-neon text-[0.6rem] px-2 py-0.5 gap-1.5">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#00F0FF] shadow-[0_0_6px_#00F0FF] animate-pulse" />

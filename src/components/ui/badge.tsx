@@ -7,15 +7,15 @@ const badgeVariants = cva(
     "inline-flex items-center rounded-md border px-2.5 py-0.5",
     "text-[11px] font-semibold tracking-wide uppercase",
     "transition-all duration-200",
-    "focus:outline-none focus:ring-2 focus:ring-[rgba(243,198,105,0.3)] focus:ring-offset-2 focus:ring-offset-[#0B0F19]",
+    "focus:outline-none focus:ring-2 focus:ring-[rgba(229,197,135,0.3)] focus:ring-offset-2 focus:ring-offset-[#05080F]",
   ].join(" "),
   {
     variants: {
       variant: {
         default:
-          "border-[rgba(243,198,105,0.3)] bg-[rgba(243,198,105,0.1)] text-[#f3c669]",
+          "border-[rgba(229,197,135,0.3)] bg-[rgba(229,197,135,0.1)] text-[#e5c587]",
         primary:
-          "border-[rgba(62,230,196,0.3)] bg-[rgba(62,230,196,0.1)] text-[#3ee6c4]",
+          "border-[rgba(66,232,224,0.3)] bg-[rgba(66,232,224,0.1)] text-[#42e8e0]",
         secondary:
           "border-white/10 bg-white/5 text-white/60",
         destructive:

@@ -100,6 +100,8 @@ export default function DashboardPage() {
           gradient: "from-violet-500 to-purple-600",
           trend: `${stats.usagePercent}%`,
           trendUp: stats.generationsUsed > 0,
+          microLabel: { en: "GENERATIONS", ja: "ジェネレーション" },
+          sysNode: "SYS.01",
         },
         {
           title: "Total Artworks",
@@ -110,6 +112,8 @@ export default function DashboardPage() {
           trend:
             stats.totalArtworks > 0 ? `+${stats.totalArtworks}` : "0",
           trendUp: stats.totalArtworks > 0,
+          microLabel: { en: "ARTWORKS", ja: "アートワーク" },
+          sysNode: "SYS.02",
         },
         {
           title: "Likes Received",
@@ -120,6 +124,8 @@ export default function DashboardPage() {
           trend:
             stats.likesReceived > 0 ? `+${stats.likesReceived}` : "0",
           trendUp: stats.likesReceived > 0,
+          microLabel: { en: "ENGAGEMENT", ja: "エンゲージメント" },
+          sysNode: "SYS.03",
         },
         {
           title: "Earnings",
@@ -132,6 +138,8 @@ export default function DashboardPage() {
               ? `+$${stats.totalEarnings.toFixed(2)}`
               : "$0",
           trendUp: stats.totalEarnings > 0,
+          microLabel: { en: "REVENUE", ja: "収益" },
+          sysNode: "SYS.04",
         },
       ]
     : [];
@@ -265,14 +273,14 @@ export default function DashboardPage() {
           {statsCards.map((stat, i) => {
             const Icon = stat.icon;
             return (
-              <motion.div
+              <div
                 key={stat.title}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.08, duration: 0.4 }}
+                className={`animate-stagger animate-stagger-${i + 1}`}
               >
-                <Card className="group diamond-indicator crosshair-mark">
+                <Card className="group diamond-indicator crosshair-mark glow-ambient bracket-corner watermark-crest">
                   <CardContent className="p-4 sm:p-5">
+                    <span className="micro-lang block mb-1" data-en={stat.microLabel.en} data-ja={stat.microLabel.ja} />
+                    <span className="sys-node block mb-1">[{stat.sysNode}]</span>
                     <div className="flex items-start justify-between">
                       <div
                         className={`flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl bg-gradient-to-br ${stat.gradient} shadow-lg`}
@@ -299,7 +307,7 @@ export default function DashboardPage() {
                     </p>
                   </CardContent>
                 </Card>
-              </motion.div>
+              </div>
             );
           })}
         </motion.div>
@@ -317,11 +325,14 @@ export default function DashboardPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.4 }}
           >
-            <Card className="diamond-indicator">
+            <Card className="diamond-indicator glow-ambient bracket-corner watermark-crest">
               <CardHeader className="flex flex-row items-center justify-between p-4 sm:p-6">
-                <CardTitle className="text-base sm:text-lg">
-                  Recent Activity
-                </CardTitle>
+                <div>
+                  <span className="micro-lang block mb-1" data-en="ACTIVITY" data-ja="アクティビティ" />
+                  <CardTitle className="text-base sm:text-lg">
+                    Recent Activity
+                  </CardTitle>
+                </div>
                 <Badge variant="secondary" className="text-xs">
                   {activity.length > 0 ? "Latest" : "No activity"}
                 </Badge>
@@ -386,8 +397,9 @@ export default function DashboardPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.4 }}
           >
-            <Card className="crosshair-mark">
+            <Card className="crosshair-mark glow-ambient bracket-corner watermark-crest">
               <CardHeader className="p-4 sm:p-6">
+                <span className="micro-lang block mb-1" data-en="ACTIONS" data-ja="アクション" />
                 <CardTitle className="text-base sm:text-lg">
                   Quick Actions
                 </CardTitle>

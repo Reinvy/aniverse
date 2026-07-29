@@ -15,7 +15,7 @@ export default function DashboardLayout({
 
   return (
     <AuthGuard>
-      <div className="flex min-h-screen bg-[#0B0F19]">
+      <div className="flex min-h-screen bg-[#05080F] bg-noise">
         <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
         {/* Mobile header bar — Game HUD style */}
@@ -28,8 +28,8 @@ export default function DashboardLayout({
             <Menu className="h-5 w-5" />
           </button>
           <div className="flex items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded-md bg-gradient-to-br from-[rgba(243,198,105,0.3)] to-[rgba(243,198,105,0.1)] border border-[rgba(243,198,105,0.3)]">
-              <Sparkles className="h-3.5 w-3.5 text-[#f3c669]" />
+            <div className="flex h-7 w-7 items-center justify-center rounded-md bg-gradient-to-br from-[rgba(229,197,135,0.3)] to-[rgba(229,197,135,0.1)] border border-[rgba(229,197,135,0.3)]">
+              <Sparkles className="h-3.5 w-3.5 text-[#e5c587]" />
             </div>
             <span className="text-sm font-bold text-white tracking-tight">
               {APP_NAME}
@@ -42,7 +42,7 @@ export default function DashboardLayout({
         <main className="flex-1 overflow-x-hidden pt-14 lg:ml-64 lg:pt-0 bg-starfield">
           {/* Subtle grid overlay */}
           <div className="fixed inset-0 pointer-events-none bg-grid opacity-30" />
-          <div className="relative z-10">{children}</div>
+          <div className="relative z-10 animate-stagger">{children}</div>
         </main>
       </div>
     </AuthGuard>
