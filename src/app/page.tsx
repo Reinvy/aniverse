@@ -117,13 +117,13 @@ export default function HomePage() {
       <main>
         {/* ─── HERO SECTION ─── */}
         <section className="relative overflow-hidden pt-28 pb-20 sm:pt-36 sm:pb-28">
-          {/* Starfield + grid background */}
+          {/* Deep space background */}
           <div className="pointer-events-none absolute inset-0 bg-starfield" />
           <div className="pointer-events-none absolute inset-0 bg-grid opacity-20" />
 
-          {/* Glow orbs */}
-          <div className="pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 w-[800px] h-[600px] bg-gradient-to-b from-gold-400/10 via-transparent to-transparent blur-3xl" />
-          <div className="pointer-events-none absolute right-0 top-40 w-[400px] h-[400px] bg-gradient-to-bl from-cyan-400/10 to-transparent blur-3xl" />
+          {/* Cyan/gold glow orbs */}
+          <div className="pointer-events-none absolute left-1/4 top-0 w-[600px] h-[600px] bg-gradient-to-b from-[#00F0FF]/10 via-transparent to-transparent blur-3xl" />
+          <div className="pointer-events-none absolute right-0 top-40 w-[400px] h-[400px] bg-gradient-to-bl from-[#FFE600]/10 to-transparent blur-3xl" />
 
           <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <motion.div
@@ -139,17 +139,17 @@ export default function HomePage() {
                 transition={{ delay: 0.2, duration: 0.4 }}
                 className="flex justify-center"
               >
-                <div className="inline-flex items-center gap-2 rounded-full border border-stroke-gold bg-[rgba(243,198,105,0.08)] px-4 py-1.5">
-                  <Sparkles className="h-3.5 w-3.5 text-gold-400" />
-                  <span className="sys-label-gold text-[11px]">NOW IN OPEN BETA // v2.4</span>
+                <div className="badge-neon-gold inline-flex items-center gap-2 px-4 py-1.5">
+                  <Sparkles className="h-3.5 w-3.5" />
+                  <span className="text-[11px] tracking-wider">NOW IN OPEN BETA // v2.4</span>
                 </div>
               </motion.div>
 
-              {/* Hero heading */}
+              {/* Hero heading — vibrant cyan-to-gold gradient */}
               <h1 className="mt-6 text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
                 <span className="text-white">Where AI Meets</span>
                 <br />
-                <span className="bg-gradient-to-r from-gold-300 via-gold-400 to-cyan-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-[#00F0FF] via-[#FFE600] to-[#FF2D78] bg-clip-text text-transparent">
                   Anime Art
                 </span>
               </h1>
@@ -159,7 +159,7 @@ export default function HomePage() {
                 discovering AI-powered anime artwork. No prompts? No problem.
               </p>
 
-              {/* CTA Buttons */}
+              {/* CTA Buttons — hex-shaped */}
               <motion.div
                 className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center"
                 initial={{ opacity: 0, y: 16 }}
@@ -167,16 +167,16 @@ export default function HomePage() {
                 transition={{ delay: 0.4, duration: 0.4 }}
               >
                 <Link href="/register">
-                  <Button size="lg" variant="primary" className="gap-2 text-base glow-gold">
+                  <button className="btn-hex gap-3 text-base font-semibold">
                     <Sparkles className="h-5 w-5" />
                     Start Creating Free
-                  </Button>
+                  </button>
                 </Link>
                 <Link href="#features">
-                  <Button variant="outline" size="lg" className="gap-2 text-base">
+                  <button className="btn-hex btn-hex-gold gap-3 text-base font-semibold">
                     See Features
                     <ChevronRight className="h-4 w-4" />
-                  </Button>
+                  </button>
                 </Link>
               </motion.div>
 
@@ -190,50 +190,75 @@ export default function HomePage() {
               </motion.p>
             </motion.div>
 
-            {/* Hero mockup — Game UI style panel */}
+            {/* Hero mockup — Holographic Terminal */}
             <motion.div
               className="relative mx-auto mt-16 max-w-5xl"
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 0.6 }}
             >
-              <div className="glass rounded-xl overflow-hidden cut-corner">
+              <div className="terminal-frame rounded-xl overflow-hidden">
+                {/* Scanning line */}
+                <div className="scan-line" />
+
+                {/* Tech grid overlay */}
+                <div className="pointer-events-none absolute inset-0 terminal-grid" />
+
                 {/* Terminal-style header */}
-                <div className="flex items-center gap-2 border-b border-stroke-white px-4 py-3">
+                <div className="relative flex items-center gap-2 border-b border-white/10 px-4 py-3">
                   <div className="flex gap-1.5">
                     <div className="h-3 w-3 rounded-full bg-red-500 shadow-[0_0_6px_rgba(239,68,68,0.5)]" />
                     <div className="h-3 w-3 rounded-full bg-yellow-500 shadow-[0_0_6px_rgba(234,179,8,0.5)]" />
                     <div className="h-3 w-3 rounded-full bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.5)]" />
                   </div>
                   <div className="ml-4 flex gap-1 sys-label">
-                    <span className="rounded bg-glass-300 px-2 py-0.5 text-gold-400">aniverse</span>
+                    <span className="rounded bg-white/10 px-2 py-0.5 text-[#00F0FF]">aniverse</span>
                     <span className="text-white/20">/</span>
                     <span className="text-white/40">create</span>
                   </div>
-                  <span className="ml-auto sys-label text-white/15">NODE//01</span>
+                  {/* Floating tech badges */}
+                  <div className="ml-auto hidden sm:flex items-center gap-2">
+                    <span className="badge-neon text-[0.55rem] px-2 py-0.5 gap-1">
+                      <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#00F0FF] shadow-[0_0_6px_#00F0FF]" />
+                      LATENCY // 0.4s
+                    </span>
+                    <span className="badge-neon-gold text-[0.55rem] px-2 py-0.5">
+                      UPTIME // 99.9%
+                    </span>
+                  </div>
+                  <span className="ml-auto sm:hidden sys-label text-white/15">NODE//01</span>
                 </div>
 
                 {/* Mockup content */}
-                <div className="p-6 sm:p-10">
+                <div className="relative p-6 sm:p-10">
                   <div className="grid gap-4 sm:grid-cols-2">
-                    <div className="glass rounded-lg p-6 aspect-square flex items-center justify-center">
+                    {/* Prompt panel */}
+                    <div className="rounded-lg border border-[rgba(0,240,255,0.12)] bg-[rgba(0,0,0,0.3)] p-6 aspect-square flex items-center justify-center">
                       <div className="text-center">
-                        <Palette className="mx-auto h-12 w-12 text-gold-400/60" />
-                        <p className="mt-3 text-sm text-white/40 sys-label">
+                        <div className="tech-icon mx-auto mb-4">
+                          <PenLine className="h-5 w-5" />
+                        </div>
+                        <p className="text-sm text-[#00F0FF]/60 font-mono tracking-wider">
                           &ldquo;samurai neon city, cyberpunk anime&rdquo;
                         </p>
-                        <Badge variant="default" className="mt-4">PROMPT // ACTIVE</Badge>
+                        <Badge variant="default" className="mt-4 border-[#00F0FF]/30 bg-[#00F0FF]/5 text-[#00F0FF]/70">
+                          PROMPT // ACTIVE
+                        </Badge>
                       </div>
                     </div>
-                    <div className="glass rounded-lg p-6 aspect-square flex items-center justify-center relative">
+                    {/* Output panel */}
+                    <div className="rounded-lg border border-[rgba(255,230,0,0.12)] bg-[rgba(0,0,0,0.3)] p-6 aspect-square flex items-center justify-center relative">
                       <div className="text-center">
-                        <Image className="mx-auto h-12 w-12 text-cyan-400/60" />
-                        <p className="mt-3 text-sm text-white/40">
+                        <div className="tech-icon mx-auto mb-4" style={{ borderColor: 'rgba(255,230,0,0.2)', background: 'rgba(255,230,0,0.05)', color: 'rgba(255,230,0,0.7)' }}>
+                          <Image className="h-5 w-5" />
+                        </div>
+                        <p className="text-sm text-white/40">
                           Your creation appears here
                         </p>
                       </div>
                       {/* Corner accent decorative */}
-                      <span className="absolute top-2 right-2 h-4 w-4 border-t border-r border-stroke-cyan pointer-events-none" />
+                      <span className="absolute top-2 right-2 h-4 w-4 border-t border-r border-[#FFE600]/30 pointer-events-none" />
+                      <span className="absolute bottom-2 left-2 h-4 w-4 border-b border-l border-[#00F0FF]/30 pointer-events-none" />
                     </div>
                   </div>
                 </div>
@@ -244,17 +269,64 @@ export default function HomePage() {
 
         {/* ─── TRENDING STYLES ─── */}
         <section className="relative py-16 sm:py-20">
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-glass-200 to-transparent" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-white/[0.02] to-transparent" />
           <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <motion.div {...fadeInUp}>
               <div className="flex items-center gap-3 mb-8">
-                <TrendingUp className="h-5 w-5 text-gold-400" />
+                <TrendingUp className="h-5 w-5 text-[#00F0FF]" />
                 <h2 className="text-xl font-bold tracking-tight text-white">
                   Trending Styles
                 </h2>
-                <span className="sys-label-gold">LIVE // 2026</span>
+                <span className="badge-neon text-[0.6rem] px-2 py-0.5 gap-1">
+                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#FF2D78] shadow-[0_0_6px_#FF2D78] animate-pulse" />
+                  LIVE // 2026
+                </span>
               </div>
-              <TrendingPalettes />
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {TRENDING_STYLES.map((style, i) => {
+                  const isGold = style.badge === "HOT";
+                  const isNew = style.badge === "NEW";
+                  return (
+                    <motion.div
+                      key={style.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.08, duration: 0.4 }}
+                      viewport={{ once: true }}
+                      className={cn(
+                        "card-element p-5 rounded-lg",
+                        isGold
+                          ? "card-element-gold"
+                          : isNew
+                            ? "card-element-pink"
+                            : "card-element-cyan",
+                      )}
+                    >
+                      {/* Gradient stripe */}
+                      <div className={cn(
+                        "h-1.5 w-full rounded-full mb-4 bg-gradient-to-r",
+                        style.gradient,
+                      )} />
+                      <div className="flex items-start justify-between mb-2">
+                        <h3 className="text-base font-semibold text-white">{style.label}</h3>
+                        <span className={cn(
+                          "badge-neon text-[0.55rem] px-2 py-0.5 leading-none",
+                          isGold && "badge-neon-gold",
+                          isNew && "border-[#FF2D78]/30 bg-[#FF2D78]/5 text-[#FF2D78]/70",
+                        )}>
+                          {style.badge}
+                        </span>
+                      </div>
+                      <p className="text-xs text-white/40 leading-relaxed line-clamp-2">
+                        {style.description}
+                      </p>
+                    </motion.div>
+                  );
+                })}
+              </div>
+              <div className="mt-8">
+                <TrendingPalettes />
+              </div>
             </motion.div>
           </div>
         </section>
@@ -295,20 +367,22 @@ export default function HomePage() {
                     }}
                     transition={{ duration: 0.4 }}
                   >
-                    <Card className="group h-full cut-corner energy-sweep relative">
+                    <Card
+                      className={cn(
+                        "card-element h-full",
+                        isGold ? "card-element-gold" : "card-element-cyan",
+                      )}
+                    >
                       <CardContent className="p-6">
                         <div
                           className={cn(
-                            "mb-4 flex h-12 w-12 items-center justify-center rounded-lg border",
+                            "tech-icon mb-4",
                             isGold
-                              ? "border-stroke-gold bg-[rgba(243,198,105,0.1)]"
-                              : "border-stroke-cyan bg-[rgba(62,230,196,0.1)]",
+                              ? "border-[#FFE600]/20 bg-[#FFE600]/5 text-[#FFE600]/70"
+                              : "border-[#00F0FF]/20 bg-[#00F0FF]/5 text-[#00F0FF]/70",
                           )}
                         >
-                          <Icon className={cn(
-                            "h-6 w-6",
-                            isGold ? "text-gold-400" : "text-cyan-400",
-                          )} />
+                          <Icon className="h-5 w-5" />
                         </div>
                         <h3 className="text-lg font-semibold text-white">
                           {feature.title}
@@ -327,7 +401,7 @@ export default function HomePage() {
 
         {/* ─── HOW IT WORKS ─── */}
         <section className="relative overflow-hidden py-20 sm:py-28">
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-cyan-400/5 via-transparent to-gold-400/5" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#00F0FF]/5 via-transparent to-[#FFE600]/5" />
           <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <motion.div className="mx-auto max-w-2xl text-center" {...fadeInUp}>
               <Badge variant="primary" className="mb-4 px-3 py-1">
@@ -342,9 +416,10 @@ export default function HomePage() {
               </p>
             </motion.div>
 
-            <div className="mt-14 grid gap-6 sm:grid-cols-3">
+            <div className="mt-14 grid gap-8 sm:grid-cols-3">
               {howItWorks.map((step, i) => {
                 const Icon = step.icon;
+                const isLast = i === howItWorks.length - 1;
                 return (
                   <motion.div
                     key={step.step}
@@ -352,15 +427,19 @@ export default function HomePage() {
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.15, duration: 0.5 }}
                     viewport={{ once: true }}
-                    className="relative text-center"
-                  >
-                    {/* Step connector line */}
-                    {i < howItWorks.length - 1 && (
-                      <div className="hidden sm:block absolute top-12 left-[60%] w-[80%] h-[1px] bg-gradient-to-r from-stroke-gold to-transparent" />
+                    className={cn(
+                      "relative text-center",
+                      !isLast && "circuit-line hidden md:block",
                     )}
+                  >
+                    {/* Astral star decorative dot */}
+                    <span className="astral-star absolute -top-1 -right-1 text-[0.5rem]" />
 
-                    <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full border-2 border-stroke-gold bg-[rgba(243,198,105,0.06)] mb-6">
-                      <Icon className="h-10 w-10 text-gold-400" />
+                    {/* Tech icon node */}
+                    <div className="mx-auto flex items-center justify-center mb-6">
+                      <div className="tech-icon w-16 h-16 border-[#00F0FF]/30 bg-[#00F0FF]/5 text-[#00F0FF]/70">
+                        <Icon className="h-7 w-7" />
+                      </div>
                     </div>
 
                     <span className="sys-label-gold block mb-2">
@@ -372,6 +451,9 @@ export default function HomePage() {
                     <p className="text-sm text-white/40 max-w-xs mx-auto">
                       {step.desc}
                     </p>
+
+                    {/* Astral star decorative footer */}
+                    <span className="astral-star mt-4 inline-block text-[0.45rem]" />
                   </motion.div>
                 );
               })}
@@ -409,56 +491,86 @@ export default function HomePage() {
                   }}
                   transition={{ duration: 0.4 }}
                 >
-                  <Card className={cn(
-                    "relative h-full cut-corner",
-                    tier.popular && "border-stroke-gold glow-gold",
-                  )}>
+                  <div
+                    className={cn(
+                      "card-supply h-full p-6 flex flex-col",
+                      tier.popular && "card-supply-gold",
+                      tier.id === "studio" && "border-[#8b5cf6]/20",
+                    )}
+                  >
                     {tier.popular && (
                       <>
-                        <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                          <Badge variant="default" className="px-3 py-1 text-xs">
+                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
+                          <Badge variant="default" className="px-3 py-1 text-xs bg-[#FFE600]/20 text-[#FFE600] border-[#FFE600]/30">
                             MOST POPULAR
                           </Badge>
                         </div>
-                        <span className="absolute top-2 right-2 h-3 w-3 border-t border-r border-stroke-gold pointer-events-none" />
-                        <span className="absolute bottom-2 left-2 h-3 w-3 border-b border-l border-stroke-gold pointer-events-none" />
+                        <span className="absolute top-2 right-2 h-3 w-3 border-t border-r border-[#FFE600]/40 pointer-events-none" />
+                        <span className="absolute bottom-2 left-2 h-3 w-3 border-b border-l border-[#FFE600]/40 pointer-events-none" />
                       </>
                     )}
-                    <CardContent className="p-6 flex flex-col h-full">
-                      <div className="mb-2">
-                        <span className="sys-label">{tier.id?.toUpperCase() || "FREE"} // TIER</span>
-                      </div>
-                      <h3 className="text-xl font-bold text-white">{tier.name}</h3>
-                      <div className="mt-3 flex items-baseline gap-1">
-                        <span className="text-4xl font-extrabold text-white">
-                          {tier.price === 0 ? "Free" : `$${tier.price}`}
-                        </span>
-                        {tier.price > 0 && (
-                          <span className="text-sm text-white/40">/month</span>
-                        )}
-                      </div>
-                      <p className="mt-1 text-sm text-white/40">
-                        {tier.credits === "Unlimited"
-                          ? "Unlimited generations"
-                          : `${tier.credits} generations/month`}
-                      </p>
-                      <ul className="mt-6 space-y-3 flex-1">
-                        {tier.features.map((f) => (
-                          <li key={f} className="flex items-start gap-2 text-sm text-white/60">
-                            <span className="mt-0.5 h-1.5 w-1.5 rounded-full bg-gold-400 shrink-0" />
-                            {f}
-                          </li>
-                        ))}
-                      </ul>
-                      <Button
-                        variant={tier.popular ? "primary" : "outline"}
-                        className="mt-6 w-full gap-2"
-                      >
-                        {tier.price === 0 ? "Get Started Free" : "Subscribe"}
-                        <ArrowRight className="h-4 w-4" />
-                      </Button>
-                    </CardContent>
-                  </Card>
+                    {tier.id === "studio" && (
+                      <>
+                        <span className="absolute top-2 left-2 h-3 w-3 border-t border-l border-[#8b5cf6]/40 pointer-events-none" />
+                        <span className="absolute bottom-2 right-2 h-3 w-3 border-b border-r border-[#8b5cf6]/40 pointer-events-none" />
+                      </>
+                    )}
+
+                    {/* Tier header */}
+                    <div className="mb-2">
+                      <span className={cn(
+                        "sys-label",
+                        tier.id === "studio" && "text-[#8b5cf6]/50",
+                      )}>
+                        {tier.id?.toUpperCase() || "FREE"} // TIER
+                      </span>
+                    </div>
+                    <h3 className={cn(
+                      "text-xl font-bold text-white",
+                      tier.popular && "text-[#FFE600]",
+                      tier.id === "studio" && "text-[#8b5cf6]",
+                    )}>
+                      {tier.name}
+                    </h3>
+
+                    {/* Price */}
+                    <div className="mt-3 flex items-baseline gap-1">
+                      <span className="text-4xl font-extrabold text-white">
+                        {tier.price === 0 ? "Free" : `$${tier.price}`}
+                      </span>
+                      {tier.price > 0 && (
+                        <span className="text-sm text-white/40">/month</span>
+                      )}
+                    </div>
+                    <p className="mt-1 text-sm text-white/40">
+                      {tier.credits === "Unlimited"
+                        ? "Unlimited generations"
+                        : `${tier.credits} generations/month`}
+                    </p>
+
+                    {/* Features list with astral stars */}
+                    <ul className="mt-6 space-y-3 flex-1">
+                      {tier.features.map((f) => (
+                        <li key={f} className="flex items-start gap-2 text-sm text-white/60">
+                          <span className="astral-star mt-0.5 shrink-0 text-[0.5rem]" />
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
+
+                    {/* CTA */}
+                    <Button
+                      variant={tier.popular ? "primary" : "outline"}
+                      className={cn(
+                        "mt-6 w-full gap-2",
+                        tier.popular && "glow-gold",
+                        tier.id === "studio" && "hover:border-[#8b5cf6]/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.15)]",
+                      )}
+                    >
+                      {tier.price === 0 ? "Get Started Free" : "Subscribe"}
+                      <ArrowRight className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </motion.div>
               ))}
             </motion.div>
@@ -468,37 +580,44 @@ export default function HomePage() {
         {/* ─── CTA FINAL ─── */}
         <section className="relative py-20 sm:py-28">
           <div className="pointer-events-none absolute inset-0 bg-grid opacity-10" />
-          <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-gradient-to-b from-gold-400/10 via-cyan-400/5 to-transparent blur-3xl" />
+          <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-gradient-to-b from-[#FFE600]/10 via-[#00F0FF]/5 to-transparent blur-3xl" />
 
           <motion.div
             className="relative mx-auto max-w-3xl text-center px-4"
             {...fadeInUp}
           >
-            <div className="glass rounded-xl p-10 sm:p-14 cut-corner">
-              <Badge variant="default" className="mb-4 px-3 py-1">
-                <Sparkles className="mr-1.5 h-3.5 w-3.5" />
-                GET STARTED // NODE
-              </Badge>
-              <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-                Ready to create your masterpiece?
-              </h2>
-              <p className="mt-4 text-lg text-white/50 max-w-xl mx-auto">
-                Join thousands of creators already generating stunning anime art
-                with AI. No credit card required.
-              </p>
-              <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-                <Link href="/register">
-                  <Button size="lg" variant="primary" className="gap-2 text-base glow-gold">
-                    <Sparkles className="h-5 w-5" />
-                    Start Creating Free
-                  </Button>
-                </Link>
-                <Link href="#features">
-                  <Button variant="outline" size="lg" className="gap-2 text-base">
-                    Learn More
-                    <ChevronRight className="h-4 w-4" />
-                  </Button>
-                </Link>
+            <div className="terminal-frame rounded-xl p-10 sm:p-14">
+              {/* Scanning line */}
+              <div className="scan-line" />
+
+              <div className="relative">
+                <Badge variant="default" className="mb-4 px-3 py-1 border-[#00F0FF]/30 bg-[#00F0FF]/5 text-[#00F0FF]/70">
+                  <Sparkles className="mr-1.5 h-3.5 w-3.5" />
+                  GET STARTED // NODE
+                </Badge>
+                <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+                  <span className="bg-gradient-to-r from-[#00F0FF] via-[#FFE600] to-[#FF2D78] bg-clip-text text-transparent">
+                    Ready to create your masterpiece?
+                  </span>
+                </h2>
+                <p className="mt-4 text-lg text-white/50 max-w-xl mx-auto">
+                  Join thousands of creators already generating stunning anime art
+                  with AI. No credit card required.
+                </p>
+                <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+                  <Link href="/register">
+                    <button className="btn-hex btn-hex-gold gap-3 text-base font-semibold">
+                      <Sparkles className="h-5 w-5" />
+                      Start Creating Free
+                    </button>
+                  </Link>
+                  <Link href="#features">
+                    <button className="btn-hex gap-3 text-base font-semibold">
+                      Learn More
+                      <ChevronRight className="h-4 w-4" />
+                    </button>
+                  </Link>
+                </div>
               </div>
             </div>
           </motion.div>
