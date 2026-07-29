@@ -122,14 +122,16 @@ export type CacheDuration =
   | "short"    // 1 minute
   | "medium"   // 5 minutes
   | "long"     // 1 hour
-  | "day";     // 24 hours
+  | "day"      // 24 hours
+  | "week";    // 7 days (for truly static content)
 
 const CACHE_DURATIONS: Record<CacheDuration, string> = {
   "no-store": "no-store, no-cache, must-revalidate",
-  short: "public, max-age=60, s-maxage=120",
-  medium: "public, max-age=300, s-maxage=600",
-  long: "public, max-age=3600, s-maxage=7200",
-  day: "public, max-age=86400, s-maxage=172800",
+  short: "public, max-age=60, s-maxage=120, stale-while-revalidate=30",
+  medium: "public, max-age=300, s-maxage=600, stale-while-revalidate=60",
+  long: "public, max-age=3600, s-maxage=7200, stale-while-revalidate=300",
+  day: "public, max-age=86400, s-maxage=172800, stale-while-revalidate=3600",
+  week: "public, max-age=604800, s-maxage=1209600, stale-while-revalidate=86400",
 };
 
 /**

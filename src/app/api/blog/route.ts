@@ -4,17 +4,19 @@ import {
   buildPaginationMeta,
   cachedJsonResponse,
   errorResponse,
-  notFoundResponse,
 } from "@/lib/api-helpers";
 import {
   findPublishedArticles,
-  findArticleBySlug,
   findArticleTags,
 } from "@/lib/services/blog.service";
+import { applyRateLimit, readLimiter } from "@/lib/rate-limiter";
 
 /** GET /api/blog — List published articles */
 export async function GET(request: NextRequest) {
   try {
+    const rateCheck = applyRateLimit(request, "blog-list", readLimiter);
+    if (rateCheck) return rateCheck;
+
     const { searchParams } = new URL(request.url);
     const pagination = parsePagination(searchParams, { sort: "publishedAt", order: "desc" });
 

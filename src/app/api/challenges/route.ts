@@ -11,10 +11,14 @@ import {
   findChallengeById,
   findAllChallenges,
 } from "@/lib/services/challenge.service";
+import { applyRateLimit, readLimiter } from "@/lib/rate-limiter";
 
 /** GET /api/challenges — List challenges */
 export async function GET(request: NextRequest) {
   try {
+    const rateCheck = applyRateLimit(request, "challenges", readLimiter);
+    if (rateCheck) return rateCheck;
+
     const { searchParams } = new URL(request.url);
     const pagination = parsePagination(searchParams, { sort: "endsAt", order: "asc" });
 
