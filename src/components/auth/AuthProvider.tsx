@@ -50,8 +50,12 @@ function setStoredToken(token: string | null) {
   if (typeof window === "undefined") return;
   if (token) {
     localStorage.setItem(TOKEN_KEY, token);
+    // Set cookie for middleware (expires in 7 days)
+    document.cookie = `${TOKEN_KEY}=${token}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax`;
   } else {
     localStorage.removeItem(TOKEN_KEY);
+    // Clear cookie
+    document.cookie = `${TOKEN_KEY}=; path=/; max-age=0`;
   }
 }
 
