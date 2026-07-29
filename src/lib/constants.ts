@@ -13,6 +13,7 @@ export const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000
 export const MAIN_NAV_LINKS = [
   { label: "Features", href: "/#features" },
   { label: "Gallery", href: "/dashboard/gallery" },
+  { label: "Blog", href: "/blog" },
   { label: "Pricing", href: "/#pricing" },
   { label: "Marketplace", href: "/dashboard/marketplace" },
 ] as const;

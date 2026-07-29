@@ -1,0 +1,51 @@
+import { NextRequest } from "next/server";
+import {
+  parsePagination,
+  buildPaginationMeta,
+  cachedJsonResponse,
+  errorResponse,
+  notFoundResponse,
+} from "@/lib/api-helpers";
+import {
+  findActiveChallenges,
+  findChallengeById,
+  findAllChallenges,
+} from "@/lib/services/challenge.service";
+
+/** GET /api/challenges — List challenges */
+export async function GET(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const pagination = parsePagination(searchParams, { sort: "endsAt", order: "asc" });
+
+    const scope = searchParams.get("scope") || "active";
+    const id = searchParams.get("id") || undefined;
+
+    // Single challenge by ID
+    if (id) {
+      const challenge = await findChallengeById(id);
+      if (!challenge) {
+        return notFoundResponse("Challenge not found");
+      }
+      return cachedJsonResponse({ challenge }, { cache: "short" });
+    }
+
+    // All or active challenges
+    if (scope === "all") {
+      const { challenges, total } = await findAllChallenges(pagination);
+      return cachedJsonResponse({
+        challenges,
+        pagination: buildPaginationMeta(total, pagination.page, pagination.limit),
+      }, { cache: "short" });
+    }
+
+    const { challenges, total } = await findActiveChallenges(pagination);
+    return cachedJsonResponse({
+      challenges,
+      pagination: buildPaginationMeta(total, pagination.page, pagination.limit),
+    }, { cache: "short" });
+  } catch (error) {
+    console.error("List challenges error:", error);
+    return errorResponse("Failed to load challenges", 500);
+  }
+}
