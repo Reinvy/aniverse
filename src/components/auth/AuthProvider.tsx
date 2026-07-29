@@ -113,13 +113,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         setStoredToken(data.token);
         setUser(data.user);
-        router.push("/dashboard");
+        // Navigation happens in the login page after this returns
         return { ok: true };
       } catch {
         return { ok: false, error: "Network error. Please try again." };
       }
     },
-    [router],
+    [],
   );
 
   // ── Register ────────────────────────────────────────────────
@@ -152,13 +152,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         setStoredToken(result.token);
         setUser(result.user);
-        router.push("/dashboard");
+        // Navigation happens in the register page after this returns
         return { ok: true };
       } catch {
         return { ok: false, error: "Network error. Please try again." };
       }
     },
-    [router],
+    [],
   );
 
   // ── Logout ──────────────────────────────────────────────────

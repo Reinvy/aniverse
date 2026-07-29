@@ -9,9 +9,11 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { APP_NAME } from "@/lib/constants";
 import { useAuth } from "@/components/auth/AuthProvider";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const { login } = useAuth();
+  const router = useRouter();
 
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
@@ -49,8 +51,10 @@ export default function LoginPage() {
     if (!result.ok) {
       setErrors({ _form: result.error || "Login failed" });
       setIsLoading(false);
+    } else {
+      // Navigate after state is committed — prevents race condition
+      router.push("/dashboard");
     }
-    // Success redirect happens inside login() via router.push
   }
 
   return (

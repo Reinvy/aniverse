@@ -10,9 +10,11 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { APP_NAME } from "@/lib/constants";
 import { useAuth } from "@/components/auth/AuthProvider";
+import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
   const { register } = useAuth();
+  const router = useRouter();
 
   const [showPassword, setShowPassword] = useState(false);
   const [firstName, setFirstName] = useState("");
@@ -69,8 +71,9 @@ export default function RegisterPage() {
     if (!result.ok) {
       setErrors({ _form: result.error || "Registration failed" });
       setIsLoading(false);
+    } else {
+      router.push("/dashboard");
     }
-    // Success redirect happens inside register() via router.push
   }
 
   return (
