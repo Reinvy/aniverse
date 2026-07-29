@@ -58,7 +58,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-navy-900 px-4">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-eclipse px-4">
       {/* Background effects */}
       <div className="pointer-events-none absolute inset-0 bg-starfield" />
       <div className="pointer-events-none absolute inset-0 bg-grid opacity-20" />
@@ -110,7 +110,7 @@ export default function LoginPage() {
                 <span className="w-full border-t border-stroke-white" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-navy-900 px-2 text-white/30 sys-label">
+                <span className="bg-eclipse px-2 text-white/30 sys-label">
                   OR CONTINUE WITH EMAIL
                 </span>
               </div>

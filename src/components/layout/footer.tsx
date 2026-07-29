@@ -6,7 +6,7 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-stroke-white bg-navy-900">
+    <footer className="border-t border-stroke-white bg-eclipse">
       {/* Angled bar accent */}
       <div className="angled-bar" />
 

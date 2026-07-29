@@ -72,7 +72,7 @@ function PaletteCard({ palette }: { palette: PaletteSwatch }) {
       transition={{ duration: 0.4 }}
       className="group"
     >
-      <div className="h-full rounded-xl border border-zinc-800/60 bg-zinc-900/50 p-5 transition-all duration-300 hover:border-zinc-700 hover:shadow-lg hover:shadow-violet-600/5">
+      <div className="h-full glass rounded-[4px] cut-corner energy-sweep p-5 transition-all duration-300 premium-transition hover:border-[rgba(255,255,255,0.12)]">
         {/* Color swatches */}
         <div className="mb-4 flex gap-1.5 overflow-hidden rounded-lg">
           {palette.colors.map((color, i) => (
@@ -116,7 +116,7 @@ function PaletteCard({ palette }: { palette: PaletteSwatch }) {
 
 export function TrendingPalettes() {
   return (
-    <section className="relative overflow-hidden py-20 sm:py-28">
+    <section className="relative overflow-hidden py-20 sm:py-28 bg-eclipse bg-starfield scanline">
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-fuchsia-600/5 via-transparent to-amber-600/5" />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div className="mx-auto max-w-2xl text-center" {...fadeInUp}>
