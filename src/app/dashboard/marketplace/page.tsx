@@ -10,8 +10,6 @@ import {
   Star,
   Image,
   TrendingUp,
-  Clock,
-  Filter,
   ArrowUpRight,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";

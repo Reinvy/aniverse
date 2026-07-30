@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import { Palette } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
 
 const fadeInUp = {
   initial: { opacity: 0, y: 24 },

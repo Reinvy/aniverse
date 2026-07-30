@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { useSpatial, type SectionId } from "@/lib/spatial-store";
+import { useSpatial } from "@/lib/spatial-store";
 import { useIsMobile } from "@/lib/use-mobile";
 import { SectionComponents } from "./SpatialCanvasContent";
 import { ParticleBackground } from "./ParticleBackground";

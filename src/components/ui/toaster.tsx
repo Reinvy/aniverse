@@ -20,7 +20,7 @@ export function Toaster() {
 
   return (
     <ToastProvider>
-      {toasts.map(function ({ id, title, description, action, variant, icon, open, onOpenChange, ...props }) {
+      {toasts.map(function ({ id, title, description, variant, icon, open, onOpenChange, ...props }) {
         return (
           <Toast
             key={id}

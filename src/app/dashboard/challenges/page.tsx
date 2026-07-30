@@ -10,7 +10,6 @@ import {
   Coins,
   Award,
   Target,
-  ChevronRight,
   Calendar,
   TrendingUp,
 } from "lucide-react";
@@ -18,7 +17,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/ui/page-header";
-import Link from "next/link";
 import { dailyChallenge } from "@/data/challenges/daily-20260724";
 import { weeklyChallenge } from "@/data/challenges/weekly-20260724";
 

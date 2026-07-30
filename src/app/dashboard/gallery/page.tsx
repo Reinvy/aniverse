@@ -8,12 +8,10 @@ import {
   Eye,
   Clock,
   Search,
-  Filter,
   Grid3X3,
   List,
   Sparkles,
   Palette,
-  Star,
   Sun,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";

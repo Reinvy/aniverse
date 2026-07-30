@@ -7,7 +7,8 @@
  * @see TIERS in constants.ts for the original canonical definitions.
  */
 
-import { TIERS, type TierId, PRICING_INTERVALS } from "./constants";
+// Pricing constants are defined locally — constants.ts has canonical versions.
+// No imports needed — we define pricingTiers below.
 
 /** Per-tier CTA button text. */
 export const pricingTiers = {
