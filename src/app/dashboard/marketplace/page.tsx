@@ -17,6 +17,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PageHeader } from "@/components/ui/page-header";
+import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { formatNumber } from "@/lib/utils";
 
 const categories = [
@@ -63,6 +64,7 @@ export default function MarketplacePage() {
   });
 
   return (
+    <ErrorBoundary compact message="Failed to load marketplace">
     <div className="p-4 sm:p-6 lg:p-8">
       {/* Header */}
       <PageHeader
@@ -234,5 +236,6 @@ export default function MarketplacePage() {
         )}
       </motion.div>
     </div>
+    </ErrorBoundary>
   );
 }

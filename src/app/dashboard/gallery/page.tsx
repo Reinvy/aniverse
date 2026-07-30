@@ -19,6 +19,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PageHeader } from "@/components/ui/page-header";
+import { ErrorBoundary } from "@/components/ui/error-boundary";
+import { Spinner } from "@/components/ui/spinner";
 import { formatNumber, timeAgo, cn } from "@/lib/utils";
 import { GALLERY_CATEGORIES } from "@/lib/constants";
 import { dailyArt } from "@/data/daily-art-20260727";
@@ -74,6 +76,7 @@ export default function GalleryPage() {
   });
 
   return (
+    <ErrorBoundary compact message="Failed to load gallery">
     <div className="p-4 sm:p-6 lg:p-8">
       {/* ─── Daily Art Section ─── */}
       {showDailyArt && (
@@ -329,5 +332,6 @@ export default function GalleryPage() {
         )}
       </motion.div>
     </div>
+    </ErrorBoundary>
   );
 }

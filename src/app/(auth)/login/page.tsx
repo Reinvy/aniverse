@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { APP_NAME } from "@/lib/constants";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useRouter } from "next/navigation";
+import { ErrorBoundary } from "@/components/ui/error-boundary";
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -58,6 +59,7 @@ export default function LoginPage() {
   }
 
   return (
+    <ErrorBoundary compact message="Authentication error">
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-eclipse px-4">
       {/* Background effects */}
       <div className="pointer-events-none absolute inset-0 bg-starfield" />
@@ -211,5 +213,6 @@ export default function LoginPage() {
         </Card>
       </motion.div>
     </div>
+    </ErrorBoundary>
   );
 }
