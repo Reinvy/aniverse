@@ -64,13 +64,13 @@ export async function GET(request: NextRequest) {
     const pagination = parsePagination(searchParams);
 
     // Optional filters
-    const style = searchParams.get("style") || undefined;
+    const style = (searchParams.get("style") || undefined) as import("@/generated/prisma/client").ArtworkStyle | undefined;
     const search = searchParams.get("search") || undefined;
 
     const { artworks, total } = await findUserArtworks(
       auth.payload.userId,
       pagination,
-      { style: style as any, search },
+      { style, search },
     );
 
     return cachedJsonResponse({

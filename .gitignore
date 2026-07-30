@@ -52,3 +52,6 @@ src/generated/
 CLAUDE.md
 .cron/pr-body-*.md
 .cron/create_pr.js
+.cron/create-pr.py
+.playwright-browsers/
+

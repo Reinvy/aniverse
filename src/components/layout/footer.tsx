@@ -85,7 +85,7 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="mt-10 flex flex-col items-center gap-4 border-t border-stroke-white pt-8 sm:flex-row sm:justify-between">
           <p className="sys-label">
-            &copy; {year} {APP_NAME} // ALL RIGHTS RESERVED
+            &copy; {year} {APP_NAME}{" //"} ALL RIGHTS RESERVED
           </p>
           <div className="flex items-center gap-4">
             <Link

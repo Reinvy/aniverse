@@ -93,6 +93,7 @@ export default function CharactersPage() {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchCharacters();
   }, [page]); // eslint-disable-line react-hooks/exhaustive-deps
 

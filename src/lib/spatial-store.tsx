@@ -51,6 +51,7 @@ export function useSpatial() {
 export function SpatialProvider({ children }: { children: React.ReactNode }) {
   const [activeSection, setActiveSection] = useState<SectionId>("hero");
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [direction, setDirection] = useState<NavDirection>("none");
   const directionRef = useRef<NavDirection>("none");
 
   const navigateTo = useCallback((section: SectionId) => {
@@ -61,17 +62,17 @@ export function SpatialProvider({ children }: { children: React.ReactNode }) {
       const nextIdx = sectionOrder.indexOf(section);
 
       // Compute animation direction
-      if (nextIdx > prevIdx) directionRef.current = "right";
-      else if (nextIdx < prevIdx) directionRef.current = "left";
-      else directionRef.current = "none";
+      let dir: NavDirection = "none";
+      if (nextIdx > prevIdx) dir = "right";
+      else if (nextIdx < prevIdx) dir = "left";
+      directionRef.current = dir;
+      setDirection(dir);
 
       setIsTransitioning(true);
       setTimeout(() => setIsTransitioning(false), 700);
       return section;
     });
   }, []);
-
-  const direction = directionRef.current;
 
   // Subtle camera transform for desktop spatial feel
   const cameraTransform = (() => {

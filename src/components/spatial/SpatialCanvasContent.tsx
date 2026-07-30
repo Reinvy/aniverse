@@ -74,7 +74,6 @@ function StatCounter({ value, label, icon: Icon }: { value: string; label: strin
 // ─── ─── 1. HERO NODE ──────────────────────────────────────────
 
 function HeroNode() {
-  const isMobile = useIsMobile();
 
   return (
     <motion.div
@@ -320,7 +319,6 @@ function ShowcaseNode() {
 
 function PricingNode() {
   const [annual, setAnnual] = useState(false);
-  const isMobile = useIsMobile();
 
   return (
     <motion.div
@@ -388,7 +386,7 @@ function PricingNode() {
                   <span className="text-[7px] md:text-[9px] font-mono tracking-widest text-[#E5C587]/70">MOST POPULAR</span>
                 </div>
               )}
-              <span className="text-[8px] md:text-[10px] font-mono tracking-widest text-white/20">{tier.id?.toUpperCase()} // TIER</span>
+              <span className="text-[8px] md:text-[10px] font-mono tracking-widest text-white/20">{tier.id?.toUpperCase()}{" //"} TIER</span>
               <h3 className="text-lg md:text-xl font-bold text-white mt-1">{tier.name}</h3>
               <div className="mt-2 md:mt-3 flex items-baseline gap-1">
                 <span className="text-2xl md:text-3xl font-bold text-white/90">
@@ -436,7 +434,6 @@ function PricingNode() {
 function FAQNode() {
   const [search, setSearch] = useState("");
   const [openIdx, setOpenIdx] = useState<number | null>(null);
-  const isMobile = useIsMobile();
 
   const filtered = faqs.filter(
     (f) => f.q.toLowerCase().includes(search.toLowerCase()) || f.a.toLowerCase().includes(search.toLowerCase())

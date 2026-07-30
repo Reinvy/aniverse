@@ -123,7 +123,7 @@ export function HSRNavbar() {
             SYS.ONLINE
           </span>
           <span className="hidden sm:inline text-[9px] md:text-[10px] font-mono tracking-wider text-white/15">
-            // {fps} FPS
+            {"//"} {fps} FPS
           </span>
           <CoordTicker />
         </div>
@@ -133,7 +133,7 @@ export function HSRNavbar() {
       <div className="fixed top-3 right-3 md:top-5 md:right-5 z-50 flex items-center gap-2 md:gap-3">
         <div className="hidden md:flex items-center gap-2 px-2 py-1 md:px-3 md:py-1.5 rounded-sm border border-white/[0.06] bg-black/50 backdrop-blur-xl">
           <span className="text-[9px] font-mono tracking-widest text-white/20">
-            {activeSection.toUpperCase()} // {(SECTIONS.findIndex((s) => s.id === activeSection) + 1).toString().padStart(2, "0")}
+            {activeSection.toUpperCase()}{" //"} {(SECTIONS.findIndex((s) => s.id === activeSection) + 1).toString().padStart(2, "0")}
           </span>
           <SectionProgress />
         </div>
