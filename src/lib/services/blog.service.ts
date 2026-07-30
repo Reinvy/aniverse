@@ -3,13 +3,15 @@
  *
  * Encapsulates all BlogArticle-related database queries with:
  * - Optimized selects
- * - Built-in pagination
- * - Consistent error handling
+ * - Built-in pagination and filtering
+ * - DRY: uses shared query-builder utilities
  */
 
 import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@/generated/prisma/client";
 import type { PaginationParams } from "@/lib/api-helpers";
+import { buildOrderBy, buildSearchClause } from "@/lib/query-builder";
+import { BLOG_ARTICLE_SORT_FIELDS } from "@/lib/services/sort-config";
 
 // ─── Types ────────────────────────────────────────────────────────
 
@@ -73,7 +75,7 @@ const blogDetailSelect = {
 // ─── Service Methods ──────────────────────────────────────────────
 
 /**
- * List published blog articles with pagination.
+ * List published blog articles with pagination and optional filtering.
  */
 export async function findPublishedArticles(
   pagination: PaginationParams,
@@ -84,13 +86,14 @@ export async function findPublishedArticles(
     publishedAt: { lte: new Date() },
   };
 
+  // Use shared buildSearchClause for text search
   if (filters?.search) {
-    const q = filters.search.trim();
-    if (q) {
-      where.OR = [
-        { title: { contains: q, mode: "insensitive" } },
-        { excerpt: { contains: q, mode: "insensitive" } },
-      ];
+    const searchClause = buildSearchClause(filters.search, [
+      "title",
+      "excerpt",
+    ]);
+    if (searchClause) {
+      where.OR = searchClause;
     }
   }
 
@@ -98,14 +101,7 @@ export async function findPublishedArticles(
     where.tags = { has: filters.tag };
   }
 
-  const allowedSortFields = ["publishedAt", "title", "createdAt"];
-  const sortField = allowedSortFields.includes(pagination.sort)
-    ? pagination.sort
-    : "publishedAt";
-
-  const orderBy: Prisma.BlogArticleOrderByWithRelationInput = {
-    [sortField]: pagination.order,
-  };
+  const orderBy = buildOrderBy(pagination, BLOG_ARTICLE_SORT_FIELDS, "publishedAt");
 
   const [articles, total] = await Promise.all([
     prisma.blogArticle.findMany({
