@@ -5,11 +5,14 @@
  * - Optimized selects (only fetch what's needed)
  * - Built-in pagination, sorting, and filtering
  * - Consistent error handling
+ * - DRY: uses shared query-builder utilities
  */
 
 import { prisma } from "@/lib/prisma";
 import type { ArtworkStyle, Prisma } from "@/generated/prisma/client";
 import type { PaginationParams } from "@/lib/api-helpers";
+import { buildOrderBy, buildSearchClause } from "@/lib/query-builder";
+import { ARTWORK_SORT_FIELDS } from "@/lib/services/sort-config";
 
 // ─── Types ────────────────────────────────────────────────────────
 
@@ -96,13 +99,14 @@ function buildWhereClause(
     where.characterId = filters.characterId;
   }
 
+  // Use shared buildSearchClause for text search
   if (filters?.search) {
-    const q = filters.search.trim();
-    if (q) {
-      where.OR = [
-        { title: { contains: q, mode: "insensitive" } },
-        { prompt: { contains: q, mode: "insensitive" } },
-      ];
+    const searchClause = buildSearchClause(filters.search, [
+      "title",
+      "prompt",
+    ]);
+    if (searchClause) {
+      where.OR = searchClause;
     }
   }
 
@@ -120,16 +124,7 @@ export async function findUserArtworks(
   filters?: ArtworkFilters,
 ) {
   const where = buildWhereClause(userId, filters);
-
-  // Build orderBy from sort param
-  const allowedSortFields = ["createdAt", "title", "updatedAt", "style"];
-  const sortField = allowedSortFields.includes(pagination.sort)
-    ? pagination.sort
-    : "createdAt";
-
-  const orderBy: Prisma.ArtworkOrderByWithRelationInput = {
-    [sortField]: pagination.order,
-  };
+  const orderBy = buildOrderBy(pagination, ARTWORK_SORT_FIELDS, "createdAt");
 
   const [artworks, total] = await Promise.all([
     prisma.artwork.findMany({

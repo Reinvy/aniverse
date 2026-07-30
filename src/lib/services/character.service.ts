@@ -3,11 +3,14 @@
  *
  * Encapsulates Character-related database queries
  * for public-facing content (browsing, discovery).
+ * DRY: uses shared query-builder utilities.
  */
 
 import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@/generated/prisma/client";
 import type { PaginationParams } from "@/lib/api-helpers";
+import { buildOrderBy, buildSearchClause } from "@/lib/query-builder";
+import { CHARACTER_SORT_FIELDS } from "@/lib/services/sort-config";
 
 // ─── Types ────────────────────────────────────────────────────────
 
@@ -77,24 +80,18 @@ export async function findPublicCharacters(
     isPublic: true,
   };
 
+  // Use shared buildSearchClause for text search
   if (filters?.search) {
-    const q = filters.search.trim();
-    if (q) {
-      where.OR = [
-        { name: { contains: q, mode: "insensitive" } },
-        { personality: { contains: q, mode: "insensitive" } },
-      ];
+    const searchClause = buildSearchClause(filters.search, [
+      "name",
+      "personality",
+    ]);
+    if (searchClause) {
+      where.OR = searchClause;
     }
   }
 
-  const allowedSortFields = ["createdAt", "name", "updatedAt"];
-  const sortField = allowedSortFields.includes(pagination.sort)
-    ? pagination.sort
-    : "createdAt";
-
-  const orderBy: Prisma.CharacterOrderByWithRelationInput = {
-    [sortField]: pagination.order,
-  };
+  const orderBy = buildOrderBy(pagination, CHARACTER_SORT_FIELDS, "createdAt");
 
   const [characters, total] = await Promise.all([
     prisma.character.findMany({

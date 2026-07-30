@@ -2,11 +2,14 @@
  * AniVerse — Challenge Service Layer
  *
  * Encapsulates all Challenge-related database queries.
+ * DRY: uses shared query-builder utilities.
  */
 
 import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@/generated/prisma/client";
 import type { PaginationParams } from "@/lib/api-helpers";
+import { buildOrderBy } from "@/lib/query-builder";
+import { CHALLENGE_SORT_FIELDS } from "@/lib/services/sort-config";
 
 // ─── Types ────────────────────────────────────────────────────────
 
@@ -62,9 +65,7 @@ export async function findActiveChallenges(pagination: PaginationParams) {
     endsAt: { gte: new Date() },
   };
 
-  const orderBy: Prisma.ChallengeOrderByWithRelationInput = {
-    endsAt: "asc",
-  };
+  const orderBy = buildOrderBy(pagination, CHALLENGE_SORT_FIELDS, "endsAt");
 
   const [challenges, total] = await Promise.all([
     prisma.challenge.findMany({
@@ -96,9 +97,7 @@ export async function findChallengeById(
  * List all challenges (including past) with pagination.
  */
 export async function findAllChallenges(pagination: PaginationParams) {
-  const orderBy: Prisma.ChallengeOrderByWithRelationInput = {
-    startsAt: "desc",
-  };
+  const orderBy = buildOrderBy(pagination, CHALLENGE_SORT_FIELDS, "startsAt");
 
   const [challenges, total] = await Promise.all([
     prisma.challenge.findMany({
