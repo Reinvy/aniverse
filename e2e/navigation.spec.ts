@@ -11,11 +11,11 @@ test.describe('Navigation', () => {
   });
 
   test('should have working header navigation', async ({ page }) => {
-    // The header has links to both public pages and protected dashboard pages.
-    // Protected pages redirect to /login when not authenticated.
+    // Navigate to a page that uses the Header component (has nav links)
+    // The landing page uses spatial HSR nav with <button> elements, not <a> links.
     const protectedPrefixes = ['/dashboard'];
 
-    await page.goto('/');
+    await page.goto('/characters');
     const navLinks = page.locator('nav a, header a');
     const count = await navLinks.count();
     expect(count).toBeGreaterThan(0);
@@ -38,13 +38,15 @@ test.describe('Navigation', () => {
         }
 
         // Navigate back to home for next test
-        await page.goto('/');
+        await page.goto('/characters');
       }
     }
   });
 
   test('header should contain branding and key links', async ({ page }) => {
-    await page.goto('/');
+    // The landing page uses a spatial layout without traditional <header>.
+    // Navigate to a page with the Header component instead.
+    await page.goto('/characters');
     // Brand should be visible
     await expect(page.locator('header').first()).toBeVisible();
     // Logo link should exist

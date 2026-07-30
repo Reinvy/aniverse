@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { AlertTriangle, RotateCcw, Sparkles } from "lucide-react";
+import { AlertTriangle, RotateCcw } from "lucide-react";
 
 export interface ErrorFallbackProps {
   error: Error;

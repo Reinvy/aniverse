@@ -67,6 +67,7 @@ export default function DashboardPage() {
   useEffect(() => {
     const token = getToken();
     if (!token) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setLoadState("error");
       return;
     }

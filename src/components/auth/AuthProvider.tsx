@@ -92,8 +92,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const token = getStoredToken();
     if (token) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       fetchUser(token);
     } else {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsLoading(false);
     }
   }, [fetchUser]);
