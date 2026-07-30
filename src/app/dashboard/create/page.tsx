@@ -20,6 +20,7 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { PageHeader } from "@/components/ui/page-header";
+import { Spinner } from "@/components/ui/spinner";
 import { STYLE_PRESETS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
@@ -402,25 +403,8 @@ export default function CreatePage() {
 
               <div className="relative flex aspect-square sm:aspect-[4/3] items-center justify-center rounded-[4px] bg-[rgba(0,0,0,0.4)] border border-white/5 overflow-hidden cut-corner">
                 {isGenerating ? (
-                  <div className="text-center relative w-full h-full flex flex-col items-center justify-center">
-                    <div className="relative w-full h-full absolute inset-0 overflow-hidden">
-                      <div className="absolute inset-0 bg-gradient-to-br from-[rgba(230,194,128,0.03)] to-transparent" />
-                      <div className="absolute inset-0 bg-grid opacity-10" />
-                      <div className="absolute inset-0 bg-[repeating-linear-gradient(0deg,transparent,transparent_2px,rgba(255,255,255,0.01)_2px,rgba(255,255,255,0.01)_4px)]" />
-                    </div>
-                    <div className="relative z-10">
-                      <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-[rgba(230,194,128,0.2)] bg-[rgba(230,194,128,0.06)]">
-                        <Loader2 className="h-8 w-8 animate-spin text-gold-400" />
-                      </div>
-                      <p className="mt-4 text-sm text-white/40">
-                        Pollinations AI is creating...
-                      </p>
-                      <div className="mt-3 flex justify-center gap-1">
-                        <span className="h-1.5 w-1.5 rounded-full bg-gold-400 animate-energy-pulse" />
-                        <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 animate-energy-pulse" style={{ animationDelay: "0.5s" }} />
-                        <span className="h-1.5 w-1.5 rounded-full bg-gold-400 animate-energy-pulse" style={{ animationDelay: "1s" }} />
-                      </div>
-                    </div>
+                  <div className="relative w-full h-full flex items-center justify-center">
+                    <Spinner size="lg" variant="gold" label="Pollinations AI is creating..." />
                   </div>
                 ) : generatedImage ? (
                   <div className="relative w-full h-full group">

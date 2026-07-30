@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { APP_NAME } from "@/lib/constants";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useRouter } from "next/navigation";
+import { ErrorBoundary } from "@/components/ui/error-boundary";
 
 export default function RegisterPage() {
   const { register } = useAuth();
@@ -77,6 +78,7 @@ export default function RegisterPage() {
   }
 
   return (
+    <ErrorBoundary compact message="Registration error">
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-eclipse px-4">
       {/* Background effects */}
       <div className="pointer-events-none absolute inset-0 bg-starfield" />
@@ -284,5 +286,6 @@ export default function RegisterPage() {
         </Card>
       </motion.div>
     </div>
+    </ErrorBoundary>
   );
 }

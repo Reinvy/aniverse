@@ -14,6 +14,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/ui/page-header";
+import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { pricingTiers, coinPacks } from "@/lib/pricing";
 import Link from "next/link";
 
@@ -64,6 +65,7 @@ const conversionGoals = [
 
 export default function MonetizationPage() {
   return (
+    <ErrorBoundary compact message="Failed to load monetization">
     <div className="p-4 sm:p-6 lg:p-8">
       {/* Header */}
       <PageHeader
@@ -347,5 +349,6 @@ export default function MonetizationPage() {
         </motion.div>
       </div>
     </div>
+    </ErrorBoundary>
   );
 }

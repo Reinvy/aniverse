@@ -17,11 +17,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/ui/page-header";
+import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { dailyChallenge } from "@/data/challenges/daily-20260724";
 import { weeklyChallenge } from "@/data/challenges/weekly-20260724";
 
 export default function ChallengesPage() {
   return (
+    <ErrorBoundary compact message="Failed to load challenges">
     <div className="p-4 sm:p-6 lg:p-8">
       {/* Header */}
       <PageHeader
@@ -312,6 +314,7 @@ export default function ChallengesPage() {
         </Card>
       </motion.div>
     </div>
+    </ErrorBoundary>
   );
 }
 

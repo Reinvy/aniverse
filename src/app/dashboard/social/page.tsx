@@ -17,6 +17,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/ui/page-header";
+import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { APP_URL } from "@/lib/constants";
 import Link from "next/link";
 
@@ -155,6 +156,7 @@ const scheduledPosts = [
 
 export default function SocialDashboardPage() {
   return (
+    <ErrorBoundary compact message="Failed to load social dashboard">
     <div className="p-4 sm:p-6 lg:p-8">
       {/* Header */}
       <PageHeader
@@ -325,5 +327,6 @@ export default function SocialDashboardPage() {
         </Card>
       </motion.div>
     </div>
+    </ErrorBoundary>
   );
 }
