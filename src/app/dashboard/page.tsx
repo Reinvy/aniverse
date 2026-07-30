@@ -12,8 +12,6 @@ import {
   ArrowUpRight,
   Sparkles,
   Loader2,
-  Users,
-  Coins,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -59,7 +57,7 @@ function getToken(): string | null {
 }
 
 export default function DashboardPage() {
-  const { user, isLoading: authLoading } = useAuth();
+  const { user } = useAuth();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [activity, setActivity] = useState<ActivityItem[]>([]);
   const [loadState, setLoadState] = useState<LoadState>("loading");

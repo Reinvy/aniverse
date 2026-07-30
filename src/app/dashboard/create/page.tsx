@@ -22,7 +22,6 @@ import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { PageHeader } from "@/components/ui/page-header";
 import { STYLE_PRESETS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-import { useAuth } from "@/components/auth/AuthProvider";
 
 const TOKEN_KEY = "aniverse_token";
 
@@ -76,7 +75,6 @@ function buildPollinationsUrl(
 type SaveState = "idle" | "saving" | "saved" | "error";
 
 export default function CreatePage() {
-  const { user } = useAuth();
   const [prompt, setPrompt] = useState("");
   const [selectedStyle, setSelectedStyle] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);

@@ -6,7 +6,6 @@ import {
   Camera,
   Bookmark,
   Music,
-  Calendar,
   Share2,
   TrendingUp,
   Clock,

@@ -6,7 +6,6 @@ import { motion } from "framer-motion";
 import {
   BookOpen,
   Calendar,
-  Tag,
   Search,
   ArrowRight,
   Sparkles,

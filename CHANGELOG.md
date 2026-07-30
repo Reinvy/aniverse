@@ -4,6 +4,16 @@ All notable changes to AniVerse are documented here.
 
 ## [Unreleased]
 
+### Performance & Maintenance (2026-07-30)
+- Cleaned dead code: removed 8 unused blog markdown files from `src/data/blog/`
+- Fixed 36 ESLint warnings: removed unused imports across 10+ files (pricing.ts, AuthProvider, dashboard pages, components)
+- Fixed unused eslint-disable directives in AuthProvider.tsx
+- Cleaned unused `actionTypes` constant in use-toast.ts (replaced with inline type)
+- Removed unused `action` destructuring in Toaster component
+- Removed unused `cn` import from TrendingPalettes
+- Removed unused `SectionId` type import from SpatialViewport
+- Updated CHANGELOG.md with this entry
+
 ### Performance & Maintenance (2026-07-29)
 - Cleaned dead code: removed 35 unused data files from `src/data/`
 - Created `.env.example` with all required environment variables

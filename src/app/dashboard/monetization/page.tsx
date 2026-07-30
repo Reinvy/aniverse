@@ -5,9 +5,7 @@ import {
   DollarSign,
   TrendingUp,
   Users,
-  Image as ImageIcon,
   ShoppingCart,
-  Gift,
   Sparkles,
   ArrowUpRight,
   Coins,
@@ -16,8 +14,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/ui/page-header";
-import { formatNumber } from "@/lib/utils";
-import { pricingTiers, coinPacks, REFERRAL_REWARDS, MARKETPLACE_COMMISSION } from "@/lib/pricing";
+import { pricingTiers, coinPacks } from "@/lib/pricing";
 import Link from "next/link";
 
 const revenueStreams = [
