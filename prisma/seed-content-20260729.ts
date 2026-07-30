@@ -11,6 +11,7 @@
  * Environment: DATABASE_URL must be set.
  */
 
+import "dotenv/config";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../src/generated/prisma/client";
 
