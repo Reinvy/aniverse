@@ -1,6 +1,11 @@
 import Link from "next/link";
 import { Sparkles, Code2, AtSign, Heart } from "lucide-react";
-import { APP_NAME } from "@/lib/constants";
+import {
+  APP_NAME,
+  FOOTER_PRODUCT_LINKS,
+  FOOTER_RESOURCE_LINKS,
+  FOOTER_APP_LINKS,
+} from "@/lib/constants";
 
 export function Footer() {
   const year = new Date().getFullYear();
@@ -32,13 +37,13 @@ export function Footer() {
           <div>
             <h3 className="sys-label mb-3">PRODUCT // NODE</h3>
             <ul className="space-y-2">
-              {["Features", "Gallery", "Pricing", "API"].map((item) => (
-                <li key={item}>
+              {FOOTER_PRODUCT_LINKS.map((item) => (
+                <li key={item.href}>
                   <Link
-                    href={`/${item.toLowerCase()}`}
+                    href={item.href}
                     className="text-sm text-white/40 hover:text-gold-300 transition-colors"
                   >
-                    {item}
+                    {item.label}
                   </Link>
                 </li>
               ))}
@@ -49,32 +54,30 @@ export function Footer() {
           <div>
             <h3 className="sys-label mb-3">RESOURCES // NODE</h3>
             <ul className="space-y-2">
-              {["Documentation", "Tutorials", "Community", "Blog"].map(
-                (item) => (
-                  <li key={item}>
-                    <Link
-                      href={`/${item.toLowerCase()}`}
-                      className="text-sm text-white/40 hover:text-gold-300 transition-colors"
-                    >
-                      {item}
-                    </Link>
-                  </li>
-                ),
-              )}
+              {FOOTER_RESOURCE_LINKS.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="text-sm text-white/40 hover:text-gold-300 transition-colors"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Legal */}
+          {/* App */}
           <div>
-            <h3 className="sys-label mb-3">LEGAL // NODE</h3>
+            <h3 className="sys-label mb-3">APP // DASHBOARD</h3>
             <ul className="space-y-2">
-              {["Privacy", "Terms", "License", "Guidelines"].map((item) => (
-                <li key={item}>
+              {FOOTER_APP_LINKS.map((item) => (
+                <li key={item.href}>
                   <Link
-                    href={`/${item.toLowerCase()}`}
+                    href={item.href}
                     className="text-sm text-white/40 hover:text-gold-300 transition-colors"
                   >
-                    {item}
+                    {item.label}
                   </Link>
                 </li>
               ))}

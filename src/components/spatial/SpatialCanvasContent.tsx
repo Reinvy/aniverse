@@ -3,12 +3,13 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useIsMobile } from "@/lib/use-mobile";
+import { useSpatial } from "@/lib/spatial-store";
 import { TIERS, TRENDING_STYLES, APP_NAME } from "@/lib/constants";
 import {
   Sparkles, Image, Wand2, Store, Palette, Zap, Shield,
   ChevronRight, TrendingUp,
   Users, Clock, Activity, Search, Check, Layers,
-  Globe, Star,
+  Globe, Star, BookOpen, Trophy, UserRound, ExternalLink,
 } from "lucide-react";
 
 // ─── Shared animation variants ─────────────────────────────────
@@ -74,6 +75,7 @@ function StatCounter({ value, label, icon: Icon }: { value: string; label: strin
 // ─── ─── 1. HERO NODE ──────────────────────────────────────────
 
 function HeroNode() {
+  const { navigateTo } = useSpatial();
 
   return (
     <motion.div
@@ -129,7 +131,7 @@ function HeroNode() {
           <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.03] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
         </a>
         <button
-          onClick={() => {}} // Will be connected via navigateTo from parent
+          onClick={() => navigateTo("features")}
           className="group inline-flex items-center gap-2 px-5 md:px-6 py-2.5 md:py-3 rounded-sm border border-white/10 text-white/40 hover:text-white/60 hover:border-white/20 transition-all duration-300 text-xs md:text-sm tracking-wider uppercase bg-black/30 backdrop-blur-sm"
         >
           See Features
@@ -518,17 +520,49 @@ function FAQNode() {
         )}
       </motion.div>
 
+      {/* Explore — discoverability links */}
+      <motion.div variants={itemVariants} className="mt-8">
+        <div className="flex items-center gap-2 mb-4">
+          <ExternalLink className="h-3.5 w-3.5 text-[#E5C587]/50" />
+          <span className="text-[9px] md:text-[11px] font-mono tracking-widest text-white/25">EXPLORE // QUICK LINKS</span>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 md:gap-3">
+          {[
+            { href: "/blog", icon: BookOpen, label: "Blog", desc: "News & guides" },
+            { href: "/characters", icon: UserRound, label: "OC Characters", desc: "Browse the roster" },
+            { href: "/challenges", icon: Trophy, label: "Challenges", desc: "Win coin rewards" },
+            { href: "/dashboard/gallery", icon: Image, label: "Gallery", desc: "Community artwork" },
+          ].map((item) => {
+            const Icon = item.icon;
+            return (
+              <a
+                key={item.href}
+                href={item.href}
+                className="group flex flex-col items-start gap-1.5 p-3.5 md:p-4 rounded-sm border border-white/[0.05] bg-white/[0.015] hover:bg-white/[0.04] hover:border-[rgba(229,197,135,0.2)] transition-all duration-500 relative overflow-hidden"
+              >
+                <span className="absolute top-0 right-0 w-3 h-3 md:w-4 md:h-4 border-t border-r border-[rgba(229,197,135,0.1)] group-hover:border-[rgba(229,197,135,0.3)] transition-colors duration-500" />
+                <Icon className="h-4 w-4 md:h-5 md:w-5 text-[#E5C587]/60 group-hover:text-[#E5C587] transition-colors duration-300" />
+                <span className="text-[11px] md:text-sm font-semibold text-white/70 group-hover:text-white transition-colors duration-300">
+                  {item.label}
+                </span>
+                <span className="text-[8px] md:text-[10px] font-mono tracking-wider text-white/25">{item.desc}</span>
+              </a>
+            );
+          })}
+        </div>
+      </motion.div>
+
       {/* Footer */}
       <motion.div variants={itemVariants} className="mt-6 md:mt-8 flex items-center justify-center gap-4 md:gap-6 text-[8px] md:text-[10px] font-mono tracking-wider text-white/12">
         <span>&copy; 2026 ANIVERSE</span>
         <span className="w-px h-3 bg-white/10" />
-        <span>DOCS</span>
+        <a href="/blog" className="hover:text-white/30 transition-colors">BLOG</a>
         <span className="w-px h-3 bg-white/10" />
-        <span>TERMS</span>
+        <a href="/challenges" className="hover:text-white/30 transition-colors">CHALLENGES</a>
         <span className="w-px h-3 bg-white/10" />
-        <span>PRIVACY</span>
-        <span className="w-px h-3 bg-white/10" />
-        <span>API</span>
+        <a href="/characters" className="hover:text-white/30 transition-colors">CHARACTERS</a>
+        <span className="w-px h-3 bg-white/10 hidden sm:inline" />
+        <a href="/register" className="hidden sm:inline hover:text-white/30 transition-colors">SIGN UP</a>
       </motion.div>
     </motion.div>
   );
