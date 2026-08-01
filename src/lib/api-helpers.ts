@@ -265,6 +265,11 @@ export type AuthenticatedRequestResult =
  *   const auth = await authenticateRequest(request);
  *   if (!auth.authenticated) return auth.response;
  *
+ * Rate limiting is identity-aware: once the token is verified, the quota is
+ * keyed by userId (not IP) so each user gets a fair share and shared-NAT
+ * clients cannot exhaust each other's quotas. Unauthenticated requests are
+ * rejected with 401 before any quota is consumed.
+ *
  * Usage:
  *   const auth = await requireAuthenticatedRequest(request, { rateLimitKey: "artworks-list" });
  *   if (!auth.ok) return auth.response;
@@ -274,17 +279,18 @@ export async function requireAuthenticatedRequest(
   request: NextRequest,
   options?: { rateLimitKey?: string; limiter?: RateLimiterInstance },
 ): Promise<AuthenticatedRequestResult> {
+  const auth = await authenticateRequest(request);
+  if (!auth.authenticated) return { ok: false, response: auth.response };
+
   if (options?.rateLimitKey) {
     const rateCheck = applyRateLimit(
       request,
       options.rateLimitKey,
       options.limiter ?? readLimiter,
+      auth.payload.userId,
     );
     if (rateCheck) return { ok: false, response: rateCheck };
   }
-
-  const auth = await authenticateRequest(request);
-  if (!auth.authenticated) return { ok: false, response: auth.response };
 
   return { ok: true, userId: auth.payload.userId, payload: auth.payload };
 }

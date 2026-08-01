@@ -135,11 +135,20 @@ export async function findArticleBySlug(
 
 /**
  * Get all unique tags from published articles.
+ *
+ * Optimized: only the `tags` column is fetched, the scan is bounded to the
+ * most recent `TAG_SCAN_LIMIT` articles, and rows are ordered newest-first.
+ * Tag vocabulary is stable over time, so sampling recent articles keeps the
+ * query O(recent) as the blog table grows instead of O(all rows).
  */
+const TAG_SCAN_LIMIT = 300;
+
 export async function findArticleTags(): Promise<string[]> {
   const articles = await prisma.blogArticle.findMany({
     where: { isPublished: true },
     select: { tags: true },
+    orderBy: { publishedAt: "desc" },
+    take: TAG_SCAN_LIMIT,
   });
 
   const tagSet = new Set<string>();

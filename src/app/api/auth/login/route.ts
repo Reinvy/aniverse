@@ -3,6 +3,11 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { signToken } from "@/lib/auth";
 import { applyRateLimit, authLimiter } from "@/lib/rate-limiter";
+import {
+  collectValidationErrors,
+  validateEmail,
+  validateRequiredString,
+} from "@/lib/validation";
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,16 +18,12 @@ export async function POST(request: NextRequest) {
     const { email, password } = body;
 
     // ── Validation ──────────────────────────────────────────────
-    const errors: Record<string, string> = {};
+    const errors = collectValidationErrors([
+      ["email", validateEmail(email)],
+      ["password", validateRequiredString(password, "Password")],
+    ]);
 
-    if (!email || typeof email !== "string" || !email.trim()) {
-      errors.email = "Email is required";
-    }
-    if (!password || typeof password !== "string" || !password) {
-      errors.password = "Password is required";
-    }
-
-    if (Object.keys(errors).length > 0) {
+    if (errors) {
       return NextResponse.json({ errors }, { status: 400 });
     }
 

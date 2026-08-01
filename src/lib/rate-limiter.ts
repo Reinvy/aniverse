@@ -164,21 +164,32 @@ export function rateLimitResponse(
  * Apply rate limiting to a Next.js API route handler.
  * Returns the 429 response if blocked, or null to continue.
  *
+ * When an `identity` (e.g. authenticated userId) is provided, the quota is
+ * keyed per-user instead of per-IP. This is fairer for users behind a shared
+ * NAT / corporate proxy (one IP, many users) and prevents a single user from
+ * exhausting the shared IP quota. Falls back to IP-based keying otherwise.
+ *
  * Usage:
  *   const rateCheck = applyRateLimit(request, "artworks-create", authLimiter);
  *   if (rateCheck) return rateCheck;
+ *
+ *   // Per-user quota for authenticated endpoints:
+ *   const rateCheck = applyRateLimit(request, "artworks-list", readLimiter, userId);
  */
 export function applyRateLimit(
   request: Request,
   keyPrefix: string,
   limiter: ReturnType<typeof rateLimiter>,
+  identity?: string,
 ): NextResponse | null {
   const ip =
     request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
     request.headers.get("x-real-ip") ??
     "anonymous";
 
-  const key = `${keyPrefix}:${ip}`;
+  const key = identity
+    ? `${keyPrefix}:user:${identity}`
+    : `${keyPrefix}:ip:${ip}`;
   const result = limiter.check(key);
 
   if (result.blocked) {

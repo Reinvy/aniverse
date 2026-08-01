@@ -12,6 +12,10 @@ import {
   findUserArtworks,
 } from "@/lib/services/artwork.service";
 import { writeLimiter } from "@/lib/rate-limiter";
+import {
+  collectValidationErrors,
+  validateRequiredString,
+} from "@/lib/validation";
 
 /** POST /api/artworks — Save a new artwork after generation */
 export async function POST(request: NextRequest) {
@@ -26,16 +30,12 @@ export async function POST(request: NextRequest) {
     const { title, prompt, style, imageUrl, width, height } = body;
 
     // ── Validation ──
-    const errors: Record<string, string> = {};
+    const errors = collectValidationErrors([
+      ["title", validateRequiredString(title, "Title")],
+      ["imageUrl", validateRequiredString(imageUrl, "Image URL")],
+    ]);
 
-    if (!title || typeof title !== "string" || !title.trim()) {
-      errors.title = "Title is required";
-    }
-    if (!imageUrl || typeof imageUrl !== "string" || !imageUrl.trim()) {
-      errors.imageUrl = "Image URL is required";
-    }
-
-    if (Object.keys(errors).length > 0) {
+    if (errors) {
       return validationErrorResponse(errors);
     }
 
