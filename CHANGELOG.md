@@ -5,6 +5,13 @@ All notable changes to AniVerse are documented here.
 ## [Unreleased]
 
 ### Performance & Maintenance (2026-08-01)
+- Bundle size & dependency cleanup: removed **17 unused npm packages** (`recharts`, `stripe`, `@stripe/stripe-js`, `react-dropzone`, `react-markdown`, `react-hook-form`, `@hookform/resolvers`, `uuid`, `zod`, `next-auth`, `@auth/prisma-adapter`, `@radix-ui/react-dialog`, `@radix-ui/react-dropdown-menu`, `@radix-ui/react-tabs`, `uploadthing`, `@uploadthing/react`, `@types/uuid`) — shrinks install from 700+ to 543 packages
+- Security: `npm audit` → **0 vulnerabilities** (was 4 high). The remaining `effect` advisory chain was eliminated by removing the unused `uploadthing` / `@uploadthing/react` dependencies
+- Fixed phantom dependency: promoted `jose` (^6.2.4) to a direct dependency — `src/lib/auth.ts` imports it directly but it was only available transitively via `@auth/prisma-adapter`; removing the unused adapter would have broken the build
+- Cleaned dead code: removed unused `calculateSkip` export from `src/lib/query-builder.ts` (skip is already computed in `parsePagination`)
+- Verified `npm run lint` → 0 errors, 0 warnings; `npm run build` → clean production build, all 25 routes + Proxy (middleware) intact
+
+### Performance & Maintenance (2026-08-01)
 - Cleaned dead code: removed unused `src/lib/services/auth.service.ts` (unreferenced duplicate of auth route logic)
 - Fixed all 14 ESLint warnings → **0 warnings, 0 errors**:
   - Converted `<img>` → `next/image` in blog, blog/[slug], characters pages (LCP/bandwidth optimization)
