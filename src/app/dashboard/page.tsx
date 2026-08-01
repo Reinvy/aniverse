@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
-  Image,
+  Image as ImageIcon,
   Wand2,
   TrendingUp,
   DollarSign,
@@ -107,7 +107,7 @@ export default function DashboardPage() {
           title: "Total Artworks",
           value: String(stats.totalArtworks),
           subtext: "Across all galleries",
-          icon: Image,
+          icon: ImageIcon,
           gradient: "from-fuchsia-500 to-pink-600",
           trend:
             stats.totalArtworks > 0 ? `+${stats.totalArtworks}` : "0",
@@ -388,7 +388,7 @@ export default function DashboardPage() {
                     variant="outline"
                     className="w-full justify-start gap-3 text-xs sm:text-sm"
                   >
-                    <Image className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-fuchsia-400" />
+                    <ImageIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-fuchsia-400" />
                     Browse My Gallery
                   </Button>
                 </Link>

@@ -4,6 +4,21 @@ All notable changes to AniVerse are documented here.
 
 ## [Unreleased]
 
+### Performance & Maintenance (2026-08-01)
+- Cleaned dead code: removed unused `src/lib/services/auth.service.ts` (unreferenced duplicate of auth route logic)
+- Fixed all 14 ESLint warnings → **0 warnings, 0 errors**:
+  - Converted `<img>` → `next/image` in blog, blog/[slug], characters pages (LCP/bandwidth optimization)
+  - Added `alt=""` to decorative lucide `Image` icons (dashboard, gallery, marketplace, create, SpatialCanvasContent)
+  - Removed unused `Spinner` import in dashboard/gallery
+  - Removed unused eslint-disable directive in AuthProvider
+  - Fixed unused catch binding in `.cron/create_pr.js`
+- Security: `npm audit` reduced 9 → 4 vulnerabilities via `overrides` in package.json:
+  - `sharp` 0.34.5 → 0.35.3 (patches libvips CVEs)
+  - `postcss` 8.4.31 → 8.5.22 (patches XSS / source-map advisories)
+  - Verified no secrets tracked in git; `.env.example` placeholders only
+- Added `.cron/reports/*.json` to `.gitignore` (runtime report noise)
+- Remaining advisory: `effect@3.17.7` (uploadthing pins exact version — requires upstream v7 update)
+
 ### Performance & Maintenance (2026-07-30)
 - Cleaned dead code: removed 8 unused blog markdown files from `src/data/blog/`
 - Fixed 36 ESLint warnings: removed unused imports across 10+ files (pricing.ts, AuthProvider, dashboard pages, components)

@@ -1,9 +1,16 @@
+/**
+ * AniVerse — Proxy (Next.js 16 renamed `middleware` → `proxy`)
+ *
+ * Protects `/dashboard/*` routes by checking for the auth token cookie.
+ * Actual token verification happens in the API routes (AuthGuard on the
+ * client provides a second layer).
+ */
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 const TOKEN_KEY = "aniverse_token";
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Only protect dashboard routes
