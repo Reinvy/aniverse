@@ -4,10 +4,13 @@ import {
   errorResponse,
   notFoundResponse,
 } from "@/lib/api-helpers";
-import { findArticleBySlug } from "@/lib/services/blog.service";
+import {
+  findArticleBySlug,
+  findRelatedArticles,
+} from "@/lib/services/blog.service";
 import { applyRateLimit, readLimiter } from "@/lib/rate-limiter";
 
-/** GET /api/blog/[slug] — Get a single published article by slug */
+/** GET /api/blog/[slug] — Get a single published article by slug (with related articles) */
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ slug: string }> },
@@ -23,7 +26,9 @@ export async function GET(
       return notFoundResponse("Article not found");
     }
 
-    return cachedJsonResponse({ article }, { cache: "medium" });
+    const related = await findRelatedArticles(slug, article.tags, 3);
+
+    return cachedJsonResponse({ article, related }, { cache: "medium" });
   } catch (error) {
     console.error("Get blog article error:", error);
     return errorResponse("Failed to load article", 500);

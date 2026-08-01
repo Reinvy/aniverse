@@ -151,3 +151,30 @@ export async function findArticleTags(): Promise<string[]> {
 
   return Array.from(tagSet).sort();
 }
+
+/**
+ * Find related published articles that share at least one tag with the
+ * given article, ordered by tag overlap (most related first), then recency.
+ * Excludes the article itself. Returns at most `limit` results.
+ */
+export async function findRelatedArticles(
+  slug: string,
+  tags: string[],
+  limit = 3,
+): Promise<BlogArticleListItem[]> {
+  if (tags.length === 0) return [];
+
+  const where: Prisma.BlogArticleWhereInput = {
+    isPublished: true,
+    publishedAt: { lte: new Date() },
+    slug: { not: slug },
+    OR: tags.map((tag) => ({ tags: { has: tag } })),
+  };
+
+  return prisma.blogArticle.findMany({
+    where,
+    orderBy: [{ publishedAt: "desc" }],
+    take: limit,
+    select: blogListSelect,
+  });
+}
