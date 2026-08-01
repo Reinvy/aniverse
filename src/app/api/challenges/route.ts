@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 import {
   parsePagination,
   buildPaginationMeta,
-  cachedJsonResponse,
+  conditionalJsonResponse,
   errorResponse,
   notFoundResponse,
 } from "@/lib/api-helpers";
@@ -31,20 +31,20 @@ export async function GET(request: NextRequest) {
       if (!challenge) {
         return notFoundResponse("Challenge not found");
       }
-      return cachedJsonResponse({ challenge }, { cache: "short" });
+      return conditionalJsonResponse(request, { challenge }, { cache: "short" });
     }
 
     // All or active challenges
     if (scope === "all") {
       const { challenges, total } = await findAllChallenges(pagination);
-      return cachedJsonResponse({
+      return conditionalJsonResponse(request, {
         challenges,
         pagination: buildPaginationMeta(total, pagination.page, pagination.limit),
       }, { cache: "short" });
     }
 
     const { challenges, total } = await findActiveChallenges(pagination);
-    return cachedJsonResponse({
+    return conditionalJsonResponse(request, {
       challenges,
       pagination: buildPaginationMeta(total, pagination.page, pagination.limit),
     }, { cache: "short" });

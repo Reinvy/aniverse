@@ -77,9 +77,24 @@ export async function getDashboardStats(userId: string): Promise<{
 
   const now = new Date();
   const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-  const generationsThisMonth = await countUserArtworks(userId, {
-    gte: firstOfMonth,
-  });
+
+  // ── Parallel batch #1: independent aggregations ──
+  // These queries only depend on `userId`, so they can run concurrently
+  // instead of serially (3 round trips → 1).
+  const [generationsThisMonth, earningsAgg, artworkIds] = await Promise.all([
+    countUserArtworks(userId, {
+      gte: firstOfMonth,
+    }),
+    prisma.transaction.aggregate({
+      where: {
+        userId,
+        status: "COMPLETED",
+        type: { in: ["PURCHASE", "DEPOSIT", "COMMISSION"] },
+      },
+      _sum: { amount: true },
+    }),
+    findUserArtworkIds(userId),
+  ]);
 
   const generationsUsed = generationsThisMonth;
   const generationsLeft = Math.max(0, generationLimit - generationsUsed);
@@ -89,18 +104,9 @@ export async function getDashboardStats(userId: string): Promise<{
       : Math.min(100, Math.round((generationsUsed / generationLimit) * 100));
 
   // ── Earnings ──
-  const earningsAgg = await prisma.transaction.aggregate({
-    where: {
-      userId,
-      status: "COMPLETED",
-      type: { in: ["PURCHASE", "DEPOSIT", "COMMISSION"] },
-    },
-    _sum: { amount: true },
-  });
   const totalEarnings = Number(earningsAgg._sum.amount ?? 0);
 
   // ── Likes received ──
-  const artworkIds = await findUserArtworkIds(userId);
   const likesReceived =
     artworkIds.length > 0
       ? await prisma.like.count({

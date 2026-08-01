@@ -1,26 +1,27 @@
 import { NextRequest } from "next/server";
 import {
-  authenticateRequest,
-  cachedJsonResponse,
+  requireAuthenticatedRequest,
+  conditionalJsonResponse,
   errorResponse,
   notFoundResponse,
 } from "@/lib/api-helpers";
 import { getDashboardStats } from "@/lib/services/dashboard.service";
-import { applyRateLimit, readLimiter } from "@/lib/rate-limiter";
 
 export async function GET(request: NextRequest) {
   try {
-    const rateCheck = applyRateLimit(request, "dashboard-stats", readLimiter);
-    if (rateCheck) return rateCheck;
+    const auth = await requireAuthenticatedRequest(request, {
+      rateLimitKey: "dashboard-stats",
+    });
+    if (!auth.ok) return auth.response;
 
-    const auth = await authenticateRequest(request);
-    if (!auth.authenticated) return auth.response;
-
-    const userId = auth.payload.userId;
+    const userId = auth.userId;
 
     const result = await getDashboardStats(userId);
 
-    return cachedJsonResponse(result);
+    return conditionalJsonResponse(request, result, {
+      cache: "short",
+      private: true,
+    });
   } catch (error) {
     if (error instanceof Error && error.message === "User not found") {
       return notFoundResponse("User not found");

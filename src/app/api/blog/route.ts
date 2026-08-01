@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 import {
   parsePagination,
   buildPaginationMeta,
-  cachedJsonResponse,
+  conditionalJsonResponse,
   errorResponse,
 } from "@/lib/api-helpers";
 import {
@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
     const { articles, total } = await findPublishedArticles(pagination, { search, tag });
     const tags = await findArticleTags();
 
-    return cachedJsonResponse({
+    return conditionalJsonResponse(request, {
       articles,
       tags,
       pagination: buildPaginationMeta(total, pagination.page, pagination.limit),

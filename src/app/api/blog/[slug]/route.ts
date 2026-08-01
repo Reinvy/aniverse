@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import {
-  cachedJsonResponse,
+  conditionalJsonResponse,
   errorResponse,
   notFoundResponse,
 } from "@/lib/api-helpers";
@@ -28,7 +28,7 @@ export async function GET(
 
     const related = await findRelatedArticles(slug, article.tags, 3);
 
-    return cachedJsonResponse({ article, related }, { cache: "medium" });
+    return conditionalJsonResponse(_request, { article, related }, { cache: "medium" });
   } catch (error) {
     console.error("Get blog article error:", error);
     return errorResponse("Failed to load article", 500);
