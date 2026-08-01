@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { FetchErrorState } from "@/components/ui/fetch-error";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { cn } from "@/lib/utils";
@@ -86,24 +87,30 @@ function getTimeRemaining(endsAt: string): string {
 export default function ChallengesPage() {
   const [challenges, setChallenges] = useState<Challenge[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [scope, setScope] = useState<"active" | "all">("active");
+  const [retryKey, setRetryKey] = useState(0);
 
   useEffect(() => {
     const fetchChallenges = async () => {
       setLoading(true);
+      setError(null);
       try {
         const res = await fetch(`/api/challenges?scope=${scope}&limit=50`);
+        if (!res.ok) throw new Error(`Request failed (${res.status})`);
         const data = await res.json();
         setChallenges(data.challenges || []);
       } catch (err) {
         console.error("Failed to fetch challenges:", err);
+        setError(err instanceof Error ? err.message : "Failed to load challenges");
+        setChallenges([]);
       } finally {
         setLoading(false);
       }
     };
 
     fetchChallenges();
-  }, [scope]);
+  }, [scope, retryKey]);
 
   return (
     <>
@@ -170,6 +177,18 @@ export default function ChallengesPage() {
           {/* Challenges List */}
           {loading ? (
             <ChallengeSkeleton />
+          ) : error ? (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="max-w-md mx-auto"
+            >
+              <FetchErrorState
+                title="Could not load challenges"
+                message={error}
+                onRetry={() => setRetryKey((k) => k + 1)}
+              />
+            </motion.div>
           ) : challenges.length === 0 ? (
             <motion.div
               initial={{ opacity: 0 }}

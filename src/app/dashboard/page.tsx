@@ -9,13 +9,13 @@ import {
   DollarSign,
   Clock,
   Heart,
-  ArrowUpRight,
   Sparkles,
   Loader2,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { StatCard } from "@/components/ui/stat-card";
 import { StatCardSkeleton, ListItemSkeleton } from "@/components/ui/skeleton";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { PageHeader } from "@/components/ui/page-header";
@@ -260,42 +260,22 @@ export default function DashboardPage() {
           transition={{ duration: 0.5, staggerChildren: 0.1 }}
         >
           {statsCards.map((stat, i) => {
-            const Icon = stat.icon;
             return (
               <div
                 key={stat.title}
                 className={`animate-stagger animate-stagger-${i + 1}`}
               >
-                <Card className="group diamond-indicator crosshair-mark glow-ambient bracket-corner watermark-crest">
-                  <CardContent className="p-4 sm:p-5">
-                    <span className="micro-lang block mb-1" data-en={stat.microLabel.en} data-ja={stat.microLabel.ja} />
-                    <span className="sys-node block mb-1">[{stat.sysNode}]</span>
-                    <div className="flex items-start justify-between">
-                      <div
-                        className={`flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl bg-gradient-to-br ${stat.gradient} shadow-lg`}
-                      >
-                        <Icon className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
-                      </div>
-                      <Badge
-                        variant="secondary"
-                        className={`flex items-center gap-0.5 border-0 bg-zinc-800 text-xs ${
-                          stat.trendUp ? "text-emerald-400" : "text-zinc-500"
-                        }`}
-                      >
-                        <ArrowUpRight
-                          className={`h-3 w-3 ${stat.trendUp ? "text-emerald-400" : "text-zinc-500"}`}
-                        />
-                        <span>{stat.trend}</span>
-                      </Badge>
-                    </div>
-                    <p className="mt-3 sm:mt-4 text-xl sm:text-2xl font-bold text-white">
-                      {stat.value}
-                    </p>
-                    <p className="mt-0.5 text-xs sm:text-sm text-white/40">
-                      {stat.subtext}
-                    </p>
-                  </CardContent>
-                </Card>
+                <StatCard
+                  title={stat.title}
+                  value={stat.value}
+                  subtext={stat.subtext}
+                  icon={stat.icon}
+                  gradient={stat.gradient}
+                  trend={stat.trend}
+                  trendUp={stat.trendUp}
+                  microLabel={stat.microLabel}
+                  sysNode={stat.sysNode}
+                />
               </div>
             );
           })}

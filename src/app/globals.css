@@ -1165,3 +1165,47 @@ html.spatial-active body {
     linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
   background-size: 64px 64px;
 }
+
+/* ─── ACCESSIBILITY — Reduced Motion ────────────────────────────────
+   Respects users who prefer reduced motion: disables decorative
+   animations, sweeps, pulses, and smooth scrolling while keeping
+   essential state transitions (opacity fades) intact. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Keep shimmer placeholders visible (static gradient) instead of
+     invisible — the sweep animation is disabled but the base surface
+     remains so loading states are still perceptible. */
+  .scanline,
+  .energy-sweep::after,
+  .btn-glow-sweep::after,
+  .animate-glow-pulse,
+  .animate-light-sweep,
+  .light-sweep,
+  .astral-star,
+  .pulse-ring,
+  .tap-scale:active,
+  .hover-lift:hover {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  /* Preserve skeleton base visibility */
+  [class*="before:animate-"]::before,
+  [class*="before:animate"]::before {
+    animation: none !important;
+    transform: translateX(0) !important;
+    opacity: 0.4;
+  }
+}

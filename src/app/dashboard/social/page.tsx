@@ -16,6 +16,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { StatCard } from "@/components/ui/stat-card";
 import { PageHeader } from "@/components/ui/page-header";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { APP_URL } from "@/lib/constants";
@@ -66,6 +67,7 @@ const todaysStats = [
     value: "16",
     subtext: "Across 4 platforms",
     icon: Share2,
+    gradient: "from-violet-500 to-purple-600",
     color: "text-violet-400",
   },
   {
@@ -73,6 +75,7 @@ const todaysStats = [
     value: "7",
     subtext: "From today's A3 generation",
     icon: Image,
+    gradient: "from-fuchsia-500 to-pink-600",
     color: "text-fuchsia-400",
   },
   {
@@ -80,6 +83,7 @@ const todaysStats = [
     value: "14.2K+",
     subtext: "Combined platform reach",
     icon: TrendingUp,
+    gradient: "from-emerald-500 to-teal-600",
     color: "text-emerald-400",
   },
   {
@@ -87,6 +91,7 @@ const todaysStats = [
     value: "10:00 WIB",
     subtext: "IG Carousel goes live",
     icon: Clock,
+    gradient: "from-amber-500 to-orange-600",
     color: "text-amber-400",
   },
 ];
@@ -180,7 +185,6 @@ export default function SocialDashboardPage() {
         transition={{ duration: 0.5, staggerChildren: 0.1 }}
       >
         {todaysStats.map((stat, i) => {
-          const Icon = stat.icon;
           return (
             <motion.div
               key={stat.label}
@@ -189,19 +193,13 @@ export default function SocialDashboardPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.08, duration: 0.4 }}
             >
-              <Card className="group border-zinc-800/60 transition-all duration-200 hover:border-zinc-700">
-                <CardContent className="p-4 sm:p-5">
-                  <div className="flex items-start justify-between">
-                    <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-600 shadow-lg">
-                      <Icon className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
-                    </div>
-                  </div>
-                  <p className="mt-3 sm:mt-4 text-xl sm:text-2xl font-bold text-white">
-                    {stat.value}
-                  </p>
-                  <p className="mt-0.5 text-xs sm:text-sm text-zinc-500">{stat.subtext}</p>
-                </CardContent>
-              </Card>
+              <StatCard
+                title={stat.label}
+                value={stat.value}
+                subtext={stat.subtext}
+                icon={stat.icon}
+                gradient={stat.gradient}
+              />
             </motion.div>
           );
         })}
