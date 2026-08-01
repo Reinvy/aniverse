@@ -3,6 +3,12 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { signToken } from "@/lib/auth";
 import { applyRateLimit, authLimiter } from "@/lib/rate-limiter";
+import {
+  collectValidationErrors,
+  validateEmail,
+  validatePassword,
+  validateRequiredString,
+} from "@/lib/validation";
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,28 +19,14 @@ export async function POST(request: NextRequest) {
     const { firstName, lastName, email, password } = body;
 
     // ── Validation ──────────────────────────────────────────────
-    const errors: Record<string, string> = {};
+    const errors = collectValidationErrors([
+      ["firstName", validateRequiredString(firstName, "First name")],
+      ["lastName", validateRequiredString(lastName, "Last name")],
+      ["email", validateEmail(email)],
+      ["password", validatePassword(password)],
+    ]);
 
-    if (!firstName || typeof firstName !== "string" || !firstName.trim()) {
-      errors.firstName = "First name is required";
-    }
-    if (!lastName || typeof lastName !== "string" || !lastName.trim()) {
-      errors.lastName = "Last name is required";
-    }
-    if (!email || typeof email !== "string" || !email.trim()) {
-      errors.email = "Email is required";
-    } else if (
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim().toLowerCase())
-    ) {
-      errors.email = "Please enter a valid email address";
-    }
-    if (!password || typeof password !== "string") {
-      errors.password = "Password is required";
-    } else if (password.length < 6) {
-      errors.password = "Password must be at least 6 characters";
-    }
-
-    if (Object.keys(errors).length > 0) {
+    if (errors) {
       return NextResponse.json({ errors }, { status: 400 });
     }
 
