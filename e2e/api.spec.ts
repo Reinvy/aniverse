@@ -41,4 +41,19 @@ test.describe('API Endpoints', () => {
     });
     expect(response.status()).toBe(400);
   });
+
+  test('GET /api/users should return 401 when not authenticated', async ({ request }) => {
+    const response = await request.get('/api/users');
+    expect([401, 403]).toContain(response.status());
+  });
+
+  test('GET /api/blog/[slug] should return 200 for existing slug', async ({ request }) => {
+    const response = await request.get('/api/blog/original-character-universe-worldbuilding-2026');
+    expect(response.ok()).toBe(true);
+  });
+
+  test('GET /api/blog/[slug] should return 404 for unknown slug', async ({ request }) => {
+    const response = await request.get('/api/blog/this-slug-does-not-exist-xyz');
+    expect([404, 400]).toContain(response.status());
+  });
 });

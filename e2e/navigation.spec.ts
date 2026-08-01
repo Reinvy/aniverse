@@ -52,4 +52,38 @@ test.describe('Navigation', () => {
     // Logo link should exist
     await expect(page.locator('header a[href="/"]').first()).toBeVisible();
   });
+
+  test('should navigate to blog detail page from blog listing', async ({ page }) => {
+    await page.goto('/blog');
+    const firstArticle = page.locator('a[href^="/blog/"]').first();
+    await expect(firstArticle).toBeVisible({ timeout: 10000 });
+    const href = await firstArticle.getAttribute('href');
+    await firstArticle.click();
+    await expect(page).toHaveURL(new RegExp(href!.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+    await expect(page.locator('body')).toBeVisible();
+    // Detail page should render content (not 404)
+    await expect(page.locator('h1').first()).toBeVisible({ timeout: 10000 });
+  });
+
+  test('landing page quick links should navigate to real pages', async ({ page }) => {
+    // The landing page EXPLORE // QUICK LINKS section lives in the FAQ/About node
+    // of the spatial canvas. Navigate there via the HUD nav first.
+    await page.goto('/');
+    await page.waitForTimeout(800);
+    const aboutBtn = page.locator('nav button:has-text("About"), nav a:has-text("About")').first();
+    await aboutBtn.click();
+    await page.waitForTimeout(1000);
+
+    const quickLinks = page.locator('a[href="/blog"], a[href="/characters"], a[href="/challenges"], a[href="/dashboard/gallery"]');
+    const count = await quickLinks.count();
+    expect(count).toBeGreaterThanOrEqual(3);
+
+    // Verify each quick link target responds without server error
+    for (const target of ['/blog', '/characters', '/challenges']) {
+      const response = await page.goto(target);
+      expect(response?.status()).toBeLessThan(500);
+      await expect(page.locator('body')).toBeVisible();
+      await page.goto('/');
+    }
+  });
 });
