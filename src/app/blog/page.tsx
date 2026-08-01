@@ -15,6 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { FetchErrorState } from "@/components/ui/fetch-error";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { cn, timeAgo } from "@/lib/utils";
@@ -72,24 +73,29 @@ export default function BlogPage() {
   const [tags, setTags] = useState<string[]>([]);
   const [pagination, setPagination] = useState<PaginationMeta | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [page, setPage] = useState(1);
 
   const fetchArticles = async () => {
     setLoading(true);
+    setError(null);
     try {
       const params = new URLSearchParams({ page: String(page), limit: "20" });
       if (search) params.set("search", search);
       if (activeTag) params.set("tag", activeTag);
 
       const res = await fetch(`/api/blog?${params}`);
+      if (!res.ok) throw new Error(`Request failed (${res.status})`);
       const data = await res.json();
       setArticles(data.articles || []);
       setTags(data.tags || []);
       setPagination(data.pagination || null);
     } catch (err) {
       console.error("Failed to fetch articles:", err);
+      setError(err instanceof Error ? err.message : "Failed to load articles");
+      setArticles([]);
     } finally {
       setLoading(false);
     }
@@ -193,6 +199,18 @@ export default function BlogPage() {
           {/* Articles Grid */}
           {loading ? (
             <BlogSkeleton />
+          ) : error ? (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="max-w-md mx-auto"
+            >
+              <FetchErrorState
+                title="Could not load articles"
+                message={error}
+                onRetry={() => fetchArticles()}
+              />
+            </motion.div>
           ) : articles.length === 0 ? (
             <motion.div
               initial={{ opacity: 0 }}

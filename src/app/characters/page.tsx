@@ -17,6 +17,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { FetchErrorState } from "@/components/ui/fetch-error";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { cn, timeAgo } from "@/lib/utils";
@@ -72,21 +73,26 @@ export default function CharactersPage() {
   const [characters, setCharacters] = useState<Character[]>([]);
   const [pagination, setPagination] = useState<PaginationMeta | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
 
   const fetchCharacters = async () => {
     setLoading(true);
+    setError(null);
     try {
       const params = new URLSearchParams({ page: String(page), limit: "24", sort: "createdAt", order: "desc" });
       if (search) params.set("search", search);
 
       const res = await fetch(`/api/characters?${params}`);
+      if (!res.ok) throw new Error(`Request failed (${res.status})`);
       const data = await res.json();
       setCharacters(data.characters || []);
       setPagination(data.pagination || null);
     } catch (err) {
       console.error("Failed to fetch characters:", err);
+      setError(err instanceof Error ? err.message : "Failed to load characters");
+      setCharacters([]);
     } finally {
       setLoading(false);
     }
@@ -166,6 +172,18 @@ export default function CharactersPage() {
           {/* Characters Grid */}
           {loading ? (
             <CharacterSkeleton />
+          ) : error ? (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="max-w-md mx-auto"
+            >
+              <FetchErrorState
+                title="Could not load characters"
+                message={error}
+                onRetry={() => fetchCharacters()}
+              />
+            </motion.div>
           ) : characters.length === 0 ? (
             <motion.div
               initial={{ opacity: 0 }}

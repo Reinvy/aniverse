@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { useIsMobile } from "@/lib/use-mobile";
 import { useSpatial } from "@/lib/spatial-store";
@@ -556,13 +557,13 @@ function FAQNode() {
       <motion.div variants={itemVariants} className="mt-6 md:mt-8 flex items-center justify-center gap-4 md:gap-6 text-[8px] md:text-[10px] font-mono tracking-wider text-white/12">
         <span>&copy; 2026 ANIVERSE</span>
         <span className="w-px h-3 bg-white/10" />
-        <a href="/blog" className="hover:text-white/30 transition-colors">BLOG</a>
+        <Link href="/blog" className="hover:text-white/30 transition-colors">BLOG</Link>
         <span className="w-px h-3 bg-white/10" />
-        <a href="/challenges" className="hover:text-white/30 transition-colors">CHALLENGES</a>
+        <Link href="/challenges" className="hover:text-white/30 transition-colors">CHALLENGES</Link>
         <span className="w-px h-3 bg-white/10" />
-        <a href="/characters" className="hover:text-white/30 transition-colors">CHARACTERS</a>
+        <Link href="/characters" className="hover:text-white/30 transition-colors">CHARACTERS</Link>
         <span className="w-px h-3 bg-white/10 hidden sm:inline" />
-        <a href="/register" className="hidden sm:inline hover:text-white/30 transition-colors">SIGN UP</a>
+        <Link href="/register" className="hidden sm:inline hover:text-white/30 transition-colors">SIGN UP</Link>
       </motion.div>
     </motion.div>
   );
