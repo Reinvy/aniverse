@@ -8,7 +8,7 @@ import {
   ShoppingCart,
   Heart,
   Star,
-  Image,
+  Image as ImageIcon,
   TrendingUp,
   ArrowUpRight,
 } from "lucide-react";
@@ -171,7 +171,7 @@ export default function MarketplacePage() {
               <Card className="group cursor-pointer diamond-indicator overflow-hidden">
                 {/* Thumbnail */}
                 <div className="aspect-[4/3] flex items-center justify-center bg-[rgba(0,0,0,0.3)] text-white/10 border-b border-white/5">
-                  <Image className="h-10 w-10" />
+                  <ImageIcon className="h-10 w-10" />
                 </div>
 
                 <CardContent className="p-4">

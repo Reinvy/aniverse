@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import {
   Wand2,
   Sparkles,
-  Image,
+  Image as ImageIcon,
   Sliders,
   RefreshCw,
   Download,
@@ -283,7 +283,7 @@ export default function CreatePage() {
           <Card>
             <CardHeader className="p-4 sm:p-6">
               <CardTitle className="text-base sm:text-lg flex items-center gap-2">
-                <Image className="h-4 w-4 text-gold-400" />
+                <ImageIcon className="h-4 w-4 text-gold-400" />
                 Resolution
               </CardTitle>
             </CardHeader>
@@ -348,7 +348,7 @@ export default function CreatePage() {
           <Card className="h-full">
             <CardHeader className="flex flex-row items-center justify-between p-4 sm:p-6">
               <CardTitle className="text-base sm:text-lg flex items-center gap-2">
-                <Image className="h-4 w-4 text-cyan-400" />
+                <ImageIcon className="h-4 w-4 text-cyan-400" />
                 Preview
               </CardTitle>
               {generatedImage && (

@@ -7,7 +7,7 @@ import { useIsMobile } from "@/lib/use-mobile";
 import { useSpatial } from "@/lib/spatial-store";
 import { TIERS, TRENDING_STYLES, APP_NAME } from "@/lib/constants";
 import {
-  Sparkles, Image, Wand2, Store, Palette, Zap, Shield,
+  Sparkles, Image as ImageIcon, Wand2, Store, Palette, Zap, Shield,
   ChevronRight, TrendingUp,
   Users, Clock, Activity, Search, Check, Layers,
   Globe, Star, BookOpen, Trophy, UserRound, ExternalLink,
@@ -38,7 +38,7 @@ const cardHover = "transition-all duration-500 hover:bg-white/[0.04] hover:borde
 const features = [
   { icon: Wand2, title: "AI-Powered Generation", desc: "Create stunning anime artwork from text prompts using state-of-the-art AI models.", stat: "Speed: 2.4s avg", accent: "gold" },
   { icon: Palette, title: "Style Presets", desc: "16 curated anime styles — cel-shaded, watercolor, cyberpunk, Ghibli, and more.", stat: "16 styles", accent: "cyan" },
-  { icon: Image, title: "4K Resolution Output", desc: "Export creations up to 4K resolution. Perfect for prints, merch, and portfolios.", stat: "Up to 4096×4096", accent: "gold" },
+  { icon: ImageIcon, title: "4K Resolution Output", desc: "Export creations up to 4K resolution. Perfect for prints, merch, and portfolios.", stat: "Up to 4096×4096", accent: "gold" },
   { icon: Store, title: "Marketplace", desc: "Buy and sell AI-generated anime art. Set your prices, earn royalties on every license.", stat: "2,450+ listings", accent: "cyan" },
   { icon: Zap, title: "Lightning Fast", desc: "Generate in seconds with optimized inference. No more waiting hours for renders.", stat: "300ms queue", accent: "gold" },
   { icon: Shield, title: "Safe & Private", desc: "Your prompts and creations are private by default. Enterprise-grade encryption.", stat: "AES-256", accent: "cyan" },
@@ -274,7 +274,7 @@ function ShowcaseNode() {
             {/* Placeholder artwork area */}
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center p-3">
-                <Image className="mx-auto h-6 w-6 md:h-8 md:w-8 text-white/10" />
+                <ImageIcon className="mx-auto h-6 w-6 md:h-8 md:w-8 text-white/10" />
                 <p className="mt-1.5 text-[8px] md:text-[10px] text-white/20 font-mono tracking-wide leading-tight">{item.label}</p>
                 <p className="text-[7px] md:text-[8px] text-white/12 font-mono mt-0.5">{item.prompt}</p>
               </div>
@@ -532,7 +532,7 @@ function FAQNode() {
             { href: "/blog", icon: BookOpen, label: "Blog", desc: "News & guides" },
             { href: "/characters", icon: UserRound, label: "OC Characters", desc: "Browse the roster" },
             { href: "/challenges", icon: Trophy, label: "Challenges", desc: "Win coin rewards" },
-            { href: "/dashboard/gallery", icon: Image, label: "Gallery", desc: "Community artwork" },
+            { href: "/dashboard/gallery", icon: ImageIcon, label: "Gallery", desc: "Community artwork" },
           ].map((item) => {
             const Icon = item.icon;
             return (

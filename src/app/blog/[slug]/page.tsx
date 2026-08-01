@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import {
@@ -109,10 +110,12 @@ function RelatedArticles({ articles }: { articles: RelatedArticle[] }) {
             <div className="glass rounded-[4px] cut-corner overflow-hidden h-full transition-all duration-300 group-hover:scale-[1.02] group-hover:border-stroke-gold/50 group-hover:shadow-[0_0_24px_rgba(229,197,135,0.12)]">
               {item.coverImage && (
                 <div className="relative h-36 overflow-hidden">
-                  <img
+                  <Image
                     src={item.coverImage}
                     alt={item.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-bg-obsidian/80 to-transparent" />
                 </div>
@@ -313,10 +316,12 @@ export default function BlogArticlePage() {
                   transition={{ delay: 0.2, duration: 0.5 }}
                   className="mb-10"
                 >
-                  <div className="glass rounded-[4px] cut-corner overflow-hidden">
-                    <img
+                  <div className="glass rounded-[4px] cut-corner overflow-hidden relative">
+                    <Image
                       src={article.coverImage}
                       alt={article.title}
+                      width={1200}
+                      height={675}
                       className="w-full h-auto max-h-[400px] object-cover"
                     />
                   </div>

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import {
-  Image,
+  Image as ImageIcon,
   Heart,
   Eye,
   Clock,
@@ -20,7 +20,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PageHeader } from "@/components/ui/page-header";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
-import { Spinner } from "@/components/ui/spinner";
 import { formatNumber, timeAgo, cn } from "@/lib/utils";
 import { GALLERY_CATEGORIES } from "@/lib/constants";
 import { dailyArt } from "@/data/daily-art-20260727";
@@ -257,7 +256,7 @@ export default function GalleryPage() {
         {filtered.length === 0 ? (
           <div className="col-span-full flex flex-col items-center justify-center py-20 text-center">
             <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-[rgba(0,0,0,0.3)]">
-              <Image className="h-7 w-7 text-white/20" />
+              <ImageIcon className="h-7 w-7 text-white/20" />
             </div>
             <p className="mt-4 text-lg font-semibold text-white/60">
               No artworks found
@@ -289,7 +288,7 @@ export default function GalleryPage() {
                       : "h-20 w-20 shrink-0 rounded-[4px] border border-white/5",
                   )}
                 >
-                  <Image className="h-8 w-8" />
+                  <ImageIcon className="h-8 w-8" />
                 </div>
 
                 <CardContent

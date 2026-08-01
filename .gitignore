@@ -48,6 +48,7 @@ skills-lock.json
 
 # Cron
 .cron/*.log
+.cron/reports/*.json
 src/generated/
 CLAUDE.md
 .cron/pr-body-*.md
