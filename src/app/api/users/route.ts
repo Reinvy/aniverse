@@ -1,23 +1,21 @@
 import { NextRequest } from "next/server";
 import {
-  authenticateRequest,
+  requireAuthenticatedRequest,
   parsePagination,
   buildPaginationMeta,
-  cachedJsonResponse,
+  conditionalJsonResponse,
   errorResponse,
 } from "@/lib/api-helpers";
 import { findUsers } from "@/lib/services/user.service";
-import { applyRateLimit, readLimiter } from "@/lib/rate-limiter";
 import type { Role, PremiumTier } from "@/generated/prisma/client";
 
 /** GET /api/users — List users with pagination, search, and filtering */
 export async function GET(request: NextRequest) {
   try {
-    const rateCheck = applyRateLimit(request, "users-list", readLimiter);
-    if (rateCheck) return rateCheck;
-
-    const auth = await authenticateRequest(request);
-    if (!auth.authenticated) return auth.response;
+    const auth = await requireAuthenticatedRequest(request, {
+      rateLimitKey: "users-list",
+    });
+    if (!auth.ok) return auth.response;
 
     const { searchParams } = new URL(request.url);
     const pagination = parsePagination(searchParams, {
@@ -44,7 +42,8 @@ export async function GET(request: NextRequest) {
       premiumTier,
     });
 
-    return cachedJsonResponse(
+    return conditionalJsonResponse(
+      request,
       {
         users,
         pagination: buildPaginationMeta(
@@ -53,7 +52,7 @@ export async function GET(request: NextRequest) {
           pagination.limit,
         ),
       },
-      { cache: "short" },
+      { cache: "short", private: true },
     );
   } catch (error) {
     console.error("List users error:", error);

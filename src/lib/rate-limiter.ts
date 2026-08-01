@@ -121,6 +121,9 @@ export function rateLimiter(options?: RateLimiterOptions) {
 
 // ─── Preset Limiters ──────────────────────────────────────────────
 
+/** Instance type returned by {@link rateLimiter} (shared by api-helpers). */
+export type RateLimiterInstance = ReturnType<typeof rateLimiter>;
+
 /** Strict: 10 requests per minute — for auth endpoints (login, register) */
 export const authLimiter = rateLimiter({ windowMs: 60_000, max: 10 });
 

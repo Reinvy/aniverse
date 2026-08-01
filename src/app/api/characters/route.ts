@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 import {
   parsePagination,
   buildPaginationMeta,
-  cachedJsonResponse,
+  conditionalJsonResponse,
   errorResponse,
   notFoundResponse,
 } from "@/lib/api-helpers";
@@ -30,12 +30,12 @@ export async function GET(request: NextRequest) {
       if (!character) {
         return notFoundResponse("Character not found");
       }
-      return cachedJsonResponse({ character }, { cache: "medium" });
+      return conditionalJsonResponse(request, { character }, { cache: "medium" });
     }
 
     const { characters, total } = await findPublicCharacters(pagination, { search });
 
-    return cachedJsonResponse({
+    return conditionalJsonResponse(request, {
       characters,
       pagination: buildPaginationMeta(total, pagination.page, pagination.limit),
     }, { cache: "medium" });

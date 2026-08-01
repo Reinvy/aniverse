@@ -7,6 +7,11 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { extractBearerToken, verifyToken, type TokenPayload } from "@/lib/auth";
+import {
+  applyRateLimit,
+  readLimiter,
+  type RateLimiterInstance,
+} from "@/lib/rate-limiter";
 
 // ─── Auth ─────────────────────────────────────────────────────────
 
@@ -135,21 +140,40 @@ const CACHE_DURATIONS: Record<CacheDuration, string> = {
 };
 
 /**
+ * Resolve the Cache-Control header value for a cache duration.
+ *
+ * When `isPrivate` is true (authenticated / per-user payloads), the shared-cache
+ * directives (`public`, `s-maxage`) are stripped so a CDN or proxy can never
+ * serve one user's data to another — only the browser may cache it.
+ */
+function cacheControlValue(
+  cache: CacheDuration | undefined,
+  isPrivate = false,
+): string {
+  if (!cache || cache === "no-store") return CACHE_DURATIONS["no-store"];
+  const base = CACHE_DURATIONS[cache];
+  if (!isPrivate) return base;
+  return base
+    .replace(/^public, /, "private, ")
+    .replace(/, s-maxage=\d+/, "");
+}
+
+/**
  * Create a JSON response with Cache-Control headers.
- * Use `cache` for GET endpoints that return public/non-sensitive data.
+ * Use `cache` for GET endpoints that return public/non-sensitive data,
+ * and pass `private: true` for authenticated/per-user payloads.
  */
 export function cachedJsonResponse(
   data: unknown,
   init?: {
     status?: number;
     cache?: CacheDuration;
+    private?: boolean;
     headers?: Record<string, string>;
   },
 ): NextResponse {
   const status = init?.status ?? 200;
-  const cacheControl = init?.cache
-    ? CACHE_DURATIONS[init.cache]
-    : CACHE_DURATIONS["no-store"];
+  const cacheControl = cacheControlValue(init?.cache, init?.private);
 
   return NextResponse.json(data, {
     status,
@@ -158,6 +182,111 @@ export function cachedJsonResponse(
       ...init?.headers,
     },
   });
+}
+
+// ─── ETag / Conditional Requests ─────────────────────────────────
+
+/**
+ * Compute a stable ETag for a JSON-serializable payload.
+ * Uses a fast non-cryptographic hash (FNV-1a style) so we don't pay
+ * crypto overhead on every response. Strong enough for cache
+ * revalidation — not for security.
+ */
+export function computeEtag(data: unknown): string {
+  const serialized = JSON.stringify(data) ?? "null";
+  let hash = 0x811c9dc5;
+  for (let i = 0; i < serialized.length; i++) {
+    hash ^= serialized.charCodeAt(i);
+    hash = Math.imul(hash, 0x01000193);
+  }
+  return `"${(hash >>> 0).toString(16)}"`;
+}
+
+/**
+ * Respond with a JSON payload + ETag, or 304 Not Modified when the
+ * client already has the current version (If-None-Match).
+ *
+ * Usage (GET endpoints):
+ *   return conditionalJsonResponse(request, data, { cache: "medium" });
+ *
+ * Browser/HTTP-cache clients transparently revalidate; clients that
+ * never send If-None-Match always receive the full 200 payload.
+ */
+export function conditionalJsonResponse(
+  request: NextRequest,
+  data: unknown,
+  init?: {
+    status?: number;
+    cache?: CacheDuration;
+    private?: boolean;
+    headers?: Record<string, string>;
+  },
+): NextResponse {
+  const etag = computeEtag(data);
+
+  const ifNoneMatch = request.headers.get("if-none-match");
+  if (ifNoneMatch) {
+    const matches =
+      ifNoneMatch.trim() === "*" ||
+      ifNoneMatch
+        .split(",")
+        .map((v) => v.trim())
+        .includes(etag);
+
+    if (matches) {
+      return new NextResponse(null, {
+        status: 304,
+        headers: {
+          ETag: etag,
+          "Cache-Control": cacheControlValue(init?.cache, init?.private),
+        },
+      });
+    }
+  }
+
+  return cachedJsonResponse(data, {
+    ...init,
+    headers: { ...init?.headers, ETag: etag },
+  });
+}
+
+// ─── Authenticated Request Helper (DRY) ───────────────────────────
+
+export type AuthenticatedRequestResult =
+  | { ok: true; userId: string; payload: TokenPayload }
+  | { ok: false; response: NextResponse };
+
+/**
+ * Apply rate limiting + bearer-token auth in one step.
+ *
+ * Replaces the repeated preamble:
+ *   const rateCheck = applyRateLimit(request, "key", readLimiter);
+ *   if (rateCheck) return rateCheck;
+ *   const auth = await authenticateRequest(request);
+ *   if (!auth.authenticated) return auth.response;
+ *
+ * Usage:
+ *   const auth = await requireAuthenticatedRequest(request, { rateLimitKey: "artworks-list" });
+ *   if (!auth.ok) return auth.response;
+ *   const { userId } = auth;
+ */
+export async function requireAuthenticatedRequest(
+  request: NextRequest,
+  options?: { rateLimitKey?: string; limiter?: RateLimiterInstance },
+): Promise<AuthenticatedRequestResult> {
+  if (options?.rateLimitKey) {
+    const rateCheck = applyRateLimit(
+      request,
+      options.rateLimitKey,
+      options.limiter ?? readLimiter,
+    );
+    if (rateCheck) return { ok: false, response: rateCheck };
+  }
+
+  const auth = await authenticateRequest(request);
+  if (!auth.authenticated) return { ok: false, response: auth.response };
+
+  return { ok: true, userId: auth.payload.userId, payload: auth.payload };
 }
 
 // ─── Standardized Error / Success Responses ──────────────────────

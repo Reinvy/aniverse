@@ -1,23 +1,21 @@
 import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import {
-  authenticateRequest,
+  requireAuthenticatedRequest,
   cachedJsonResponse,
   errorResponse,
   notFoundResponse,
 } from "@/lib/api-helpers";
-import { applyRateLimit, readLimiter } from "@/lib/rate-limiter";
 
 export async function GET(request: NextRequest) {
   try {
-    const rateCheck = applyRateLimit(request, "auth-me", readLimiter);
-    if (rateCheck) return rateCheck;
-
-    const auth = await authenticateRequest(request);
-    if (!auth.authenticated) return auth.response;
+    const auth = await requireAuthenticatedRequest(request, {
+      rateLimitKey: "auth-me",
+    });
+    if (!auth.ok) return auth.response;
 
     const user = await prisma.user.findUnique({
-      where: { id: auth.payload.userId },
+      where: { id: auth.userId },
       select: {
         id: true,
         name: true,
