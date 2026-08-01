@@ -16,6 +16,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { EmptyState } from "@/components/ui/empty-state";
 import { PageHeader } from "@/components/ui/page-header";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { formatNumber } from "@/lib/utils";
@@ -44,10 +45,10 @@ const listings = Array.from({ length: 8 }, (_, i) => ({
   creator: ["CyberWeeb", "EmberForge", "PixelMage", "MoriArt", "KiraKira", "NeonWeeb", "SakuraGen", "DawnArtist"][i],
   price: [4.99, 14.99, 8.99, 9.99, 6.49, 19.99, 3.99, 12.99][i],
   originalPrice: [null, 29.99, null, null, 12.99, null, null, 24.99][i],
-  likes: Math.floor(Math.random() * 500),
-  rating: (3.5 + Math.random() * 1.5).toFixed(1),
-  sales: Math.floor(Math.random() * 200),
-  category: categories[Math.floor(Math.random() * (categories.length - 1)) + 1].id,
+  likes: ((i * 61) % 480) + 20,
+  rating: (3.5 + ((i * 13) % 15) / 10).toFixed(1),
+  sales: ((i * 23) % 190) + 10,
+  category: categories[(i % (categories.length - 1)) + 1].id,
 }));
 
 export default function MarketplacePage() {
@@ -148,16 +149,13 @@ export default function MarketplacePage() {
         transition={{ delay: 0.2, duration: 0.4 }}
       >
         {filtered.length === 0 ? (
-          <div className="col-span-full flex flex-col items-center justify-center py-20 text-center">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-[rgba(0,0,0,0.3)]">
-              <Store className="h-7 w-7 text-white/20" />
-            </div>
-            <p className="mt-4 text-lg font-semibold text-white/60">
-              No listings found
-            </p>
-            <p className="mt-1 text-sm text-white/30">
-              Try adjusting your search or filters.
-            </p>
+          <div className="col-span-full">
+            <EmptyState
+              icon={Store}
+              title="No listings found"
+              description="Try adjusting your search or filters."
+              className="max-w-md mx-auto"
+            />
           </div>
         ) : (
           filtered.map((item, i) => (

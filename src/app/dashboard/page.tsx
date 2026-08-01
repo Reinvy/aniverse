@@ -17,6 +17,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { StatCard } from "@/components/ui/stat-card";
 import { StatCardSkeleton, ListItemSkeleton } from "@/components/ui/skeleton";
+import { EmptyState } from "@/components/ui/empty-state";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { PageHeader } from "@/components/ui/page-header";
 import { timeAgo } from "@/lib/utils";
@@ -308,18 +309,20 @@ export default function DashboardPage() {
               </CardHeader>
               <CardContent className="px-4 pb-4 sm:px-6 sm:pb-6">
                 {activity.length === 0 ? (
-                  <div className="flex flex-col items-center py-8 text-center">
-                    <Sparkles className="h-8 w-8 text-white/20" />
-                    <p className="mt-3 text-sm text-white/40">
-                      No activity yet. Start by creating your first artwork!
-                    </p>
-                    <Link href="/dashboard/create" className="mt-4">
-                      <Button size="sm" className="gap-2">
-                        <Wand2 className="h-4 w-4" />
-                        Create Artwork
-                      </Button>
-                    </Link>
-                  </div>
+                  <EmptyState
+                    icon={Sparkles}
+                    compact
+                    title="No activity yet"
+                    description="Start by creating your first artwork!"
+                    action={
+                      <Link href="/dashboard/create" className="mt-4">
+                        <Button size="sm" className="gap-2">
+                          <Wand2 className="h-4 w-4" />
+                          Create Artwork
+                        </Button>
+                      </Link>
+                    }
+                  />
                 ) : (
                   <div className="space-y-3 sm:space-y-4">
                     {activity.map((item, i) => (

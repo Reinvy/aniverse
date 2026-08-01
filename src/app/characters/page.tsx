@@ -18,6 +18,8 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Pagination } from "@/components/ui/pagination";
 import { FetchErrorState } from "@/components/ui/fetch-error";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
@@ -189,16 +191,21 @@ export default function CharactersPage() {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-center py-20"
+              className="max-w-md mx-auto"
             >
-              <div className="glass rounded-xl p-10 max-w-md mx-auto cut-corner">
-                <Users className="mx-auto h-12 w-12 text-white/20 mb-4" />
-                <p className="text-white/40 text-sm">
-                  {search
-                    ? "No characters match your search. Try different keywords."
-                    : "No characters have been created yet. Be the first!"}
-                </p>
-              </div>
+              <EmptyState
+                icon={Users}
+                title={
+                  search
+                    ? "No characters match your search"
+                    : "No characters yet"
+                }
+                description={
+                  search
+                    ? "Try different keywords or clear the search filter."
+                    : "Be the first to create an original character!"
+                }
+              />
             </motion.div>
           ) : (
             <motion.div
@@ -268,32 +275,13 @@ export default function CharactersPage() {
           )}
 
           {/* Pagination */}
-          {pagination && pagination.totalPages > 1 && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="mt-10 flex items-center justify-center gap-3"
-            >
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={page <= 1}
-                onClick={() => setPage(page - 1)}
-              >
-                Previous
-              </Button>
-              <span className="sys-label text-white/40">
-                PAGE {pagination.page} OF {pagination.totalPages}
-              </span>
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={page >= pagination.totalPages}
-                onClick={() => setPage(page + 1)}
-              >
-                Next
-              </Button>
-            </motion.div>
+          {pagination && (
+            <Pagination
+              page={page}
+              totalPages={pagination.totalPages}
+              totalItems={pagination.total}
+              onPageChange={setPage}
+            />
           )}
 
           {/* Bottom CTA */}

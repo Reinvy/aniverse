@@ -16,6 +16,8 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Pagination } from "@/components/ui/pagination";
 import { FetchErrorState } from "@/components/ui/fetch-error";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
@@ -216,14 +218,17 @@ export default function BlogPage() {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-center py-20"
+              className="max-w-md mx-auto"
             >
-              <div className="glass rounded-xl p-10 max-w-md mx-auto cut-corner">
-                <BookOpen className="mx-auto h-12 w-12 text-white/20 mb-4" />
-                <p className="text-white/40 text-sm">
-                  No articles found. Try a different search or check back later.
-                </p>
-              </div>
+              <EmptyState
+                icon={BookOpen}
+                title="No articles found"
+                description={
+                  search || activeTag
+                    ? "Try a different search term or tag filter."
+                    : "Check back later for new articles from the AniVerse team."
+                }
+              />
             </motion.div>
           ) : (
             <motion.div
@@ -298,32 +303,13 @@ export default function BlogPage() {
           )}
 
           {/* Pagination */}
-          {pagination && pagination.totalPages > 1 && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="mt-10 flex items-center justify-center gap-3"
-            >
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={page <= 1}
-                onClick={() => setPage(page - 1)}
-              >
-                Previous
-              </Button>
-              <span className="sys-label text-white/40">
-                PAGE {pagination.page} OF {pagination.totalPages}
-              </span>
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={page >= pagination.totalPages}
-                onClick={() => setPage(page + 1)}
-              >
-                Next
-              </Button>
-            </motion.div>
+          {pagination && (
+            <Pagination
+              page={page}
+              totalPages={pagination.totalPages}
+              totalItems={pagination.total}
+              onPageChange={setPage}
+            />
           )}
 
           {/* Bottom CTA */}

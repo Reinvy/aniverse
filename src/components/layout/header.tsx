@@ -12,12 +12,14 @@ import {
   UserPlus,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/components/auth/AuthProvider";
 import { cn } from "@/lib/utils";
 import { APP_NAME, MAIN_NAV_LINKS } from "@/lib/constants";
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
+  const { user, isAuthenticated } = useAuth();
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 glass-obsidian mt-3 mx-3 sm:mx-4 rounded-none chamfered glow-ambient bg-noise">
@@ -75,18 +77,29 @@ export function Header() {
             SYS.ONLINE
           </span>
 
-          <Link href="/login">
-            <Button variant="ghost" size="sm" className="gap-2">
-              <LogIn className="h-4 w-4" />
-              Sign In
-            </Button>
-          </Link>
-          <Link href="/register">
-            <Button variant="primary" size="sm" className="gap-2">
-              <UserPlus className="h-4 w-4" />
-              Get Started
-            </Button>
-          </Link>
+          {isAuthenticated && user ? (
+            <Link href="/dashboard">
+              <Button variant="primary" size="sm" className="gap-2">
+                <Sparkles className="h-4 w-4" />
+                Dashboard
+              </Button>
+            </Link>
+          ) : (
+            <>
+              <Link href="/login">
+                <Button variant="ghost" size="sm" className="gap-2">
+                  <LogIn className="h-4 w-4" />
+                  Sign In
+                </Button>
+              </Link>
+              <Link href="/register">
+                <Button variant="primary" size="sm" className="gap-2">
+                  <UserPlus className="h-4 w-4" />
+                  Get Started
+                </Button>
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile menu toggle */}
@@ -123,22 +136,35 @@ export function Header() {
               ))}
               <hr className="my-3 border-stroke-white" />
               <span className="sys-label block px-3 pb-1">SESSION // AUTH</span>
-              <Link
-                href="/login"
-                onClick={() => setMobileOpen(false)}
-                className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm text-white/50 hover:bg-glass-300 hover:text-white"
-              >
-                <LogIn className="h-4 w-4" />
-                Sign In
-              </Link>
-              <Link
-                href="/register"
-                onClick={() => setMobileOpen(false)}
-                className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm text-gold-400 hover:bg-glass-300"
-              >
-                <UserPlus className="h-4 w-4" />
-                Get Started
-              </Link>
+              {isAuthenticated && user ? (
+                <Link
+                  href="/dashboard"
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm text-gold-400 hover:bg-glass-300"
+                >
+                  <Sparkles className="h-4 w-4" />
+                  Dashboard
+                </Link>
+              ) : (
+                <>
+                  <Link
+                    href="/login"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm text-white/50 hover:bg-glass-300 hover:text-white"
+                  >
+                    <LogIn className="h-4 w-4" />
+                    Sign In
+                  </Link>
+                  <Link
+                    href="/register"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm text-gold-400 hover:bg-glass-300"
+                  >
+                    <UserPlus className="h-4 w-4" />
+                    Get Started
+                  </Link>
+                </>
+              )}
             </div>
           </motion.div>
         )}

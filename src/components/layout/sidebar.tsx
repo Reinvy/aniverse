@@ -17,6 +17,7 @@ import {
 import { cn } from "@/lib/utils";
 import { APP_NAME } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/components/auth/AuthProvider";
 import { useEffect } from "react";
 
 const sidebarNav = [
@@ -37,6 +38,7 @@ export function Sidebar({
   onClose: () => void;
 }) {
   const pathname = usePathname();
+  const { user, logout } = useAuth();
 
   // Close sidebar on route change (mobile)
   useEffect(() => {
@@ -116,19 +118,22 @@ export function Sidebar({
         <span className="sys-label block px-1 pb-2">ACCOUNT // NODE</span>
         <div className="mb-3 flex items-center gap-3 rounded-lg bg-white/5 border border-white/5 p-2.5">
           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-gradient-to-br from-[rgba(229,197,135,0.3)] to-[rgba(229,197,135,0.1)] border border-[rgba(229,197,135,0.2)] text-xs font-bold text-[#e5c587]">
-            U
+            {user?.name?.charAt(0)?.toUpperCase() || user?.email?.charAt(0)?.toUpperCase() || "U"}
           </div>
           <div className="flex-1 min-w-0">
             <p className="truncate text-sm font-medium text-white/80">
-              User
+              {user?.name || user?.username || user?.email || "User"}
             </p>
-            <p className="sys-label">TIER // FREE</p>
+            <p className="sys-label">
+              TIER // {user?.premiumTier ? user.premiumTier.toUpperCase() : "FREE"}
+            </p>
           </div>
         </div>
         <Button
           variant="ghost"
           size="sm"
-          className="w-full justify-start gap-2 text-white/40 hover:text-white/70"
+          className="w-full justify-start gap-2 text-white/40 hover:text-white/70 hover:bg-[rgba(239,68,68,0.08)] hover:text-red-400"
+          onClick={logout}
         >
           <LogOut className="h-4 w-4 shrink-0" />
           <span className="text-xs tracking-wider uppercase">Disconnect</span>
