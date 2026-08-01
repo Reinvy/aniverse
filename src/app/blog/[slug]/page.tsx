@@ -11,6 +11,7 @@ import {
   User,
   Tag,
   Sparkles,
+  BookOpen,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -43,6 +44,22 @@ interface BlogArticle {
   } | null;
 }
 
+interface RelatedArticle {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string | null;
+  coverImage: string | null;
+  tags: string[];
+  publishedAt: string | null;
+  createdAt: string;
+  author: {
+    id: string;
+    name: string | null;
+    avatar: string | null;
+  } | null;
+}
+
 // ─── Skeleton ─────────────────────────────────────────────────────
 
 function ArticleSkeleton() {
@@ -66,12 +83,90 @@ function ArticleSkeleton() {
   );
 }
 
+// ─── Related Articles ─────────────────────────────────────────────
+
+function RelatedArticles({ articles }: { articles: RelatedArticle[] }) {
+  if (articles.length === 0) return null;
+
+  return (
+    <motion.section
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.7, duration: 0.5 }}
+      className="mt-12"
+    >
+      <div className="flex items-center gap-2 mb-6">
+        <BookOpen className="h-5 w-5 text-gold-400" />
+        <h2 className="text-xl font-bold text-white sys-label">
+          RELATED ARTICLES
+        </h2>
+        <span className="h-px flex-1 bg-gradient-to-r from-stroke-gold/40 to-transparent" />
+      </div>
+
+      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {articles.map((item) => (
+          <Link key={item.id} href={`/blog/${item.slug}`} className="group">
+            <div className="glass rounded-[4px] cut-corner overflow-hidden h-full transition-all duration-300 group-hover:scale-[1.02] group-hover:border-stroke-gold/50 group-hover:shadow-[0_0_24px_rgba(229,197,135,0.12)]">
+              {item.coverImage && (
+                <div className="relative h-36 overflow-hidden">
+                  <img
+                    src={item.coverImage}
+                    alt={item.title}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-bg-obsidian/80 to-transparent" />
+                </div>
+              )}
+              <div className="p-5">
+                <div className="flex flex-wrap gap-1.5 mb-2">
+                  {(item.tags || []).slice(0, 2).map((tag) => (
+                    <Badge key={tag} variant="secondary" className="px-2 py-0.5 text-[10px]">
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+                <h3 className="text-sm font-semibold text-white leading-snug mb-2 line-clamp-2 group-hover:text-gold-300 transition-colors">
+                  {item.title}
+                </h3>
+                {item.excerpt && (
+                  <p className="text-xs text-white/40 line-clamp-2 mb-3">
+                    {item.excerpt}
+                  </p>
+                )}
+                <div className="flex items-center gap-1.5 text-[11px] text-white/30">
+                  {item.author?.name && (
+                    <span className="flex items-center gap-1">
+                      <User className="h-3 w-3" />
+                      {item.author.name}
+                    </span>
+                  )}
+                  {item.publishedAt && (
+                    <span className="flex items-center gap-1 ml-auto">
+                      <Calendar className="h-3 w-3" />
+                      {new Date(item.publishedAt).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      })}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </motion.section>
+  );
+}
+
 // ─── Main Page ────────────────────────────────────────────────────
 
 export default function BlogArticlePage() {
   const params = useParams();
   const slug = params?.slug as string;
   const [article, setArticle] = useState<BlogArticle | null>(null);
+  const [related, setRelated] = useState<RelatedArticle[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -88,6 +183,7 @@ export default function BlogArticlePage() {
         }
         const data = await res.json();
         setArticle(data.article);
+        setRelated(data.related || []);
       } catch (err) {
         setError(err instanceof Error ? err.message : "An error occurred");
       } finally {
@@ -320,6 +416,9 @@ export default function BlogArticlePage() {
                   </Link>
                 </div>
               </motion.div>
+
+              {/* Related Articles */}
+              <RelatedArticles articles={related} />
             </article>
           )}
         </div>
