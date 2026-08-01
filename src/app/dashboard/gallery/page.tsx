@@ -19,12 +19,13 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PageHeader } from "@/components/ui/page-header";
+import { EmptyState } from "@/components/ui/empty-state";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { formatNumber, timeAgo, cn } from "@/lib/utils";
 import { GALLERY_CATEGORIES } from "@/lib/constants";
 import { dailyArt } from "@/data/daily-art-20260727";
 
-// Placeholder artwork data
+// Placeholder artwork data (deterministic — avoids SSR/client hydration mismatch)
 const artworks = Array.from({ length: 12 }, (_, i) => ({
   id: `art-${i + 1}`,
   title: [
@@ -42,10 +43,10 @@ const artworks = Array.from({ length: 12 }, (_, i) => ({
     "Shadow Ronin",
   ][i],
   artist: ["CyberWeeb", "MoriArt", "KiraKira", "NeonWeeb", "SakuraGen", "PixelMage", "DawnArtist", "EmberForge", "StarWeaver", "FrostByte", "QuantumArt", "ShadowCraft"][i],
-  likes: Math.floor(Math.random() * 5000),
-  views: Math.floor(Math.random() * 20000),
-  createdAt: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000),
-  category: GALLERY_CATEGORIES[Math.floor(Math.random() * (GALLERY_CATEGORIES.length - 1)) + 1].id,
+  likes: ((i * 137) % 4800) + 120,
+  views: ((i * 911) % 19000) + 500,
+  createdAt: new Date(Date.now() - (i + 1) * 14 * 60 * 60 * 1000),
+  category: GALLERY_CATEGORIES[(i % (GALLERY_CATEGORIES.length - 1)) + 1].id,
   image: null,
 }));
 
@@ -254,16 +255,13 @@ export default function GalleryPage() {
         transition={{ delay: 0.2, duration: 0.4 }}
       >
         {filtered.length === 0 ? (
-          <div className="col-span-full flex flex-col items-center justify-center py-20 text-center">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-[rgba(0,0,0,0.3)]">
-              <ImageIcon className="h-7 w-7 text-white/20" />
-            </div>
-            <p className="mt-4 text-lg font-semibold text-white/60">
-              No artworks found
-            </p>
-            <p className="mt-1 text-sm text-white/30">
-              Try adjusting your search or filters.
-            </p>
+          <div className="col-span-full">
+            <EmptyState
+              icon={ImageIcon}
+              title="No artworks found"
+              description="Try adjusting your search or filters."
+              className="max-w-md mx-auto"
+            />
           </div>
         ) : (
           filtered.map((art, i) => (
