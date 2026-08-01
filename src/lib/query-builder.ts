@@ -72,15 +72,6 @@ export function buildSearchClause(
   });
 }
 
-// ─── Pagination Meta ──────────────────────────────────────────────
-
-/**
- * Calculate skip value from page and limit.
- */
-export function calculateSkip(page: number, limit: number): number {
-  return (page - 1) * limit;
-}
-
 // ─── Composite Fetch Helper ───────────────────────────────────────
 
 /**
