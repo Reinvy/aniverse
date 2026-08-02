@@ -21,6 +21,7 @@ import { Input } from "@/components/ui/input";
 import { PageHeader } from "@/components/ui/page-header";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
+import { FilterChips } from "@/components/ui/filter-chips";
 import { formatNumber, timeAgo, cn } from "@/lib/utils";
 import { GALLERY_CATEGORIES } from "@/lib/constants";
 import { dailyArt } from "@/data/daily-art-20260727";
@@ -224,22 +225,11 @@ export default function GalleryPage() {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        <div className="flex flex-wrap gap-2">
-          {GALLERY_CATEGORIES.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => setActiveCategory(cat.id)}
-              className={cn(
-                "rounded-[4px] px-3 py-1.5 text-xs font-medium transition-all duration-300 premium-transition",
-                activeCategory === cat.id
-                  ? "border border-[rgba(230,194,128,0.3)] bg-[rgba(230,194,128,0.1)] text-gold-400"
-                  : "border border-white/10 bg-[rgba(0,0,0,0.2)] text-white/40 hover:border-white/20 hover:text-white/60",
-              )}
-            >
-              {cat.label}
-            </button>
-          ))}
-        </div>
+        <FilterChips
+          options={GALLERY_CATEGORIES}
+          value={activeCategory}
+          onChange={setActiveCategory}
+        />
       </motion.div>
 
       {/* Artwork Grid */}

@@ -19,7 +19,9 @@ import { Input } from "@/components/ui/input";
 import { EmptyState } from "@/components/ui/empty-state";
 import { PageHeader } from "@/components/ui/page-header";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
-import { formatNumber } from "@/lib/utils";
+import { FilterChips } from "@/components/ui/filter-chips";
+import { cn, formatNumber } from "@/lib/utils";
+import { toast } from "@/hooks/use-toast";
 
 const categories = [
   { id: "all", label: "All" },
@@ -54,6 +56,8 @@ const listings = Array.from({ length: 8 }, (_, i) => ({
 export default function MarketplacePage() {
   const [activeCategory, setActiveCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [cartIds, setCartIds] = useState<Set<string>>(new Set());
+  const [favoriteIds, setFavoriteIds] = useState<Set<string>>(new Set());
 
   const filtered = listings.filter((item) => {
     const matchesCategory =
@@ -64,6 +68,46 @@ export default function MarketplacePage() {
     return matchesCategory && matchesSearch;
   });
 
+  const toggleCart = (item: (typeof listings)[number]) => {
+    const isInCart = cartIds.has(item.id);
+    setCartIds((prev) => {
+      const next = new Set(prev);
+      if (isInCart) {
+        next.delete(item.id);
+      } else {
+        next.add(item.id);
+      }
+      return next;
+    });
+    toast({
+      title: isInCart ? "Removed from cart" : "Added to cart",
+      description: isInCart
+        ? `${item.title} removed from your cart.`
+        : `${item.title} — $${item.price.toFixed(2)}`,
+      variant: isInCart ? "default" : "success",
+    });
+  };
+
+  const toggleFavorite = (item: (typeof listings)[number]) => {
+    const isFavorite = favoriteIds.has(item.id);
+    setFavoriteIds((prev) => {
+      const next = new Set(prev);
+      if (isFavorite) {
+        next.delete(item.id);
+      } else {
+        next.add(item.id);
+      }
+      return next;
+    });
+    toast({
+      title: isFavorite ? "Removed from favorites" : "Added to favorites",
+      description: isFavorite
+        ? `${item.title} removed from your favorites.`
+        : `${item.title} saved to your favorites.`,
+      variant: isFavorite ? "default" : "success",
+    });
+  };
+
   return (
     <ErrorBoundary compact message="Failed to load marketplace">
     <div className="p-4 sm:p-6 lg:p-8">
@@ -72,10 +116,28 @@ export default function MarketplacePage() {
         title="Marketplace"
         description="BUY // SELL — AI-generated anime art marketplace"
         actions={
-          <Button variant="primary" className="w-full sm:w-auto gap-2 glow-gold">
-            <Store className="h-4 w-4" />
-            List Your Art
-          </Button>
+          <div className="flex items-center gap-2 sm:gap-3">
+            {cartIds.size > 0 && (
+              <Badge variant="default" className="gap-1 px-2.5 py-1.5">
+                <ShoppingCart className="h-3.5 w-3.5" />
+                {cartIds.size}
+              </Badge>
+            )}
+            <Button
+              variant="primary"
+              className="w-full sm:w-auto gap-2 glow-gold"
+              onClick={() =>
+                toast({
+                  title: "Coming soon",
+                  description: "Marketplace listing will open after Stripe integration.",
+                  variant: "warning",
+                })
+              }
+            >
+              <Store className="h-4 w-4" />
+              List Your Art
+            </Button>
+          </div>
         }
       />
 
@@ -124,21 +186,11 @@ export default function MarketplacePage() {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        <div className="flex flex-wrap gap-2">
-          {categories.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => setActiveCategory(cat.id)}
-              className={`rounded-[4px] px-3 py-1.5 text-xs font-medium transition-all duration-300 premium-transition ${
-                activeCategory === cat.id
-                  ? "border border-[rgba(230,194,128,0.3)] bg-[rgba(230,194,128,0.1)] text-gold-400"
-                  : "border border-white/10 bg-[rgba(0,0,0,0.2)] text-white/40 hover:border-white/20 hover:text-white/60"
-              }`}
-            >
-              {cat.label}
-            </button>
-          ))}
-        </div>
+        <FilterChips
+          options={categories}
+          value={activeCategory}
+          onChange={setActiveCategory}
+        />
       </motion.div>
 
       {/* Listings grid */}
@@ -182,8 +234,27 @@ export default function MarketplacePage() {
                         by {item.creator}
                       </p>
                     </div>
-                    <button className="shrink-0 text-white/20 hover:text-rose-400 transition-colors duration-200">
-                      <Heart className="h-4 w-4" />
+                    <button
+                      onClick={() => toggleFavorite(item)}
+                      className={cn(
+                        "shrink-0 transition-all duration-200 hover:scale-110 active:scale-90",
+                        favoriteIds.has(item.id)
+                          ? "text-rose-400"
+                          : "text-white/20 hover:text-rose-400",
+                      )}
+                      aria-label={
+                        favoriteIds.has(item.id)
+                          ? "Remove from favorites"
+                          : "Add to favorites"
+                      }
+                      aria-pressed={favoriteIds.has(item.id)}
+                    >
+                      <Heart
+                        className={cn(
+                          "h-4 w-4",
+                          favoriteIds.has(item.id) && "fill-rose-400",
+                        )}
+                      />
                     </button>
                   </div>
 
@@ -223,9 +294,13 @@ export default function MarketplacePage() {
                     </span>
                   </div>
 
-                  <Button variant="outline" className="mt-4 w-full gap-2 text-xs">
+                  <Button
+                    variant={cartIds.has(item.id) ? "default" : "outline"}
+                    className="mt-4 w-full gap-2 text-xs"
+                    onClick={() => toggleCart(item)}
+                  >
                     <ShoppingCart className="h-3.5 w-3.5" />
-                    Add to Cart
+                    {cartIds.has(item.id) ? "In Cart" : "Add to Cart"}
                   </Button>
                 </CardContent>
               </Card>

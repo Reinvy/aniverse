@@ -20,6 +20,7 @@ import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { PageBackground } from "@/components/ui/page-background";
 import { APP_NAME } from "@/lib/constants";
 
 // ─── Types ────────────────────────────────────────────────────────
@@ -219,10 +220,7 @@ export default function BlogArticlePage() {
       <Header />
       <main className="relative min-h-screen pt-24 pb-16">
         {/* Background layers */}
-        <div className="pointer-events-none fixed inset-0 bg-eclipse" />
-        <div className="pointer-events-none fixed inset-0 bg-starfield opacity-30" />
-        <div className="pointer-events-none fixed inset-0 bg-grid opacity-10" />
-        <div className="pointer-events-none fixed inset-0 scanline" />
+        <PageBackground starfieldOpacity={0.3} gridOpacity={0.1} />
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {loading ? (
