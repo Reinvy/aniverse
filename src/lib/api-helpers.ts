@@ -72,6 +72,14 @@ export interface PaginationMeta {
   limit: number;
   total: number;
   totalPages: number;
+  /** True when a next page exists (client pager / load-more rendering). */
+  hasNextPage: boolean;
+  /** True when a previous page exists. */
+  hasPrevPage: boolean;
+  /** Page number of the next page, or null when on the last page. */
+  nextPage: number | null;
+  /** Page number of the previous page, or null when on the first page. */
+  prevPage: number | null;
 }
 
 const DEFAULT_PAGE = 1;
@@ -112,11 +120,16 @@ export function buildPaginationMeta(
   page: number,
   limit: number,
 ): PaginationMeta {
+  const totalPages = Math.ceil(total / limit);
   return {
     page,
     limit,
     total,
-    totalPages: Math.ceil(total / limit),
+    totalPages,
+    hasNextPage: page < totalPages,
+    hasPrevPage: page > 1,
+    nextPage: page < totalPages ? page + 1 : null,
+    prevPage: page > 1 ? page - 1 : null,
   };
 }
 
@@ -248,6 +261,72 @@ export function conditionalJsonResponse(
     ...init,
     headers: { ...init?.headers, ETag: etag },
   });
+}
+
+// ─── Sparse Fieldsets ─────────────────────────────────────────────
+
+const DEFAULT_MAX_FIELDS = 20;
+
+/**
+ * Parse a comma-separated `fields` query param into an array of field names.
+ *
+ * Usage (GET endpoints):
+ *   const fields = parseFields(searchParams);
+ *   return conditionalJsonResponse(request, {
+ *     artworks: projectFields(artworks, fields),
+ *     pagination: ...,
+ *   }, { cache: "short", private: true });
+ *
+ * Returns `undefined` when absent/empty so callers can skip projection.
+ * Each token must be a valid identifier (`/^[A-Za-z_][A-Za-z0-9_]*$/`),
+ * and the list is bounded to `max` entries to prevent abuse.
+ */
+export function parseFields(
+  searchParams: URLSearchParams,
+  max: number = DEFAULT_MAX_FIELDS,
+): string[] | undefined {
+  const raw = searchParams.get("fields");
+  if (!raw) return undefined;
+
+  const fields = raw
+    .split(",")
+    .map((f) => f.trim())
+    .filter((f) => f.length > 0 && /^[A-Za-z_][A-Za-z0-9_]*$/.test(f));
+
+  if (fields.length === 0) return undefined;
+  return fields.slice(0, max);
+}
+
+/**
+ * Project a payload (object or array of objects) down to the requested fields.
+ *
+ * This is a *response* projection: the full optimized select is still fetched
+ * from the DB, but only the requested keys are serialized to the client —
+ * cutting bandwidth and client-side parsing cost for narrow consumers
+ * (e.g. autocomplete dropdowns that only need `id` + `name`).
+ *
+ * Unknown / requested-but-absent fields are silently dropped, so callers can
+ * pass user-controlled field lists without throwing on shape mismatch.
+ * Returns the input unchanged when `fields` is undefined.
+ */
+export function projectFields(
+  data: unknown,
+  fields: string[] | undefined,
+): unknown {
+  if (!fields || fields.length === 0) return data;
+
+  const project = (obj: Record<string, unknown>): Record<string, unknown> => {
+    const out: Record<string, unknown> = {};
+    for (const f of fields) {
+      if (f in obj) out[f] = obj[f];
+    }
+    return out;
+  };
+
+  if (Array.isArray(data)) {
+    return data.map((item) => project(item as Record<string, unknown>));
+  }
+  return project(data as Record<string, unknown>);
 }
 
 // ─── Authenticated Request Helper (DRY) ───────────────────────────

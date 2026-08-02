@@ -2,6 +2,8 @@ import { NextRequest } from "next/server";
 import {
   requireAuthenticatedRequest,
   parsePagination,
+  parseFields,
+  projectFields,
   buildPaginationMeta,
   conditionalJsonResponse,
   errorResponse,
@@ -22,6 +24,7 @@ export async function GET(request: NextRequest) {
       sort: "createdAt",
       order: "desc",
     });
+    const fields = parseFields(searchParams);
 
     const search = searchParams.get("search") || undefined;
     const roleRaw = searchParams.get("role") || undefined;
@@ -45,7 +48,7 @@ export async function GET(request: NextRequest) {
     return conditionalJsonResponse(
       request,
       {
-        users,
+        users: projectFields(users, fields),
         pagination: buildPaginationMeta(
           total,
           pagination.page,

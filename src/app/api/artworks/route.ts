@@ -2,6 +2,8 @@ import { NextRequest } from "next/server";
 import {
   requireAuthenticatedRequest,
   parsePagination,
+  parseFields,
+  projectFields,
   buildPaginationMeta,
   conditionalJsonResponse,
   errorResponse,
@@ -61,6 +63,7 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const pagination = parsePagination(searchParams);
+    const fields = parseFields(searchParams);
 
     // Optional filters
     const style = (searchParams.get("style") || undefined) as import("@/generated/prisma/client").ArtworkStyle | undefined;
@@ -73,7 +76,7 @@ export async function GET(request: NextRequest) {
     );
 
     return conditionalJsonResponse(request, {
-      artworks,
+      artworks: projectFields(artworks, fields),
       pagination: buildPaginationMeta(total, pagination.page, pagination.limit),
     }, { cache: "short", private: true });
   } catch (error) {

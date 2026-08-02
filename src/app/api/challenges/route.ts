@@ -1,6 +1,8 @@
 import { NextRequest } from "next/server";
 import {
   parsePagination,
+  parseFields,
+  projectFields,
   buildPaginationMeta,
   conditionalJsonResponse,
   errorResponse,
@@ -21,6 +23,7 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const pagination = parsePagination(searchParams, { sort: "endsAt", order: "asc" });
+    const fields = parseFields(searchParams);
 
     const scope = searchParams.get("scope") || "active";
     const id = searchParams.get("id") || undefined;
@@ -31,21 +34,25 @@ export async function GET(request: NextRequest) {
       if (!challenge) {
         return notFoundResponse("Challenge not found");
       }
-      return conditionalJsonResponse(request, { challenge }, { cache: "short" });
+      return conditionalJsonResponse(
+        request,
+        { challenge: projectFields(challenge, fields) },
+        { cache: "short" },
+      );
     }
 
     // All or active challenges
     if (scope === "all") {
       const { challenges, total } = await findAllChallenges(pagination);
       return conditionalJsonResponse(request, {
-        challenges,
+        challenges: projectFields(challenges, fields),
         pagination: buildPaginationMeta(total, pagination.page, pagination.limit),
       }, { cache: "short" });
     }
 
     const { challenges, total } = await findActiveChallenges(pagination);
     return conditionalJsonResponse(request, {
-      challenges,
+      challenges: projectFields(challenges, fields),
       pagination: buildPaginationMeta(total, pagination.page, pagination.limit),
     }, { cache: "short" });
   } catch (error) {

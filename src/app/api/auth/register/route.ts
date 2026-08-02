@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-import { prisma } from "@/lib/prisma";
 import { signToken } from "@/lib/auth";
+import {
+  findExistingUserByEmail,
+  createUser,
+} from "@/lib/services/auth.service";
 import { applyRateLimit, authLimiter } from "@/lib/rate-limiter";
 import {
   collectValidationErrors,
@@ -33,10 +36,7 @@ export async function POST(request: NextRequest) {
     const normalizedEmail = email.trim().toLowerCase();
 
     // ── Check for existing user ─────────────────────────────────
-    const existingUser = await prisma.user.findUnique({
-      where: { email: normalizedEmail },
-      select: { id: true },
-    });
+    const existingUser = await findExistingUserByEmail(normalizedEmail);
 
     if (existingUser) {
       return NextResponse.json(
@@ -49,31 +49,22 @@ export async function POST(request: NextRequest) {
     const hashedPassword = await bcrypt.hash(password, 12);
     const fullName = `${firstName.trim()} ${lastName.trim()}`;
 
-    const user = await prisma.user.create({
-      data: {
-        name: fullName,
-        email: normalizedEmail,
-        password: hashedPassword,
-      },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        premiumTier: true,
-        createdAt: true,
-      },
+    const user = await createUser({
+      name: fullName,
+      email: normalizedEmail,
+      password: hashedPassword,
     });
 
     // ── Generate token ──────────────────────────────────────────
     const token = await signToken(user.id, user.email!);
 
+    // Auth responses carry credentials — never allow caching.
     return NextResponse.json(
       {
         user,
         token,
       },
-      { status: 201 },
+      { status: 201, headers: { "Cache-Control": "no-store" } },
     );
   } catch (error) {
     console.error("Register error:", error);
