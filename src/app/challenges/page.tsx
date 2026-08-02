@@ -19,6 +19,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { FetchErrorState } from "@/components/ui/fetch-error";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { PageBackground } from "@/components/ui/page-background";
 import { cn } from "@/lib/utils";
 
 // ─── Types ────────────────────────────────────────────────────────
@@ -117,10 +118,7 @@ export default function ChallengesPage() {
       <Header />
       <main className="relative min-h-screen pt-24 pb-16">
         {/* Background layers */}
-        <div className="pointer-events-none fixed inset-0 bg-eclipse" />
-        <div className="pointer-events-none fixed inset-0 bg-starfield opacity-40" />
-        <div className="pointer-events-none fixed inset-0 bg-grid opacity-15" />
-        <div className="pointer-events-none fixed inset-0 scanline" />
+        <PageBackground />
 
         <div className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           {/* Page Header */}
