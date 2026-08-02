@@ -56,4 +56,19 @@ test.describe('API Endpoints', () => {
     const response = await request.get('/api/blog/this-slug-does-not-exist-xyz');
     expect([404, 400]).toContain(response.status());
   });
+
+  test('GET /api/health should return 200', async ({ request }) => {
+    const response = await request.get('/api/health');
+    expect(response.ok()).toBe(true);
+    const body = await response.json();
+    expect(body.status).toBeDefined();
+  });
+
+  test('GET /feed.xml should return XML with 200', async ({ request }) => {
+    const response = await request.get('/feed.xml');
+    expect(response.ok()).toBe(true);
+    const text = await response.text();
+    expect(text).toContain('<?xml');
+    expect(text).toContain('<rss');
+  });
 });

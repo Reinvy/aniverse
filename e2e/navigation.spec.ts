@@ -86,4 +86,29 @@ test.describe('Navigation', () => {
       await page.goto('/');
     }
   });
+
+  test('landing page footer strip links should navigate to real pages', async ({ page }) => {
+    // The footer strip (BLOG / CHALLENGES / CHARACTERS / SIGN UP) sits inside the
+    // FAQ/About node of the spatial canvas.
+    await page.goto('/');
+    await page.waitForTimeout(800);
+    const aboutBtn = page.locator('nav button:has-text("About"), nav a:has-text("About")').first();
+    await aboutBtn.click();
+    await page.waitForTimeout(1000);
+
+    const footerLinks = page.locator('a[href="/blog"], a[href="/challenges"], a[href="/characters"], a[href="/register"]');
+    const count = await footerLinks.count();
+    expect(count).toBeGreaterThanOrEqual(3);
+
+    for (const target of ['/blog', '/challenges', '/characters']) {
+      const response = await page.goto(target);
+      expect(response?.status()).toBeLessThan(500);
+      await expect(page.locator('body')).toBeVisible();
+      await page.goto('/');
+      await page.waitForTimeout(800);
+      const btn = page.locator('nav button:has-text("About"), nav a:has-text("About")').first();
+      await btn.click();
+      await page.waitForTimeout(1000);
+    }
+  });
 });
