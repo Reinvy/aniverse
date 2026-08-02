@@ -1,11 +1,11 @@
 import { NextRequest } from "next/server";
-import { prisma } from "@/lib/prisma";
 import {
   requireAuthenticatedRequest,
   cachedJsonResponse,
   errorResponse,
   notFoundResponse,
 } from "@/lib/api-helpers";
+import { findUserProfileById } from "@/lib/services/auth.service";
 
 export async function GET(request: NextRequest) {
   try {
@@ -14,21 +14,7 @@ export async function GET(request: NextRequest) {
     });
     if (!auth.ok) return auth.response;
 
-    const user = await prisma.user.findUnique({
-      where: { id: auth.userId },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        premiumTier: true,
-        username: true,
-        bio: true,
-        avatar: true,
-        coinBalance: true,
-        createdAt: true,
-      },
-    });
+    const user = await findUserProfileById(auth.userId);
 
     if (!user) {
       return notFoundResponse("User not found");

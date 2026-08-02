@@ -1,6 +1,8 @@
 import { NextRequest } from "next/server";
 import {
   parsePagination,
+  parseFields,
+  projectFields,
   buildPaginationMeta,
   conditionalJsonResponse,
   errorResponse,
@@ -19,6 +21,7 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const pagination = parsePagination(searchParams, { sort: "publishedAt", order: "desc" });
+    const fields = parseFields(searchParams);
 
     const search = searchParams.get("search") || undefined;
     const tag = searchParams.get("tag") || undefined;
@@ -27,7 +30,7 @@ export async function GET(request: NextRequest) {
     const tags = await findArticleTags();
 
     return conditionalJsonResponse(request, {
-      articles,
+      articles: projectFields(articles, fields),
       tags,
       pagination: buildPaginationMeta(total, pagination.page, pagination.limit),
     }, { cache: "medium" });

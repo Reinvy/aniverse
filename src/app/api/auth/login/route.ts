@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-import { prisma } from "@/lib/prisma";
 import { signToken } from "@/lib/auth";
+import { findUserWithCredentials } from "@/lib/services/auth.service";
 import { applyRateLimit, authLimiter } from "@/lib/rate-limiter";
 import {
   collectValidationErrors,
@@ -30,19 +30,7 @@ export async function POST(request: NextRequest) {
     const normalizedEmail = email.trim().toLowerCase();
 
     // ── Find user ───────────────────────────────────────────────
-    const user = await prisma.user.findUnique({
-      where: { email: normalizedEmail },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        password: true,
-        role: true,
-        premiumTier: true,
-        avatar: true,
-        createdAt: true,
-      },
-    });
+    const user = await findUserWithCredentials(normalizedEmail);
 
     if (!user || !user.password) {
       return NextResponse.json(
@@ -63,18 +51,22 @@ export async function POST(request: NextRequest) {
     // ── Generate token ──────────────────────────────────────────
     const token = await signToken(user.id, user.email!);
 
-    return NextResponse.json({
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        premiumTier: user.premiumTier,
-        avatar: user.avatar,
-        createdAt: user.createdAt,
+    // Auth responses carry credentials — never allow caching.
+    return NextResponse.json(
+      {
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          premiumTier: user.premiumTier,
+          avatar: user.avatar,
+          createdAt: user.createdAt,
+        },
+        token,
       },
-      token,
-    });
+      { headers: { "Cache-Control": "no-store" } },
+    );
   } catch (error) {
     console.error("Login error:", error);
     return NextResponse.json(

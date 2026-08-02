@@ -1,5 +1,7 @@
 import { NextRequest } from "next/server";
 import {
+  parseFields,
+  projectFields,
   conditionalJsonResponse,
   errorResponse,
   notFoundResponse,
@@ -20,6 +22,7 @@ export async function GET(
     if (rateCheck) return rateCheck;
 
     const { slug } = await params;
+    const fields = parseFields(new URL(_request.url).searchParams);
     const article = await findArticleBySlug(slug);
 
     if (!article) {
@@ -28,7 +31,14 @@ export async function GET(
 
     const related = await findRelatedArticles(slug, article.tags, 3);
 
-    return conditionalJsonResponse(_request, { article, related }, { cache: "medium" });
+    return conditionalJsonResponse(
+      _request,
+      {
+        article: projectFields(article, fields),
+        related: projectFields(related, fields),
+      },
+      { cache: "medium" },
+    );
   } catch (error) {
     console.error("Get blog article error:", error);
     return errorResponse("Failed to load article", 500);

@@ -1,6 +1,8 @@
 import { NextRequest } from "next/server";
 import {
   parsePagination,
+  parseFields,
+  projectFields,
   buildPaginationMeta,
   conditionalJsonResponse,
   errorResponse,
@@ -20,6 +22,7 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const pagination = parsePagination(searchParams, { sort: "createdAt", order: "desc" });
+    const fields = parseFields(searchParams);
 
     const search = searchParams.get("search") || undefined;
     const id = searchParams.get("id") || undefined;
@@ -30,13 +33,17 @@ export async function GET(request: NextRequest) {
       if (!character) {
         return notFoundResponse("Character not found");
       }
-      return conditionalJsonResponse(request, { character }, { cache: "medium" });
+      return conditionalJsonResponse(
+        request,
+        { character: projectFields(character, fields) },
+        { cache: "medium" },
+      );
     }
 
     const { characters, total } = await findPublicCharacters(pagination, { search });
 
     return conditionalJsonResponse(request, {
-      characters,
+      characters: projectFields(characters, fields),
       pagination: buildPaginationMeta(total, pagination.page, pagination.limit),
     }, { cache: "medium" });
   } catch (error) {
