@@ -4,6 +4,16 @@ All notable changes to AniVerse are documented here.
 
 ## [Unreleased]
 
+### Performance & Maintenance (2026-08-02)
+- Cleaned dead code: removed **3 unreferenced components** (verified 0 imports across the codebase):
+  - `src/components/ui/modal.tsx` (game-style Modal — no longer used, replaced by inline panels)
+  - `src/components/ui/select.tsx` (custom Select — no longer used, replaced by native/API-driven controls)
+  - `src/components/trending-palettes.tsx` (TrendingPalettes — no longer used)
+- Security hardening: added `poweredByHeader: false` to `next.config.ts` — hides the `X-Powered-By: Next.js` framework fingerprint from response headers
+- Security audit: `npm audit --audit-level=high` → **0 vulnerabilities**; verified `.env` is NOT tracked in git (only `.env.example` with placeholders)
+- Verified structured error handling: all 11 API routes use try/catch + `console.error` + standardized `errorResponse`/`notFoundResponse` helpers from `@/lib/api-helpers` (no raw 500s leak internal details)
+- Verified `npm run lint` → 0 errors, 0 warnings; `npm run build` → clean production build, all 25 routes + Proxy (middleware) intact
+
 ### Performance & Maintenance (2026-08-01)
 - Bundle size & dependency cleanup: removed **17 unused npm packages** (`recharts`, `stripe`, `@stripe/stripe-js`, `react-dropzone`, `react-markdown`, `react-hook-form`, `@hookform/resolvers`, `uuid`, `zod`, `next-auth`, `@auth/prisma-adapter`, `@radix-ui/react-dialog`, `@radix-ui/react-dropdown-menu`, `@radix-ui/react-tabs`, `uploadthing`, `@uploadthing/react`, `@types/uuid`) — shrinks install from 700+ to 543 packages
 - Security: `npm audit` → **0 vulnerabilities** (was 4 high). The remaining `effect` advisory chain was eliminated by removing the unused `uploadthing` / `@uploadthing/react` dependencies

@@ -32,6 +32,9 @@ const nextConfig: NextConfig = {
   // ── Production Optimizations ────────────────────────────────────
   productionBrowserSourceMaps: false,
 
+  // Hide framework fingerprint (X-Powered-By header) — security hardening
+  poweredByHeader: false,
+
   // ── Server Options ──────────────────────────────────────────────
   serverExternalPackages: ["bcryptjs"],
 
