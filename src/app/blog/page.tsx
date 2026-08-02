@@ -10,6 +10,7 @@ import {
   Search,
   ArrowRight,
   Sparkles,
+  Rss,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -144,6 +145,18 @@ export default function BlogPage() {
               Tutorials, guides, and updates from the AniVerse team. Learn AI
               anime art creation tips and stay up to date with new features.
             </p>
+
+            {/* RSS Feed Link */}
+            <div className="mt-5 flex justify-center">
+              <Link
+                href="/feed.xml"
+                className="inline-flex items-center gap-2 rounded-[4px] border border-stroke-gold/40 bg-glass-300 px-3 py-1.5 text-xs font-medium text-gold-300/90 transition-all duration-200 hover:border-stroke-gold hover:text-gold-300 hover:shadow-[0_0_12px_rgba(230,194,128,0.25)]"
+                aria-label="Subscribe to the AniVerse blog RSS feed"
+              >
+                <Rss className="h-3.5 w-3.5" />
+                RSS FEED
+              </Link>
+            </div>
           </motion.div>
 
           {/* Search + Tag Filter */}
