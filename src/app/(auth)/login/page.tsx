@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Sparkles, LogIn, Eye, EyeOff, Code2, AtSign, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,8 +19,23 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
+
+  // Restore remembered email on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("aniverse_remember_email");
+      if (saved) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setEmail(saved);
+        setRememberMe(true);
+      }
+    } catch {
+      // localStorage unavailable — ignore
+    }
+  }, []);
 
   function validate(): Record<string, string> {
     const errs: Record<string, string> = {};
@@ -53,6 +68,16 @@ export default function LoginPage() {
       setErrors({ _form: result.error || "Login failed" });
       setIsLoading(false);
     } else {
+      // Persist email if "Remember me" is checked, otherwise clear it
+      try {
+        if (rememberMe) {
+          localStorage.setItem("aniverse_remember_email", email.trim());
+        } else {
+          localStorage.removeItem("aniverse_remember_email");
+        }
+      } catch {
+        // localStorage unavailable — ignore
+      }
       // Navigate after state is committed — prevents race condition
       router.push("/dashboard");
     }
@@ -181,9 +206,12 @@ export default function LoginPage() {
                 )}
               </div>
               <div className="flex items-center justify-between">
-                <label className="flex items-center gap-2 text-sm text-white/40">
+                <label className="flex cursor-pointer items-center gap-2 text-sm text-white/40">
                   <input
                     type="checkbox"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                    disabled={isLoading}
                     className="rounded border-stroke-white bg-glass-200 text-gold-400 focus:ring-gold-400/30"
                   />
                   Remember me

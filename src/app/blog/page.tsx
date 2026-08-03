@@ -7,16 +7,15 @@ import { motion } from "framer-motion";
 import {
   BookOpen,
   Calendar,
-  Search,
   ArrowRight,
   Sparkles,
   Rss,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { SearchBar } from "@/components/ui/search-bar";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Pagination } from "@/components/ui/pagination";
 import { FetchErrorState } from "@/components/ui/fetch-error";
@@ -165,18 +164,13 @@ export default function BlogPage() {
             className="mb-8 space-y-4"
           >
             {/* Search Bar */}
-            <form onSubmit={handleSearch} className="flex gap-3 max-w-md mx-auto">
-              <Input
-                type="text"
-                placeholder="Search articles..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="flex-1"
-              />
-              <Button type="submit" variant="default" size="icon" className="shrink-0">
-                <Search className="h-4 w-4" />
-              </Button>
-            </form>
+            <SearchBar
+              placeholder="Search articles..."
+              value={search}
+              onChange={setSearch}
+              onSubmit={handleSearch}
+              centered
+            />
 
             {/* Tags */}
             {tags.length > 0 && (
