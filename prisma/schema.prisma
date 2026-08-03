@@ -252,6 +252,7 @@ model Artwork {
   @@index([style])
   @@index([createdAt])
   @@index([isPublic])
+  @@index([isPublic, createdAt])
 }
 
 // ============================================================
@@ -668,6 +669,7 @@ model BlogArticle {
   @@index([slug])
   @@index([isPublished])
   @@index([publishedAt])
+  @@index([isPublished, publishedAt])
 }
 
 // ============================================================
@@ -695,6 +697,7 @@ model Challenge {
   @@index([type])
   @@index([status])
   @@index([startsAt, endsAt])
+  @@index([status, startsAt, endsAt])
 }
 
 // ============================================================
