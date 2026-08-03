@@ -3,7 +3,6 @@
  */
 
 export const APP_NAME = "AniVerse";
-export const APP_TAGLINE = "Where AI Meets Anime Art";
 export const APP_DESCRIPTION =
   "AniVerse is a creative platform for generating, sharing, and discovering AI-powered anime artwork.";
 
@@ -39,45 +38,6 @@ export const FOOTER_APP_LINKS = [
   { label: "Overview", href: "/dashboard" },
   { label: "Monetization", href: "/dashboard/monetization" },
   { label: "Dashboard Challenges", href: "/dashboard/challenges" },
-] as const;
-
-/** Dashboard sidebar navigation items. */
-export const DASHBOARD_NAV = [
-  {
-    label: "Overview",
-    href: "/dashboard",
-    icon: "LayoutDashboard",
-  },
-  {
-    label: "Gallery",
-    href: "/dashboard/gallery",
-    icon: "Image",
-  },
-  {
-    label: "Create",
-    href: "/dashboard/create",
-    icon: "Wand2",
-  },
-  {
-    label: "Marketplace",
-    href: "/dashboard/marketplace",
-    icon: "Store",
-  },
-  {
-    label: "Social",
-    href: "/dashboard/social",
-    icon: "Share2",
-  },
-  {
-    label: "Challenges",
-    href: "/dashboard/challenges",
-    icon: "Trophy",
-  },
-  {
-    label: "Monetization",
-    href: "/dashboard/monetization",
-    icon: "DollarSign",
-  },
 ] as const;
 
 /** Subscription tier definitions. */
@@ -130,39 +90,6 @@ export const TIERS = {
     popular: false,
   },
 } as const;
-
-export type TierId = keyof typeof TIERS;
-
-/** Annual pricing (20% discount applied). */
-export const ANNUAL_PRICES: Record<Exclude<TierId, "FREE">, number> = {
-  PRO: 7.99,
-  STUDIO: 19.99,
-} as const;
-
-/** Coin pack definitions for microtransactions. */
-export const COIN_PACKS = [
-  { id: "coins-10", coins: 10, price: 1.99, bonus: 0, label: "Starter Pack" },
-  { id: "coins-50", coins: 50, price: 7.99, bonus: 5, label: "Creator Pack" },
-  { id: "coins-100", coins: 100, price: 14.99, bonus: 15, label: "Pro Pack" },
-  { id: "coins-500", coins: 500, price: 59.99, bonus: 100, label: "Mega Pack" },
-] as const;
-
-/** Marketplace commission rate. */
-export const MARKETPLACE_COMMISSION_RATE = 0.15 as const;
-
-/** Referral program reward structure. */
-export const REFERRAL_REWARDS = {
-  referrerCredit: 5, // $5 credit
-  refereeDiscountPercent: 20, // 20% off first month
-  maxReferralsPerMonth: 10,
-  minPayout: 20, // minimum $20 to withdraw
-} as const;
-
-/** Pricing display variants. */
-export const PRICING_INTERVALS = [
-  { label: "Monthly", value: "monthly" },
-  { label: "Annual", value: "annual" },
-] as const;
 
 /** Featured gallery categories. */
 export const GALLERY_CATEGORIES = [
@@ -238,37 +165,5 @@ export const TRENDING_STYLES = [
     description: "Warm sepia-toned vintage anime aesthetic with film grain texture — TikTok's #animeedit community is driving this nostalgic trend to new heights.",
     gradient: "from-yellow-600 to-amber-700",
     badge: "NEW",
-  },
-] as const;
-
-/** Example artworks for feature showcase. */
-export const FEATURED_ARTWORKS = [
-  {
-    id: "1",
-    title: "Neon Samurai",
-    artist: "CyberWeeb",
-    likes: 1243,
-    image: "/placeholder-artwork.svg",
-  },
-  {
-    id: "2",
-    title: "Spirit of the Forest",
-    artist: "MoriArt",
-    likes: 982,
-    image: "/placeholder-artwork.svg",
-  },
-  {
-    id: "3",
-    title: "Starlight Dancer",
-    artist: "KiraKira",
-    likes: 2156,
-    image: "/placeholder-artwork.svg",
-  },
-  {
-    id: "4",
-    title: "Mechanized Dreams",
-    artist: "NeonWeeb",
-    likes: 745,
-    image: "/placeholder-artwork.svg",
   },
 ] as const;

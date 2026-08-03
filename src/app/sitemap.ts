@@ -1,7 +1,6 @@
 import type { MetadataRoute } from "next";
 import { prisma } from "@/lib/prisma";
-
-const APP_URL = "https://aniverse-one-khaki.vercel.app";
+import { APP_URL } from "@/lib/constants";
 
 /**
  * sitemap.xml — publicly indexable pages only.
