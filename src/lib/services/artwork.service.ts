@@ -43,6 +43,10 @@ export type ArtworkDetailItem = Prisma.ArtworkGetPayload<{
   select: typeof artworkDetailSelect;
 }>;
 
+export type PublicArtworkItem = Prisma.ArtworkGetPayload<{
+  select: typeof publicArtworkSelect;
+}>;
+
 // ─── Selects (optimized — only fetch required fields) ────────────
 
 const artworkListSelect = {
@@ -73,6 +77,30 @@ const artworkDetailSelect = {
   updatedAt: true,
   creatorId: true,
   characterId: true,
+  _count: { select: { products: true } },
+} satisfies Prisma.ArtworkSelect;
+
+/**
+ * Optimized select for the public gallery — includes creator identity
+ * and a lightweight product count, without heavy relations.
+ */
+const publicArtworkSelect = {
+  id: true,
+  title: true,
+  style: true,
+  imageUrl: true,
+  prompt: true,
+  width: true,
+  height: true,
+  createdAt: true,
+  creator: {
+    select: {
+      id: true,
+      name: true,
+      username: true,
+      avatar: true,
+    },
+  },
   _count: { select: { products: true } },
 } satisfies Prisma.ArtworkSelect;
 
@@ -200,4 +228,51 @@ export async function findUserArtworkIds(userId: string): Promise<string[]> {
     select: { id: true },
   });
   return artworks.map((a) => a.id);
+}
+
+/**
+ * List PUBLIC artworks across all creators — powers the community gallery.
+ *
+ * Only `isPublic: true` artworks are returned (never drafts/private),
+ * with optional style + search filtering, safe sort fields, and an
+ * optimized select (creator identity + like count, no heavy relations).
+ */
+export async function findPublicArtworks(
+  pagination: PaginationParams,
+  filters?: { style?: ArtworkStyle; search?: string; creatorId?: string },
+) {
+  const where: Prisma.ArtworkWhereInput = { isPublic: true };
+
+  if (filters?.style) {
+    where.style = filters.style;
+  }
+
+  if (filters?.creatorId) {
+    where.creatorId = filters.creatorId;
+  }
+
+  if (filters?.search) {
+    const searchClause = buildSearchClause(filters.search, [
+      "title",
+      "prompt",
+    ]);
+    if (searchClause) {
+      where.OR = searchClause;
+    }
+  }
+
+  const orderBy = buildOrderBy(pagination, ARTWORK_SORT_FIELDS, "createdAt");
+
+  const [artworks, total] = await Promise.all([
+    prisma.artwork.findMany({
+      where,
+      orderBy,
+      skip: pagination.skip,
+      take: pagination.limit,
+      select: publicArtworkSelect,
+    }),
+    prisma.artwork.count({ where }),
+  ]);
+
+  return { artworks, total };
 }
