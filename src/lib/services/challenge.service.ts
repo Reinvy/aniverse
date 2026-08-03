@@ -94,6 +94,36 @@ export async function findChallengeById(
 }
 
 /**
+ * Get the current active challenge (DAILY first, then WEEKLY as fallback).
+ *
+ * "Current" = the most recently started challenge whose window is live right
+ * now (`startsAt <= now <= endsAt`). Daily challenges are preferred so the
+ * homepage/hero can always surface today's prompt; if no daily is live, the
+ * most recent weekly is returned. Returns null when nothing is active.
+ */
+export async function findCurrentChallenge(): Promise<ChallengeDetail | null> {
+  const now = new Date();
+  const where: Prisma.ChallengeWhereInput = {
+    status: "ACTIVE",
+    startsAt: { lte: now },
+    endsAt: { gte: now },
+  };
+
+  const daily = await prisma.challenge.findFirst({
+    where: { ...where, type: "DAILY" },
+    orderBy: { startsAt: "desc" },
+    select: challengeDetailSelect,
+  });
+  if (daily) return daily;
+
+  return prisma.challenge.findFirst({
+    where: { ...where, type: "WEEKLY" },
+    orderBy: { startsAt: "desc" },
+    select: challengeDetailSelect,
+  });
+}
+
+/**
  * List all challenges (including past) with pagination.
  */
 export async function findAllChallenges(pagination: PaginationParams) {
