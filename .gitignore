@@ -55,4 +55,5 @@ CLAUDE.md
 .cron/create_pr.js
 .cron/create-pr.py
 .playwright-browsers/
+.pw-browsers/
 
