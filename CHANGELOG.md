@@ -4,6 +4,15 @@ All notable changes to AniVerse are documented here.
 
 ## [Unreleased]
 
+### Performance & Maintenance (2026-08-03)
+- Cleaned dead code: removed **18 unused exports** (verified 0 imports across the entire repo — `src/`, e2e, `.cron`):
+  - `src/lib/constants.ts` (9): `APP_TAGLINE`, `DASHBOARD_NAV` (sidebar defines its own local nav), `TierId`, `ANNUAL_PRICES`, `COIN_PACKS`, `MARKETPLACE_COMMISSION_RATE`, `REFERRAL_REWARDS`, `PRICING_INTERVALS`, `FEATURED_ARTWORKS`
+  - `src/lib/pricing.ts` (9): `PricingTierId`, `annualPrices`, `annualSavings`, `perGenerationCost`, `MARKETPLACE_COMMISSION`, `REFERRAL_REWARDS`, `upgradeReasons`, `formatPrice`, `getPriceId` — the file now keeps only the two exports actually consumed by the app (`pricingTiers`, `coinPacks`)
+- DRY / domain single-source-of-truth: `sitemap.ts` and `robots.ts` now import `APP_URL` from `@/lib/constants` instead of hardcoding the production domain (prevents the stale-domain bug class where SEO metadata drifts from the real Vercel alias)
+- Verified `npm run lint` → 0 errors, 0 warnings; `npm run build` → clean production build, all 28 routes + Proxy (middleware) intact
+- Security audit: `npm audit --audit-level=high` → **0 vulnerabilities**; `.env` NOT tracked in git (only `.env.example` with placeholders); no `console.log` statements in `src/`
+- Verified structured error handling: all 13 API routes use try/catch + `console.error` + standardized helpers from `@/lib/api-helpers` (no raw 500s leak internal details)
+
 ### Performance & Maintenance (2026-08-02)
 - Cleaned dead code: removed **3 unreferenced components** (verified 0 imports across the codebase):
   - `src/components/ui/modal.tsx` (game-style Modal — no longer used, replaced by inline panels)
