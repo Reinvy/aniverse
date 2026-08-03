@@ -7,7 +7,6 @@ import {
   Heart,
   Eye,
   Clock,
-  Search,
   Grid3X3,
   List,
   Sparkles,
@@ -15,11 +14,11 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { PageHeader } from "@/components/ui/page-header";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { Skeleton } from "@/components/ui/skeleton";
+import { SearchBar } from "@/components/ui/search-bar";
 import { Pagination } from "@/components/ui/pagination";
 import { FetchErrorState } from "@/components/ui/fetch-error";
 import { FilterChips } from "@/components/ui/filter-chips";
@@ -163,15 +162,14 @@ export default function GalleryPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.4 }}
         >
-          <form onSubmit={handleSearch} className="relative flex-1 max-w-full sm:max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/30" />
-            <Input
-              placeholder="Search artworks or prompts..."
-              className="pl-10 text-sm"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </form>
+          <SearchBar
+            placeholder="Search artworks or prompts..."
+            value={searchQuery}
+            onChange={setSearchQuery}
+            onSubmit={handleSearch}
+            maxWidth="max-w-full sm:max-w-md"
+            className="flex-1"
+          />
           <FilterChips
             options={GALLERY_CATEGORIES}
             value={activeCategory}

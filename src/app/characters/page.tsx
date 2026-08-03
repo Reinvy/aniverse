@@ -7,7 +7,6 @@ import { motion } from "framer-motion";
 import {
   Users,
   Sparkles,
-  Search,
   Palette,
   Clock,
   ArrowRight,
@@ -15,9 +14,9 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { SearchBar } from "@/components/ui/search-bar";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Pagination } from "@/components/ui/pagination";
 import { FetchErrorState } from "@/components/ui/fetch-error";
@@ -156,18 +155,13 @@ export default function CharactersPage() {
             transition={{ delay: 0.1, duration: 0.4 }}
             className="mb-8"
           >
-            <form onSubmit={handleSearch} className="flex gap-3 max-w-md mx-auto">
-              <Input
-                type="text"
-                placeholder="Search characters..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="flex-1"
-              />
-              <Button type="submit" variant="default" size="icon" className="shrink-0">
-                <Search className="h-4 w-4" />
-              </Button>
-            </form>
+            <SearchBar
+              placeholder="Search characters..."
+              value={search}
+              onChange={setSearch}
+              onSubmit={handleSearch}
+              centered
+            />
           </motion.div>
 
           {/* Characters Grid */}
