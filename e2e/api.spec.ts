@@ -71,4 +71,25 @@ test.describe('API Endpoints', () => {
     expect(text).toContain('<?xml');
     expect(text).toContain('<rss');
   });
+
+  test('GET /robots.txt should return 200 with sitemap reference', async ({ request }) => {
+    const response = await request.get('/robots.txt');
+    expect(response.ok()).toBe(true);
+    const text = await response.text();
+    expect(text).toContain('User-Agent');
+    expect(text).toContain('sitemap');
+    expect(text).toContain('aniverse-one-khaki.vercel.app');
+  });
+
+  test('GET /sitemap.xml should return 200 with public routes', async ({ request }) => {
+    const response = await request.get('/sitemap.xml');
+    expect(response.ok()).toBe(true);
+    const text = await response.text();
+    expect(text).toContain('<urlset');
+    expect(text).toContain('/blog');
+    expect(text).toContain('/characters');
+    // Auth-gated routes must NOT be listed (consistent with robots disallow)
+    expect(text).not.toContain('/dashboard');
+    expect(text).not.toContain('/login');
+  });
 });

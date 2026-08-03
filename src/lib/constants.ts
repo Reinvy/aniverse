@@ -7,7 +7,8 @@ export const APP_TAGLINE = "Where AI Meets Anime Art";
 export const APP_DESCRIPTION =
   "AniVerse is a creative platform for generating, sharing, and discovering AI-powered anime artwork.";
 
-export const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+export const APP_URL =
+  process.env.NEXT_PUBLIC_APP_URL ?? "https://aniverse-one-khaki.vercel.app";
 
 /** Navigation links for the public site header. */
 export const MAIN_NAV_LINKS = [
