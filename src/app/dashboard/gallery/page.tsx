@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
   Image as ImageIcon,
-  Heart,
+  ShoppingCart,
   Eye,
   Clock,
   Grid3X3,
@@ -276,10 +276,12 @@ export default function GalleryPage() {
                         )}
 
                         <div className="mt-3 flex items-center gap-4 text-xs text-white/30">
-                          <span className="flex items-center gap-1">
-                            <Heart className="h-3.5 w-3.5 text-rose-400" />
-                            {formatNumber(art._count?.products ?? 0)}
-                          </span>
+                          {(art._count?.products ?? 0) > 0 && (
+                            <span className="flex items-center gap-1" title="Marketplace listings">
+                              <ShoppingCart className="h-3.5 w-3.5 text-gold-400" />
+                              {formatNumber(art._count?.products ?? 0)}
+                            </span>
+                          )}
                           <span className="flex items-center gap-1">
                             <Eye className="h-3.5 w-3.5" />
                             {art.width ?? 0}×{art.height ?? 0}
