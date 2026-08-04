@@ -1,0 +1,65 @@
+import { test, expect } from '@playwright/test';
+
+/**
+ * Game-style 404 page (AniVerse Design System v2) — added 2026-08-04 (PR #85).
+ * Unknown routes must render the themed "lost node" page, not a generic error,
+ * and its action links must navigate to real pages.
+ */
+test.describe('Game-Style 404 Page', () => {
+  const BOGUS_ROUTE = '/this-route-does-not-exist-xyz';
+
+  test('unknown route should return 404 with game-style markers', async ({ page }) => {
+    const response = await page.goto(BOGUS_ROUTE);
+    expect(response?.status()).toBe(404);
+
+    // HUD error code
+    await expect(page.getByText('[SYS.ERR] // 404').first()).toBeVisible();
+    // Glitch code block
+    await expect(page.getByText('404', { exact: true }).first()).toBeVisible();
+    // Themed headline
+    await expect(page.getByText('Signal lost — this coordinate does not exist').first()).toBeVisible();
+    // Status tag
+    await expect(page.getByText('NODE NOT FOUND').first()).toBeVisible();
+    // Design-system glass panel with corner brackets is present
+    await expect(page.locator('.glass.cut-corner').first()).toBeVisible();
+    await expect(page.locator('.bracket-corner').first()).toBeVisible();
+  });
+
+  test('404 "Return to Base" button should navigate home', async ({ page }) => {
+    await page.goto(BOGUS_ROUTE);
+    await expect(page.getByRole('button', { name: /return to base/i })).toBeVisible();
+    await page.getByRole('button', { name: /return to base/i }).click();
+    await expect(page).toHaveURL(/\/$/);
+    await expect(page.locator('body')).toBeVisible();
+  });
+
+  test('404 action buttons should navigate to real pages', async ({ page }) => {
+    await page.goto(BOGUS_ROUTE);
+
+    // Explore Characters → /characters
+    await page.getByRole('button', { name: /explore characters/i }).click();
+    await expect(page).toHaveURL(/\/characters/);
+    await expect(page.locator('body')).toBeVisible();
+
+    // Read the Blog → /blog
+    await page.goto(BOGUS_ROUTE);
+    await page.getByRole('button', { name: /read the blog/i }).click();
+    await expect(page).toHaveURL(/\/blog/);
+    await expect(page.locator('body')).toBeVisible();
+  });
+
+  test('404 footer strip links should be real routes (no dead placeholders)', async ({ page }) => {
+    await page.goto(BOGUS_ROUTE);
+
+    const footerTargets = ['/challenges', '/dashboard/gallery', '/dashboard/create'];
+    for (const target of footerTargets) {
+      const link = page.locator(`a[href="${target}"]`).first();
+      await expect(link).toBeVisible();
+      const response = await page.goto(target);
+      // Protected dashboard routes may redirect to login — but must never 500
+      expect(response?.status()).toBeLessThan(500);
+      await expect(page.locator('body')).toBeVisible();
+      await page.goto(BOGUS_ROUTE);
+    }
+  });
+});

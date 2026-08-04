@@ -28,6 +28,34 @@ test.describe('API Endpoints', () => {
     expect([401, 403]).toContain(response.status());
   });
 
+  test('GET /api/auth/me should return 401 when no token is present', async ({ request }) => {
+    const response = await request.get('/api/auth/me');
+    expect([401, 403]).toContain(response.status());
+    const body = await response.json();
+    // Graceful JSON error, not an HTML crash page
+    expect(body.error ?? body.message).toBeDefined();
+  });
+
+  test('GET /api/gallery should return 200 with artworks', async ({ request }) => {
+    const response = await request.get('/api/gallery');
+    expect(response.ok()).toBe(true);
+    const body = await response.json();
+    expect(Array.isArray(body.artworks)).toBe(true);
+  });
+
+  test('GET /api/challenges/current should respond gracefully (active or empty state)', async ({ request }) => {
+    const response = await request.get('/api/challenges/current');
+    // Either an active challenge (200) or a graceful empty state (404 JSON) is valid
+    expect([200, 404]).toContain(response.status());
+    const body = await response.json();
+    if (response.status() === 200) {
+      expect(body.challenge ?? body).toBeDefined();
+    } else {
+      // Empty state must be a JSON error object, not an HTML crash page
+      expect(body.error).toBeDefined();
+    }
+  });
+
   test('POST /api/auth/login with invalid credentials should return 401', async ({ request }) => {
     const response = await request.post('/api/auth/login', {
       data: { email: 'nonexistent@test.com', password: 'wrongpassword' },
