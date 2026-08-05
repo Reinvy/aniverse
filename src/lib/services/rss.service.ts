@@ -6,9 +6,10 @@
  */
 
 import { prisma } from "@/lib/prisma";
+import { APP_URL } from "@/lib/constants";
 
 export const RSS_FEED_LIMIT = 20;
-export const SITE_URL = "https://aniverse-one-khaki.vercel.app";
+export const SITE_URL = APP_URL;
 export const SITE_TITLE = "AniVerse Blog";
 export const SITE_DESCRIPTION =
   "Tutorials, guides, and updates from the AniVerse team — AI anime art creation tips and platform news.";

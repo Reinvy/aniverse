@@ -42,23 +42,3 @@ export function formatNumber(num: number): string {
   const scaled = num / Math.pow(10, tier * 3);
   return `${scaled.toFixed(1).replace(/\.0$/, "")}${suffix}`;
 }
-
-/**
- * Truncate text with ellipsis.
- */
-export function truncate(str: string, length: number): string {
-  if (str.length <= length) return str;
-  return str.slice(0, length).trimEnd() + "…";
-}
-
-/**
- * Generate a random ID (for client-side use).
- */
-export function generateId(): string {
-  return Math.random().toString(36).substring(2, 11);
-}
-
-/**
- * Check if code is running on the client side.
- */
-export const isClient = typeof window !== "undefined";

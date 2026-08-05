@@ -39,7 +39,7 @@ export function buildOrderBy<T extends string>(
  * Configuration for a text search field mapping.
  * Maps user-facing search params to Prisma field conditions.
  */
-export interface SearchFieldConfig {
+interface SearchFieldConfig {
   /** Field name in the model (e.g., "title", "name") */
   field: string;
   /** Mode for string matching (default: insensitive) */
