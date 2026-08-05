@@ -63,3 +63,30 @@ test.describe('Game-Style 404 Page', () => {
     }
   });
 });
+
+/**
+ * Protected /dashboard/* routing — the proxy redirects unauthenticated users to
+ * /login, and unknown dashboard sub-routes must 404 (not silently render the
+ * dashboard shell) once the proxy check is passed.
+ */
+test.describe('Protected Dashboard Routing', () => {
+  // Proxy (src/proxy.ts) only validates token length (>= 20) before passing
+  // through; actual verification happens in API routes / client AuthGuard.
+  const FAKE_TOKEN = 'x'.repeat(40);
+
+  test('unknown dashboard sub-routes should 404 when a token is present', async ({ request }) => {
+    for (const path of ['/dashboard/nonexistent-page-xyz', '/dashboard/deep/nested/xyz']) {
+      const response = await request.get(path, {
+        headers: { Cookie: `aniverse_token=${FAKE_TOKEN}` },
+        maxRedirects: 0,
+      });
+      expect(response.status()).toBe(404);
+    }
+  });
+
+  test('unknown dashboard sub-routes should redirect to /login when unauthenticated', async ({ request }) => {
+    const response = await request.get('/dashboard/nonexistent-page-xyz', { maxRedirects: 0 });
+    // Proxy redirects every /dashboard/* path to /login for unauthenticated users
+    expect([302, 307, 308]).toContain(response.status());
+  });
+});

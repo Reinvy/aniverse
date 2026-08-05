@@ -22,6 +22,28 @@ test.describe('API Endpoints', () => {
     expect(response.ok()).toBe(true);
   });
 
+  test('GET /api/characters/[id] should return 200 for an existing character', async ({ request }) => {
+    // Fetch the list first to get a real character id (ids are DB-generated, not slugs)
+    const listResponse = await request.get('/api/characters');
+    expect(listResponse.ok()).toBe(true);
+    const listBody = await listResponse.json();
+    const characters = Array.isArray(listBody) ? listBody : listBody.characters ?? listBody.data ?? [];
+    expect(characters.length).toBeGreaterThan(0);
+    const firstId = characters[0].id;
+    expect(firstId).toBeTruthy();
+
+    const response = await request.get(`/api/characters/${firstId}`);
+    expect(response.ok()).toBe(true);
+    const body = await response.json();
+    const character = body.character ?? body;
+    expect(character.name).toBeDefined();
+  });
+
+  test('GET /api/characters/[id] should return 404 for an unknown id', async ({ request }) => {
+    const response = await request.get('/api/characters/this-id-does-not-exist-xyz');
+    expect([404, 400]).toContain(response.status());
+  });
+
   test('GET /api/dashboard/stats should return 401 when not authenticated', async ({ request }) => {
     const response = await request.get('/api/dashboard/stats');
     // Should return 401 or 403 since we're not authenticated
