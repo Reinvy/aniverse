@@ -4,6 +4,17 @@ All notable changes to AniVerse are documented here.
 
 ## [Unreleased]
 
+### Performance & Maintenance (2026-08-05)
+- Security audit fix: bumped `postcss` override `8.5.22` → `^8.5.25` in `package.json` — closes GHSA-fxqj-rqcc-2cmp (attacker-controlled `sourceMappingURL` reads arbitrary `.map` files; affects postcss ≤8.5.22 via the `next` dependency chain)
+- `npm audit fix` → **0 vulnerabilities** (was 2 high: `brace-expansion` <5.0.9 DoS via unbounded intermediate arrays, `fast-uri` <3.1.5 host confusion via backslash authority introducer)
+- Cleaned dead code (verified 0 imports across `src/`, e2e, `.cron`):
+  - `src/data/daily-art-20260727.ts` — unreferenced daily-art data file (12.6 KB)
+  - `src/lib/utils.ts`: removed 3 unused exports — `truncate`, `generateId`, `isClient`
+  - `src/lib/query-builder.ts`: de-exported internal-only `SearchFieldConfig` interface (used only inside the file)
+- DRY / domain single-source-of-truth: `src/lib/services/rss.service.ts` now imports `SITE_URL` from `APP_URL` in `@/lib/constants` instead of hardcoding `https://aniverse-one-khaki.vercel.app` (extends the 08-03 pattern; `/feed.xml` links can never drift from the real Vercel alias)
+- Verified structured error handling: all **15** API routes use try/catch + `console.error` + standardized helpers from `@/lib/api-helpers`
+- Verified `npm run lint` → 0 errors, 0 warnings; `npm run build` → clean production build
+
 ### Performance & Maintenance (2026-08-03)
 - Cleaned dead code: removed **18 unused exports** (verified 0 imports across the entire repo — `src/`, e2e, `.cron`):
   - `src/lib/constants.ts` (9): `APP_TAGLINE`, `DASHBOARD_NAV` (sidebar defines its own local nav), `TierId`, `ANNUAL_PRICES`, `COIN_PACKS`, `MARKETPLACE_COMMISSION_RATE`, `REFERRAL_REWARDS`, `PRICING_INTERVALS`, `FEATURED_ARTWORKS`
