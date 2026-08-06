@@ -61,6 +61,7 @@ export function Header() {
               <Link
                 key={link.href}
                 href={link.href}
+                aria-current={isActive ? "page" : undefined}
                 className={cn("nav-diamond text-sm font-medium tracking-wide", isActive && "active")}
               >
                 {link.label}
