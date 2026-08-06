@@ -4,10 +4,10 @@ import {
   parseFields,
   projectFields,
   buildPaginationMeta,
+  buildNextCursor,
   conditionalJsonResponse,
   errorResponse,
   decodeCursor,
-  encodeCursor,
   isKeysetSafeSort,
 } from "@/lib/api-helpers";
 import {
@@ -31,7 +31,9 @@ import { applyRateLimit, readLimiter } from "@/lib/rate-limiter";
  *   cursor — opaque keyset token returned as `pagination.nextCursor`. When
  *            present (and `sort` is keyset-safe), the list is fetched with an
  *            index range predicate instead of OFFSET — O(log n) per page at
- *            any depth. Malformed cursors fall back to offset pagination.
+ *            any depth. Page 1 (offset) already emits `nextCursor` so clients
+ *            can switch to keyset mode for deep pages. Malformed cursors fall
+ *            back to offset pagination.
  */
 export async function GET(request: NextRequest) {
   try {
@@ -51,15 +53,16 @@ export async function GET(request: NextRequest) {
       featured: featuredOnly || undefined,
     };
 
-    // Cursor mode requires a keyset-safe sort that is ALSO whitelisted for the
-    // blog entity (avoids decoding a cursor for a sort the service would clamp).
-    const cursor =
+    // Whether the active sort can drive a keyset cursor for this entity.
+    const canCursor =
       isKeysetSafeSort(pagination.sort) &&
       BLOG_ARTICLE_SORT_FIELDS.includes(
         pagination.sort as (typeof BLOG_ARTICLE_SORT_FIELDS)[number],
-      )
-        ? decodeCursor(searchParams.get("cursor"))
-        : null;
+      );
+
+    // Cursor mode requires a keyset-safe sort that is ALSO whitelisted for the
+    // blog entity (avoids decoding a cursor for a sort the service would clamp).
+    const cursor = canCursor ? decodeCursor(searchParams.get("cursor")) : null;
 
     let articles;
     let paginationMeta;
@@ -67,29 +70,32 @@ export async function GET(request: NextRequest) {
     if (cursor) {
       const result = await findPublishedArticlesCursor(pagination, filters, cursor);
       articles = result.articles;
-      const last = articles[articles.length - 1];
-      const nextCursor =
-        result.hasNextPage && last
-          ? encodeCursor(
-              (last as Record<string, unknown>)[pagination.sort] as
-                | string
-                | number
-                | Date,
-              last.id,
-            )
-          : null;
       paginationMeta = {
         ...buildPaginationMeta(result.total, 1, pagination.limit),
-        nextCursor,
+        nextCursor: buildNextCursor(
+          articles as unknown as Record<string, unknown>[],
+          pagination.sort,
+          result.hasNextPage,
+        ),
       };
     } else {
       const result = await findPublishedArticles(pagination, filters);
       articles = result.articles;
-      paginationMeta = buildPaginationMeta(
+      const meta = buildPaginationMeta(
         result.total,
         pagination.page,
         pagination.limit,
       );
+      paginationMeta = {
+        ...meta,
+        nextCursor: canCursor
+          ? buildNextCursor(
+              articles as unknown as Record<string, unknown>[],
+              pagination.sort,
+              meta.hasNextPage,
+            )
+          : null,
+      };
     }
 
     const tags = await findArticleTags();

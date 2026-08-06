@@ -93,6 +93,7 @@ const publicArtworkSelect = {
   width: true,
   height: true,
   createdAt: true,
+  updatedAt: true,
   creator: {
     select: {
       id: true,
