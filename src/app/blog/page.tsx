@@ -19,6 +19,7 @@ import { SearchBar } from "@/components/ui/search-bar";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Pagination } from "@/components/ui/pagination";
 import { FetchErrorState } from "@/components/ui/fetch-error";
+import { FeaturedArticleHero, type FeaturedArticle } from "@/components/blog/featured-article-hero";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { PageBackground } from "@/components/ui/page-background";
@@ -74,6 +75,7 @@ function BlogSkeleton() {
 
 export default function BlogPage() {
   const [articles, setArticles] = useState<BlogArticle[]>([]);
+  const [featured, setFeatured] = useState<FeaturedArticle | null>(null);
   const [tags, setTags] = useState<string[]>([]);
   const [pagination, setPagination] = useState<PaginationMeta | null>(null);
   const [loading, setLoading] = useState(true);
@@ -96,6 +98,11 @@ export default function BlogPage() {
       setArticles(data.articles || []);
       setTags(data.tags || []);
       setPagination(data.pagination || null);
+      if (!search && !activeTag) {
+        setFeatured(data.featured || null);
+      } else {
+        setFeatured(null);
+      }
     } catch (err) {
       console.error("Failed to fetch articles:", err);
       setError(err instanceof Error ? err.message : "Failed to load articles");
@@ -155,6 +162,9 @@ export default function BlogPage() {
               </Link>
             </div>
           </motion.div>
+
+          {/* Featured Article Hero */}
+          {featured && <FeaturedArticleHero article={featured} />}
 
           {/* Search + Tag Filter */}
           <motion.div
