@@ -6,8 +6,15 @@ import {
   buildPaginationMeta,
   conditionalJsonResponse,
   errorResponse,
+  decodeCursor,
+  encodeCursor,
+  isKeysetSafeSort,
 } from "@/lib/api-helpers";
-import { findPublicArtworks } from "@/lib/services/artwork.service";
+import {
+  findPublicArtworks,
+  findPublicArtworksCursor,
+} from "@/lib/services/artwork.service";
+import { ARTWORK_SORT_FIELDS } from "@/lib/services/sort-config";
 import { applyRateLimit, readLimiter } from "@/lib/rate-limiter";
 
 /**
@@ -24,6 +31,15 @@ import { applyRateLimit, readLimiter } from "@/lib/rate-limiter";
  *   search  — free-text search on title/prompt
  *   creatorId — narrow to one creator
  *   fields  — comma-separated projection (e.g. fields=id,title,imageUrl)
+ *
+ * Cursor (keyset) pagination — scalable deep pages:
+ *   cursor  — opaque token returned as `pagination.nextCursor`. When present
+ *             (and `sort` is keyset-safe: createdAt | updatedAt | title), the
+ *             list is fetched with an index range predicate instead of OFFSET,
+ *             which stays O(log n) no matter how deep the page. The response
+ *             pagination object then carries `nextCursor` for the following
+ *             page. Enum sorts (style) and malformed cursors transparently
+ *             fall back to offset pagination.
  */
 export async function GET(request: NextRequest) {
   try {
@@ -55,11 +71,55 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get("search") || undefined;
     const creatorId = searchParams.get("creatorId") || undefined;
 
-    const { artworks, total } = await findPublicArtworks(pagination, {
-      style,
-      search,
-      creatorId,
-    });
+    const filters = { style, search, creatorId };
+
+    // Cursor mode is only valid for keyset-safe sort fields (enum sorts like
+    // `style` cannot drive a range predicate in Prisma) that are ALSO
+    // whitelisted for the artwork entity — a sort the service would clamp
+    // (e.g. `publishedAt`) must not decode a cursor, or the keyset predicate
+    // would compare against the wrong column. The style/search/creatorId
+    // filters compose fine with the keyset predicate.
+    const cursor =
+      isKeysetSafeSort(pagination.sort) &&
+      ARTWORK_SORT_FIELDS.includes(
+        pagination.sort as (typeof ARTWORK_SORT_FIELDS)[number],
+      )
+        ? decodeCursor(searchParams.get("cursor"))
+        : null;
+
+    if (cursor) {
+      const { artworks, total, hasNextPage } = await findPublicArtworksCursor(
+        pagination,
+        filters,
+        cursor,
+      );
+
+      const last = artworks[artworks.length - 1];
+      const nextCursor =
+        hasNextPage && last
+          ? encodeCursor(
+              (last as Record<string, unknown>)[pagination.sort] as
+                | string
+                | number
+                | Date,
+              last.id,
+            )
+          : null;
+
+      return conditionalJsonResponse(
+        request,
+        {
+          artworks: projectFields(artworks, fields),
+          pagination: {
+            ...buildPaginationMeta(total, 1, pagination.limit),
+            nextCursor,
+          },
+        },
+        { cache: "short" },
+      );
+    }
+
+    const { artworks, total } = await findPublicArtworks(pagination, filters);
 
     return conditionalJsonResponse(
       request,

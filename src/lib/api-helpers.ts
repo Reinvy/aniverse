@@ -87,6 +87,17 @@ const DEFAULT_LIMIT = 20;
 const MAX_LIMIT = 100;
 
 /**
+ * Maximum allowed OFFSET for offset-based pagination.
+ *
+ * Deep offset pagination degrades to O(n) in PostgreSQL: every page requires
+ * scanning and discarding all preceding rows. Clamping the skip keeps
+ * pathological inputs (`?page=999999999`) from triggering multi-million-row
+ * scans. Clients that need to paginate deep into a dataset should use
+ * cursor-based (keyset) pagination instead — see `encodeCursor`/`decodeCursor`.
+ */
+const MAX_SKIP = 10_000;
+
+/**
  * Parse pagination, sorting, and filtering parameters from URL search params.
  */
 export function parsePagination(
@@ -107,9 +118,92 @@ export function parsePagination(
   const sort = searchParams.get("sort") ?? defaults?.sort ?? "createdAt";
   const orderRaw = searchParams.get("order") ?? defaults?.order ?? "desc";
   const order: "asc" | "desc" = orderRaw === "asc" ? "asc" : "desc";
-  const skip = (page - 1) * limit;
+  let skip = (page - 1) * limit;
 
-  return { page, limit, skip, sort, order };
+  // Harden against pathological deep-page offsets (see MAX_SKIP docs above).
+  // Recompute `page` so the pagination meta always reflects the effective
+  // offset (idempotent when no clamp happened).
+  if (skip > MAX_SKIP) {
+    skip = MAX_SKIP;
+  }
+  const effectivePage = Math.floor(skip / limit) + 1;
+
+  return { page: effectivePage, limit, skip, sort, order };
+}
+
+// ─── Cursor (Keyset) Pagination ───────────────────────────────────
+
+/**
+ * Fields that are safe to use as keyset-pagination sort keys.
+ *
+ * Keyset pagination requires range filters (`lt`/`gt`) plus a unique
+ * tiebreaker (id). Prisma enum filters do NOT expose `lt`/`gt` (only
+ * equals/in/notIn/not), so enum-typed sort fields (e.g. Artwork `style`)
+ * cannot drive a keyset cursor — callers must fall back to offset
+ * pagination for those sorts.
+ */
+const KEYSET_SAFE_SORT_FIELDS = new Set([
+  "createdAt",
+  "updatedAt",
+  "title",
+  "publishedAt",
+]);
+
+/**
+ * True when `field` can be used as a keyset cursor sort key.
+ */
+export function isKeysetSafeSort(field: string): boolean {
+  return KEYSET_SAFE_SORT_FIELDS.has(field);
+}
+
+/**
+ * Encode an opaque, tamper-resistant cursor for keyset pagination.
+ *
+ * The cursor carries the last row's sort value + id, base64url-encoded so it
+ * is URL-safe and opaque to clients. The payload is NOT signed — treat it as
+ * a hint, not a security boundary: a forged cursor yields an empty page at
+ * worst (range filters are validated against the whitelist on decode).
+ *
+ * DateTime values are normalized to ISO-8601 strings, which Prisma accepts
+ * for DateTime range filters.
+ */
+export function encodeCursor(
+  sortValue: string | number | Date,
+  id: string,
+): string {
+  const v =
+    sortValue instanceof Date
+      ? sortValue.toISOString()
+      : String(sortValue);
+  return Buffer.from(JSON.stringify({ v, i: id })).toString("base64url");
+}
+
+/**
+ * Decode a keyset cursor produced by {@link encodeCursor}.
+ *
+ * Returns null for missing/malformed/out-of-shape payloads so callers can
+ * transparently fall back to offset pagination.
+ */
+export function decodeCursor(
+  raw: string | null | undefined,
+): { sortValue: string; id: string } | null {
+  if (!raw) return null;
+  try {
+    const parsed = JSON.parse(
+      Buffer.from(raw, "base64url").toString("utf8"),
+    ) as { v?: unknown; i?: unknown };
+    if (
+      parsed &&
+      typeof parsed.v === "string" &&
+      typeof parsed.i === "string" &&
+      parsed.i.length > 0
+    ) {
+      return { sortValue: parsed.v, id: parsed.i };
+    }
+  } catch {
+    // Malformed cursor — treat as absent.
+  }
+  return null;
 }
 
 /**
