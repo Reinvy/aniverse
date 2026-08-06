@@ -656,6 +656,7 @@ model BlogArticle {
   seoDesc     String?
   isPublished Boolean  @default(false)
   publishedAt DateTime?
+  featured    Boolean  @default(false) // Curated hero article on the blog landing page
 
   authorId String
 
@@ -670,6 +671,7 @@ model BlogArticle {
   @@index([isPublished])
   @@index([publishedAt])
   @@index([isPublished, publishedAt])
+  @@index([featured, isPublished, publishedAt])
 }
 
 // ============================================================

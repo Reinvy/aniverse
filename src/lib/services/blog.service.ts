@@ -18,6 +18,7 @@ import { BLOG_ARTICLE_SORT_FIELDS } from "@/lib/services/sort-config";
 export interface BlogArticleFilters {
   search?: string;
   tag?: string;
+  featured?: boolean;
 }
 
 export type BlogArticleListItem = Prisma.BlogArticleGetPayload<{
@@ -37,6 +38,7 @@ const blogListSelect = {
   excerpt: true,
   coverImage: true,
   tags: true,
+  featured: true,
   publishedAt: true,
   createdAt: true,
   author: {
@@ -59,6 +61,7 @@ const blogDetailSelect = {
   seoTitle: true,
   seoDesc: true,
   isPublished: true,
+  featured: true,
   publishedAt: true,
   createdAt: true,
   updatedAt: true,
@@ -99,6 +102,10 @@ export async function findPublishedArticles(
 
   if (filters?.tag) {
     where.tags = { has: filters.tag };
+  }
+
+  if (filters?.featured !== undefined) {
+    where.featured = filters.featured;
   }
 
   const orderBy = buildOrderBy(pagination, BLOG_ARTICLE_SORT_FIELDS, "publishedAt");
@@ -159,6 +166,22 @@ export async function findArticleTags(): Promise<string[]> {
   }
 
   return Array.from(tagSet).sort();
+}
+
+/**
+ * Get the single latest featured published article (curated hero for the
+ * blog landing page). Returns null when no featured article exists yet.
+ */
+export async function findFeaturedArticle(): Promise<BlogArticleListItem | null> {
+  return prisma.blogArticle.findFirst({
+    where: {
+      isPublished: true,
+      featured: true,
+      publishedAt: { lte: new Date() },
+    },
+    orderBy: { publishedAt: "desc" },
+    select: blogListSelect,
+  });
 }
 
 /**
