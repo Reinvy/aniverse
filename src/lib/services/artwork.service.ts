@@ -350,10 +350,14 @@ export async function findPublicArtworksCursor(
     ];
   }
 
-  const orderBy = {
-    [sortField]: pagination.order,
-    id: pagination.order,
-  } as const;
+  // Prisma 7 requires ARRAY form for multi-field orderBy (a two-key object
+  // passes typecheck but fails runtime validation). Cast is intentional: the
+  // generated types accept the single-object form that Prisma rejects at
+  // runtime — the array form is the only shape that actually works.
+  const orderBy = [
+    { [sortField]: pagination.order },
+    { id: pagination.order },
+  ] as Prisma.ArtworkOrderByWithRelationInput[];
 
   // Fetch one extra row to detect whether another page exists.
   const [rows, total] = await Promise.all([
