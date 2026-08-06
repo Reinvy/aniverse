@@ -207,6 +207,28 @@ export function decodeCursor(
 }
 
 /**
+ * Compute the `nextCursor` token for a page of rows, or null when there is no
+ * next page (or the row shape can't produce a cursor).
+ *
+ * DRY helper shared by list routes: given the fetched rows (already projected
+ * to the list select), the active sort field, and whether a next page exists,
+ * it encodes the last row's sort value + id. Returns null when the sort value
+ * is absent from the row (caller's select doesn't include it) — the route
+ * then simply omits the cursor.
+ */
+export function buildNextCursor(
+  rows: ReadonlyArray<Record<string, unknown>>,
+  sort: string,
+  hasNextPage: boolean,
+): string | null {
+  if (!hasNextPage || rows.length === 0) return null;
+  const last = rows[rows.length - 1];
+  const sortValue = last[sort];
+  if (sortValue === undefined || sortValue === null) return null;
+  return encodeCursor(sortValue as string | number | Date, String(last.id));
+}
+
+/**
  * Build pagination metadata object for API responses.
  */
 export function buildPaginationMeta(

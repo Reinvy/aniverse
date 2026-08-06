@@ -4,10 +4,10 @@ import {
   parseFields,
   projectFields,
   buildPaginationMeta,
+  buildNextCursor,
   conditionalJsonResponse,
   errorResponse,
   decodeCursor,
-  encodeCursor,
   isKeysetSafeSort,
 } from "@/lib/api-helpers";
 import {
@@ -94,25 +94,17 @@ export async function GET(request: NextRequest) {
         cursor,
       );
 
-      const last = artworks[artworks.length - 1];
-      const nextCursor =
-        hasNextPage && last
-          ? encodeCursor(
-              (last as Record<string, unknown>)[pagination.sort] as
-                | string
-                | number
-                | Date,
-              last.id,
-            )
-          : null;
-
       return conditionalJsonResponse(
         request,
         {
           artworks: projectFields(artworks, fields),
           pagination: {
             ...buildPaginationMeta(total, 1, pagination.limit),
-            nextCursor,
+            nextCursor: buildNextCursor(
+              artworks as unknown as Record<string, unknown>[],
+              pagination.sort,
+              hasNextPage,
+            ),
           },
         },
         { cache: "short" },
@@ -120,12 +112,27 @@ export async function GET(request: NextRequest) {
     }
 
     const { artworks, total } = await findPublicArtworks(pagination, filters);
+    const meta = buildPaginationMeta(total, pagination.page, pagination.limit);
+
+    // Emit the first cursor from the offset page so clients can switch to
+    // keyset pagination for deep pages (when the sort is keyset-safe).
+    const nextCursor =
+      isKeysetSafeSort(pagination.sort) &&
+      ARTWORK_SORT_FIELDS.includes(
+        pagination.sort as (typeof ARTWORK_SORT_FIELDS)[number],
+      )
+        ? buildNextCursor(
+            artworks as unknown as Record<string, unknown>[],
+            pagination.sort,
+            meta.hasNextPage,
+          )
+        : null;
 
     return conditionalJsonResponse(
       request,
       {
         artworks: projectFields(artworks, fields),
-        pagination: buildPaginationMeta(total, pagination.page, pagination.limit),
+        pagination: { ...meta, nextCursor },
       },
       { cache: "short" },
     );

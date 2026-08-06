@@ -41,6 +41,7 @@ const blogListSelect = {
   featured: true,
   publishedAt: true,
   createdAt: true,
+  updatedAt: true,
   author: {
     select: {
       id: true,
