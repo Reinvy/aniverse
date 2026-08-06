@@ -16,6 +16,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Select } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { EmptyState } from "@/components/ui/empty-state";
 import { FetchErrorState } from "@/components/ui/fetch-error";
@@ -272,23 +273,26 @@ export default function MarketplacePage() {
             <label htmlFor="marketplace-sort" className="sr-only">
               Sort listings
             </label>
-            <select
+            <Select
               id="marketplace-sort"
+              aria-label="Sort listings"
               value={sort}
               onChange={(e) => {
                 setSort(e.target.value as SortId);
                 setPage(1);
               }}
-              className="h-10 rounded-[4px] border border-white/10 bg-[rgba(0,0,0,0.4)] px-3 text-sm text-white/70
-                focus:border-[rgba(230,194,128,0.4)] focus:outline-none focus:ring-1 focus:ring-[rgba(230,194,128,0.3)]
-                transition-all duration-300"
+              className="w-auto min-w-[190px]"
             >
               {SORT_OPTIONS.map((opt) => (
-                <option key={opt.id} value={opt.id} className="bg-[#0b0e14] text-white">
+                <option
+                  key={opt.id}
+                  value={opt.id}
+                  className="bg-[#0b0e14] text-white"
+                >
                   {opt.label}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
         </motion.div>
 

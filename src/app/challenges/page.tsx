@@ -17,11 +17,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { EmptyState } from "@/components/ui/empty-state";
 import { FetchErrorState } from "@/components/ui/fetch-error";
+import { FilterChips } from "@/components/ui/filter-chips";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { PageBackground } from "@/components/ui/page-background";
-import { cn } from "@/lib/utils";
 
 // ─── Types ────────────────────────────────────────────────────────
 
@@ -297,30 +298,16 @@ export default function ChallengesPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.1 }}
-            className="flex justify-center gap-2 mb-8"
+            className="flex justify-center mb-8"
           >
-            <button
-              onClick={() => setScope("active")}
-              className={cn(
-                "px-4 py-2 rounded-[4px] text-sm transition-all duration-200",
-                scope === "active"
-                  ? "bg-gold-400/20 text-gold-300 border border-stroke-gold"
-                  : "bg-glass-300 text-white/50 border border-transparent hover:border-stroke-gold hover:text-gold-300",
-              )}
-            >
-              Active
-            </button>
-            <button
-              onClick={() => setScope("all")}
-              className={cn(
-                "px-4 py-2 rounded-[4px] text-sm transition-all duration-200",
-                scope === "all"
-                  ? "bg-gold-400/20 text-gold-300 border border-stroke-gold"
-                  : "bg-glass-300 text-white/50 border border-transparent hover:border-stroke-gold hover:text-gold-300",
-              )}
-            >
-              All Challenges
-            </button>
+            <FilterChips
+              options={[
+                { id: "active", label: "Active" },
+                { id: "all", label: "All Challenges" },
+              ]}
+              value={scope}
+              onChange={(v) => setScope(v)}
+            />
           </motion.div>
 
           {/* Challenges List */}
@@ -342,16 +329,21 @@ export default function ChallengesPage() {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-center py-20"
+              className="max-w-md mx-auto"
             >
-              <div className="glass rounded-xl p-10 max-w-md mx-auto cut-corner">
-                <Trophy className="mx-auto h-12 w-12 text-white/20 mb-4" />
-                <p className="text-white/40 text-sm">
-                  {scope === "active"
-                    ? "No active challenges right now. Check back soon!"
-                    : "No challenges found."}
-                </p>
-              </div>
+              <EmptyState
+                icon={Trophy}
+                title={
+                  scope === "active"
+                    ? "No active challenges right now"
+                    : "No challenges found"
+                }
+                description={
+                  scope === "active"
+                    ? "Check back soon — new challenges drop regularly."
+                    : "Challenges will appear here once published."
+                }
+              />
             </motion.div>
           ) : (
             <motion.div

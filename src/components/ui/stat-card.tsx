@@ -89,14 +89,14 @@ export function StatCard({
             <Badge
               variant="secondary"
               className={cn(
-                "flex items-center gap-0.5 border-0 bg-zinc-800 text-xs shrink-0",
-                trendUp ? "text-emerald-400" : "text-zinc-500",
+                "flex items-center gap-0.5 border-0 bg-[rgba(0,0,0,0.35)] text-xs shrink-0",
+                trendUp ? "text-emerald-400" : "text-white/35",
               )}
             >
               <ArrowUpRight
                 className={cn(
                   "h-3 w-3",
-                  trendUp ? "text-emerald-400" : "text-zinc-500",
+                  trendUp ? "text-emerald-400" : "text-white/35",
                 )}
               />
               <span>{trend}</span>
