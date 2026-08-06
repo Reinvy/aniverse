@@ -276,3 +276,97 @@ export async function findPublicArtworks(
 
   return { artworks, total };
 }
+
+/**
+ * Keyset (cursor) pagination over PUBLIC artworks — the scalable deep-page
+ * alternative to OFFSET pagination.
+ *
+ * Instead of `OFFSET n LIMIT k` (which makes PostgreSQL scan and discard all
+ * preceding rows on every page — O(n) per page, O(n²) to walk the whole
+ * table), this walks the index with a range predicate:
+ *
+ *   WHERE (sortField < :cursorValue)
+ *      OR (sortField = :cursorValue AND id < :cursorId)
+ *   ORDER BY sortField DESC, id DESC
+ *   LIMIT :limit + 1
+ *
+ * With the existing `@@index([isPublic, createdAt])` this is O(log n) per
+ * page. The extra `+1` row is fetched solely to compute `hasNextPage` /
+ * `nextCursor` without a separate count query for the page boundary.
+ *
+ * @param cursor      Decoded cursor from `decodeCursor()` (or null for page 1)
+ * @param sortField   Whitelisted sort field (must be keyset-safe — see
+ *                    `isKeysetSafeSort`; callers fall back to offset for
+ *                    enum sorts like `style`)
+ */
+export async function findPublicArtworksCursor(
+  pagination: PaginationParams,
+  filters?: { style?: ArtworkStyle; search?: string; creatorId?: string },
+  cursor?: { sortValue: string; id: string } | null,
+) {
+  const where: Prisma.ArtworkWhereInput = { isPublic: true };
+
+  if (filters?.style) {
+    where.style = filters.style;
+  }
+
+  if (filters?.creatorId) {
+    where.creatorId = filters.creatorId;
+  }
+
+  if (filters?.search) {
+    const searchClause = buildSearchClause(filters.search, [
+      "title",
+      "prompt",
+    ]);
+    if (searchClause) {
+      where.OR = searchClause;
+    }
+  }
+
+  // The sort field was already whitelisted by the route (keyset-safe check);
+  // default to createdAt so the keyset predicate below is always well-formed.
+  const sortField = ARTWORK_SORT_FIELDS.includes(
+    pagination.sort as (typeof ARTWORK_SORT_FIELDS)[number],
+  )
+    ? pagination.sort
+    : "createdAt";
+
+  // Count against the base filters only (no keyset predicate).
+  const baseWhere: Prisma.ArtworkWhereInput = { ...where };
+
+  if (cursor) {
+    // Keyset predicate: strictly after the cursor in sort order, using the
+    // row id as a unique tiebreaker (cuids are lexicographically ordered).
+    const cmp = pagination.order === "desc" ? "lt" : "gt";
+    where.AND = [
+      {
+        OR: [
+          { [sortField]: { [cmp]: cursor.sortValue } },
+          { [sortField]: cursor.sortValue, id: { [cmp]: cursor.id } },
+        ],
+      },
+    ];
+  }
+
+  const orderBy = {
+    [sortField]: pagination.order,
+    id: pagination.order,
+  } as const;
+
+  // Fetch one extra row to detect whether another page exists.
+  const [rows, total] = await Promise.all([
+    prisma.artwork.findMany({
+      where,
+      orderBy,
+      take: pagination.limit + 1,
+      select: publicArtworkSelect,
+    }),
+    prisma.artwork.count({ where: baseWhere }),
+  ]);
+
+  const hasNextPage = rows.length > pagination.limit;
+  const artworks = hasNextPage ? rows.slice(0, pagination.limit) : rows;
+
+  return { artworks, total, hasNextPage };
+}

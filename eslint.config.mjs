@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Generated code — never lint or format (huge, machine-written,
+    // regenerated on every `prisma generate`). Linting it wastes minutes
+    // of CI/agent time for zero signal.
+    "src/generated/**",
   ]),
 ]);
 

@@ -1,6 +1,4 @@
 import { NextRequest } from "next/server";
-import type { Prisma } from "@/generated/prisma/client";
-import { prisma } from "@/lib/prisma";
 import {
   parsePagination,
   buildPaginationMeta,
@@ -8,7 +6,10 @@ import {
   errorResponse,
 } from "@/lib/api-helpers";
 import { applyRateLimit, readLimiter } from "@/lib/rate-limiter";
-import { buildSearchClause } from "@/lib/query-builder";
+import {
+  findMarketplaceProducts,
+  getMarketplaceStats,
+} from "@/lib/services/marketplace.service";
 
 /**
  * GET /api/marketplace — Public marketplace listings.
@@ -25,6 +26,11 @@ import { buildSearchClause } from "@/lib/query-builder";
  *   page, limit
  *   search — free-text search on product name/description
  *   sort   — newest | price-asc | price-desc
+ *
+ * Scalability: the listing query lives in the marketplace service layer
+ * (`src/lib/services/marketplace.service.ts`), and the four aggregate
+ * stat-bar queries are TTL-cached in-memory (60s) — steady-state cost is
+ * 2 DB queries per request instead of 6.
  */
 export async function GET(request: NextRequest) {
   try {
@@ -39,80 +45,11 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get("search") || undefined;
     const sort = searchParams.get("sort") || "newest";
 
-    const where: Prisma.ProductWhereInput = { isActive: true };
-
-    if (search) {
-      const searchClause = buildSearchClause(search, ["name", "description"]);
-      if (searchClause) {
-        where.OR = searchClause;
-      }
-    }
-
-    let orderBy: Prisma.ProductOrderByWithRelationInput = {
-      createdAt: "desc",
-    };
-    if (sort === "price-asc") orderBy = { price: "asc" };
-    if (sort === "price-desc") orderBy = { price: "desc" };
-
-    const [products, total] = await Promise.all([
-      prisma.product.findMany({
-        where,
-        orderBy,
-        skip: pagination.skip,
-        take: pagination.limit,
-        select: {
-          id: true,
-          name: true,
-          description: true,
-          price: true,
-          createdAt: true,
-          creator: {
-            select: {
-              id: true,
-              name: true,
-              username: true,
-              avatar: true,
-            },
-          },
-          artwork: {
-            select: {
-              id: true,
-              title: true,
-              imageUrl: true,
-              style: true,
-            },
-          },
-        },
-      }),
-      prisma.product.count({ where }),
-    ]);
-
-    // Aggregate stats — global (unfiltered) so the stat bar reflects the
-    // whole marketplace, not just the current search/page.
-    const [totalListings, creatorGroups, priceAgg, salesAgg] =
-      await Promise.all([
-        prisma.product.count({ where: { isActive: true } }),
-        prisma.product.groupBy({
-          by: ["creatorId"],
-          where: { isActive: true },
-          _count: { _all: true },
-        }),
-        prisma.product.aggregate({
-          where: { isActive: true },
-          _avg: { price: true },
-        }),
-        prisma.order.aggregate({
-          where: { status: { in: ["PAID", "COMPLETED"] } },
-          _sum: { total: true },
-        }),
-      ]);
-
-    const stats = {
-      totalListings,
-      activeCreators: creatorGroups.length,
-      avgPrice: priceAgg._avg.price ? Number(priceAgg._avg.price) : 0,
-      totalSales: salesAgg._sum.total ? Number(salesAgg._sum.total) : 0,
-    };
+    const { products, total } = await findMarketplaceProducts(pagination, {
+      search,
+      sort,
+    });
+    const stats = await getMarketplaceStats();
 
     return conditionalJsonResponse(
       request,
