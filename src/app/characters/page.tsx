@@ -84,7 +84,12 @@ export default function CharactersPage() {
     setLoading(true);
     setError(null);
     try {
-      const params = new URLSearchParams({ page: String(page), limit: "24", sort: "createdAt", order: "desc" });
+      const params = new URLSearchParams({
+        page: String(page),
+        limit: "24",
+        sort: "createdAt",
+        order: "desc",
+      });
       if (search) params.set("search", search);
 
       const res = await fetch(`/api/characters?${params}`);
@@ -94,7 +99,9 @@ export default function CharactersPage() {
       setPagination(data.pagination || null);
     } catch (err) {
       console.error("Failed to fetch characters:", err);
-      setError(err instanceof Error ? err.message : "Failed to load characters");
+      setError(
+        err instanceof Error ? err.message : "Failed to load characters",
+      );
       setCharacters([]);
     } finally {
       setLoading(false);
@@ -214,52 +221,59 @@ export default function CharactersPage() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.03, duration: 0.4 }}
+                    className="h-full"
                   >
-                    <Card className="group h-full cut-corner energy-sweep relative overflow-hidden">
-                      {/* Reference Image */}
-                      {image ? (
-                        <div className="relative h-48 overflow-hidden">
-                          <Image
-                            src={image}
-                            alt={character.name}
-                            fill
-                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                            className="object-cover transition-transform duration-500 group-hover:scale-105"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-[#0b0e14] via-transparent to-transparent" />
-                        </div>
-                      ) : (
-                        <div className="h-48 flex items-center justify-center bg-navy-800">
-                          <Palette className="h-10 w-10 text-white/20" />
-                        </div>
-                      )}
-
-                      <CardContent className={cn("p-5", !image && "pt-5")}>
-                        {/* Name */}
-                        <h3 className="text-base font-bold text-white group-hover:text-gold-300 transition-colors mb-2 truncate">
-                          {character.name}
-                        </h3>
-
-                        {/* Personality snippet */}
-                        {character.personality && (
-                          <p className="text-sm text-white/40 line-clamp-2 mb-3">
-                            {character.personality}
-                          </p>
+                    <Link
+                      href={`/characters/${character.id}`}
+                      className="group block h-full"
+                      aria-label={`View ${character.name} profile`}
+                    >
+                      <Card className="group h-full cut-corner energy-sweep relative overflow-hidden transition-all duration-300 group-hover:border-stroke-gold/50 group-hover:shadow-[0_0_24px_rgba(229,197,135,0.12)]">
+                        {/* Reference Image */}
+                        {image ? (
+                          <div className="relative h-48 overflow-hidden">
+                            <Image
+                              src={image}
+                              alt={character.name}
+                              fill
+                              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                              className="object-cover transition-transform duration-500 group-hover:scale-105"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#0b0e14] via-transparent to-transparent" />
+                          </div>
+                        ) : (
+                          <div className="h-48 flex items-center justify-center bg-navy-800">
+                            <Palette className="h-10 w-10 text-white/20" />
+                          </div>
                         )}
 
-                        {/* Stats */}
-                        <div className="flex items-center justify-between text-xs text-white/30">
-                          <span className="flex items-center gap-1">
-                            <ImageIcon className="h-3 w-3" />
-                            {character._count.artworks} artworks
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Clock className="h-3 w-3" />
-                            {timeAgo(character.createdAt)}
-                          </span>
-                        </div>
-                      </CardContent>
-                    </Card>
+                        <CardContent className={cn("p-5", !image && "pt-5")}>
+                          {/* Name */}
+                          <h3 className="text-base font-bold text-white group-hover:text-gold-300 transition-colors mb-2 truncate">
+                            {character.name}
+                          </h3>
+
+                          {/* Personality snippet */}
+                          {character.personality && (
+                            <p className="text-sm text-white/40 line-clamp-2 mb-3">
+                              {character.personality}
+                            </p>
+                          )}
+
+                          {/* Stats */}
+                          <div className="flex items-center justify-between text-xs text-white/30">
+                            <span className="flex items-center gap-1">
+                              <ImageIcon className="h-3 w-3" />
+                              {character._count.artworks} artworks
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <Clock className="h-3 w-3" />
+                              {timeAgo(character.createdAt)}
+                            </span>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </Link>
                   </motion.div>
                 );
               })}
