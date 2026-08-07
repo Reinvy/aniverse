@@ -170,19 +170,6 @@ export async function findUserArtworks(
 }
 
 /**
- * Get a single artwork by ID (scoped to user).
- */
-export async function findArtworkById(
-  artworkId: string,
-  userId: string,
-): Promise<ArtworkDetailItem | null> {
-  return prisma.artwork.findFirst({
-    where: { id: artworkId, creatorId: userId },
-    select: artworkDetailSelect,
-  });
-}
-
-/**
  * Create a new artwork.
  */
 export async function createArtwork(
