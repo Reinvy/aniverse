@@ -9,6 +9,7 @@ import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@/generated/prisma/client";
 import type { PaginationParams } from "@/lib/api-helpers";
 import { buildOrderBy } from "@/lib/query-builder";
+import { createTtlCache } from "@/lib/ttl-cache";
 import { CHALLENGE_SORT_FIELDS } from "@/lib/services/sort-config";
 
 // ─── Types ────────────────────────────────────────────────────────
@@ -100,8 +101,18 @@ export async function findChallengeById(
  * now (`startsAt <= now <= endsAt`). Daily challenges are preferred so the
  * homepage/hero can always surface today's prompt; if no daily is live, the
  * most recent weekly is returned. Returns null when nothing is active.
+ *
+ * TTL-cached (60s): the active challenge only changes on a daily/weekly
+ * cadence, so caching for a minute is imperceptible but removes up to two DB
+ * queries from every homepage / challenges-current request.
  */
+const currentChallengeCache = createTtlCache<ChallengeDetail | null>(60_000);
+const CURRENT_CHALLENGE_CACHE_KEY = "global";
+
 export async function findCurrentChallenge(): Promise<ChallengeDetail | null> {
+  const cached = currentChallengeCache.get(CURRENT_CHALLENGE_CACHE_KEY);
+  if (cached !== undefined) return cached;
+
   const now = new Date();
   const where: Prisma.ChallengeWhereInput = {
     status: "ACTIVE",
@@ -114,13 +125,14 @@ export async function findCurrentChallenge(): Promise<ChallengeDetail | null> {
     orderBy: { startsAt: "desc" },
     select: challengeDetailSelect,
   });
-  if (daily) return daily;
-
-  return prisma.challenge.findFirst({
+  const challenge = daily ?? (await prisma.challenge.findFirst({
     where: { ...where, type: "WEEKLY" },
     orderBy: { startsAt: "desc" },
     select: challengeDetailSelect,
-  });
+  }));
+
+  currentChallengeCache.set(CURRENT_CHALLENGE_CACHE_KEY, challenge);
+  return challenge;
 }
 
 /**

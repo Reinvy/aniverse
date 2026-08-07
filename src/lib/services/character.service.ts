@@ -36,6 +36,7 @@ const characterListSelect = {
   referenceImages: true,
   isPublic: true,
   createdAt: true,
+  updatedAt: true,
   creator: {
     select: {
       id: true,
@@ -105,6 +106,89 @@ export async function findPublicCharacters(
   ]);
 
   return { characters, total };
+}
+
+/**
+ * Keyset (cursor) pagination over public characters — the scalable deep-page
+ * alternative to OFFSET pagination.
+ *
+ * Same contract as `findPublicArtworksCursor`: walks the index with a range
+ * predicate (`sortField < :cursorValue OR (= AND id < :cursorId)`) instead of
+ * `OFFSET n LIMIT k`, so page depth stays O(log n). The `+1` lookahead row is
+ * used to compute `hasNextPage`/`nextCursor` without a boundary count query.
+ *
+ * Search filters compose with the keyset predicate via AND.
+ *
+ * @param cursor  Decoded cursor from `decodeCursor()` (or null for page 1).
+ *                The route must only pass a cursor when `pagination.sort` is
+ *                both keyset-safe AND in `CHARACTER_SORT_FIELDS`.
+ */
+export async function findPublicCharactersCursor(
+  pagination: PaginationParams,
+  filters?: CharacterFilters,
+  cursor?: { sortValue: string; id: string } | null,
+) {
+  const where: Prisma.CharacterWhereInput = {
+    isPublic: true,
+  };
+
+  if (filters?.search) {
+    const searchClause = buildSearchClause(filters.search, [
+      "name",
+      "personality",
+    ]);
+    if (searchClause) {
+      where.OR = searchClause;
+    }
+  }
+
+  // The route already whitelisted the sort field; fall back to createdAt so
+  // the keyset predicate below is always well-formed.
+  const sortField = CHARACTER_SORT_FIELDS.includes(
+    pagination.sort as (typeof CHARACTER_SORT_FIELDS)[number],
+  )
+    ? pagination.sort
+    : "createdAt";
+
+  // Count against the base filters only (no keyset predicate).
+  const baseWhere: Prisma.CharacterWhereInput = { ...where };
+
+  if (cursor) {
+    const cmp = pagination.order === "desc" ? "lt" : "gt";
+    where.AND = [
+      {
+        OR: [
+          { [sortField]: { [cmp]: cursor.sortValue } },
+          { [sortField]: cursor.sortValue, id: { [cmp]: cursor.id } },
+        ],
+      },
+    ];
+  }
+
+  // Prisma 7 requires ARRAY form for multi-field orderBy (a two-key object
+  // passes typecheck but fails runtime validation). Cast is intentional: the
+  // generated types accept the single-object form that Prisma rejects at
+  // runtime — the array form is the only shape that actually works.
+  const orderBy = [
+    { [sortField]: pagination.order },
+    { id: pagination.order },
+  ] as Prisma.CharacterOrderByWithRelationInput[];
+
+  // Fetch one extra row to detect whether another page exists.
+  const [rows, total] = await Promise.all([
+    prisma.character.findMany({
+      where,
+      orderBy,
+      take: pagination.limit + 1,
+      select: characterListSelect,
+    }),
+    prisma.character.count({ where: baseWhere }),
+  ]);
+
+  const hasNextPage = rows.length > pagination.limit;
+  const characters = hasNextPage ? rows.slice(0, pagination.limit) : rows;
+
+  return { characters, total, hasNextPage };
 }
 
 /**

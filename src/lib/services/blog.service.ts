@@ -11,6 +11,7 @@ import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@/generated/prisma/client";
 import type { PaginationParams } from "@/lib/api-helpers";
 import { buildOrderBy, buildSearchClause } from "@/lib/query-builder";
+import { createTtlCache } from "@/lib/ttl-cache";
 import { BLOG_ARTICLE_SORT_FIELDS } from "@/lib/services/sort-config";
 
 // ─── Types ────────────────────────────────────────────────────────
@@ -240,10 +241,21 @@ export async function findArticleBySlug(
  * most recent `TAG_SCAN_LIMIT` articles, and rows are ordered newest-first.
  * Tag vocabulary is stable over time, so sampling recent articles keeps the
  * query O(recent) as the blog table grows instead of O(all rows).
+ *
+ * The result is TTL-cached (60s) because the tag vocabulary only changes when
+ * an article is published/edited — a 300-row scan per blog-list request is
+ * pure waste on a read-heavy public endpoint. The cache is keyed globally
+ * (tags are not user-specific).
  */
 const TAG_SCAN_LIMIT = 300;
 
+const tagsCache = createTtlCache<string[]>(60_000);
+const TAGS_CACHE_KEY = "global";
+
 export async function findArticleTags(): Promise<string[]> {
+  const cached = tagsCache.get(TAGS_CACHE_KEY);
+  if (cached) return cached;
+
   const articles = await prisma.blogArticle.findMany({
     where: { isPublished: true },
     select: { tags: true },
@@ -258,15 +270,27 @@ export async function findArticleTags(): Promise<string[]> {
     }
   }
 
-  return Array.from(tagSet).sort();
+  const tags = Array.from(tagSet).sort();
+  tagsCache.set(TAGS_CACHE_KEY, tags);
+  return tags;
 }
 
 /**
  * Get the single latest featured published article (curated hero for the
  * blog landing page). Returns null when no featured article exists yet.
+ *
+ * TTL-cached (60s): the featured hero only changes when an admin edits which
+ * article is featured, so caching for a minute is imperceptible to users but
+ * removes a DB query from every unfiltered blog-list request.
  */
+const featuredCache = createTtlCache<BlogArticleListItem | null>(60_000);
+const FEATURED_CACHE_KEY = "global";
+
 export async function findFeaturedArticle(): Promise<BlogArticleListItem | null> {
-  return prisma.blogArticle.findFirst({
+  const cached = featuredCache.get(FEATURED_CACHE_KEY);
+  if (cached !== undefined) return cached;
+
+  const article = await prisma.blogArticle.findFirst({
     where: {
       isPublished: true,
       featured: true,
@@ -275,6 +299,9 @@ export async function findFeaturedArticle(): Promise<BlogArticleListItem | null>
     orderBy: { publishedAt: "desc" },
     select: blogListSelect,
   });
+
+  featuredCache.set(FEATURED_CACHE_KEY, article);
+  return article;
 }
 
 /**
