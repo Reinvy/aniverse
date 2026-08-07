@@ -8,10 +8,10 @@
 import { prisma } from "@/lib/prisma";
 import { APP_URL } from "@/lib/constants";
 
-export const RSS_FEED_LIMIT = 20;
-export const SITE_URL = APP_URL;
-export const SITE_TITLE = "AniVerse Blog";
-export const SITE_DESCRIPTION =
+const RSS_FEED_LIMIT = 20;
+const SITE_URL = APP_URL;
+const SITE_TITLE = "AniVerse Blog";
+const SITE_DESCRIPTION =
   "Tutorials, guides, and updates from the AniVerse team — AI anime art creation tips and platform news.";
 
 function escapeXml(value: string): string {
@@ -26,7 +26,7 @@ function escapeXml(value: string): string {
 /**
  * Fetch the most recent published articles for the feed.
  */
-export async function findRssArticles() {
+async function findRssArticles() {
   return prisma.blogArticle.findMany({
     where: {
       isPublished: true,

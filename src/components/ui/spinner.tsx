@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { Loader2, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 
 /* ─── Types ──────────────────────────────────────────────── */
 
@@ -131,70 +131,4 @@ export function Spinner({
   }
 
   return content;
-}
-
-/* ─── Inline Spinner (for buttons, small areas) ──────────── */
-
-/**
- * Tiny inline spinner for buttons and compact areas.
- * Just the spinning ring, no label or decorative elements.
- */
-export function InlineSpinner({
-  className,
-}: {
-  className?: string;
-}) {
-  return (
-    <Loader2
-      className={cn("h-4 w-4 animate-spin text-[#e6c280]", className)}
-    />
-  );
-}
-
-/* ─── Page Loading Shell ─────────────────────────────────── */
-
-/**
- * Full-page loading shell with the game-style aesthetic.
- * Shows glass cards with shimmer animation while content loads.
- */
-export function PageLoadingShell({
-  sections = 3,
-  className,
-}: {
-  /** Number of skeleton sections to show */
-  sections?: number;
-  className?: string;
-}) {
-  return (
-    <div className={cn("p-4 sm:p-6 lg:p-8", className)}>
-      {/* Header skeleton */}
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between animate-pulse">
-        <div>
-          <div className="h-3 w-20 rounded bg-white/5" />
-          <div className="mt-1 h-8 w-48 rounded bg-white/5" />
-        </div>
-        <div className="h-10 w-32 rounded-[4px] bg-white/5" />
-      </div>
-
-      {/* Content skeleton */}
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {Array.from({ length: sections }).map((_, i) => (
-          <div
-            key={i}
-            className="glass rounded-[4px] cut-corner p-5 relative overflow-hidden
-              before:absolute before:inset-0 before:-translate-x-full
-              before:bg-gradient-to-r before:from-transparent before:via-[rgba(230,194,128,0.06)] before:to-transparent
-              before:animate-[shimmer_1.8s_infinite]"
-          >
-            <div className="space-y-3">
-              <div className="h-4 w-1/3 rounded bg-white/5" />
-              <div className="h-8 w-1/2 rounded bg-white/5" />
-              <div className="h-3 w-2/3 rounded bg-white/5" />
-              <div className="h-3 w-1/2 rounded bg-white/5" />
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
 }

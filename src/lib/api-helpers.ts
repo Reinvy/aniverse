@@ -15,7 +15,7 @@ import {
 
 // ─── Auth ─────────────────────────────────────────────────────────
 
-export type AuthResult =
+type AuthResult =
   | { authenticated: true; payload: TokenPayload }
   | { authenticated: false; response: NextResponse };
 
@@ -26,8 +26,12 @@ export type AuthResult =
  *   const auth = await authenticateRequest(request);
  *   if (!auth.authenticated) return auth.response;
  *   const { userId } = auth.payload;
+ *
+ * NOTE: Most routes should prefer {@link requireAuthenticatedRequest},
+ * which composes rate limiting + auth in one call. This lower-level
+ * helper is the internal building block used by that composite.
  */
-export async function authenticateRequest(
+async function authenticateRequest(
   request: NextRequest,
 ): Promise<AuthResult> {
   const authHeader = request.headers.get("authorization");
@@ -166,8 +170,10 @@ export function isKeysetSafeSort(field: string): boolean {
  *
  * DateTime values are normalized to ISO-8601 strings, which Prisma accepts
  * for DateTime range filters.
+ *
+ * Internal helper — used by {@link buildNextCursor}.
  */
-export function encodeCursor(
+function encodeCursor(
   sortValue: string | number | Date,
   id: string,
 ): string {
@@ -320,8 +326,10 @@ export function cachedJsonResponse(
  * Uses a fast non-cryptographic hash (FNV-1a style) so we don't pay
  * crypto overhead on every response. Strong enough for cache
  * revalidation — not for security.
+ *
+ * Internal helper — used by {@link conditionalJsonResponse}.
  */
-export function computeEtag(data: unknown): string {
+function computeEtag(data: unknown): string {
   const serialized = JSON.stringify(data) ?? "null";
   let hash = 0x811c9dc5;
   for (let i = 0; i < serialized.length; i++) {

@@ -75,50 +75,10 @@ export function buildSearchClause(
 // ─── Composite Fetch Helper ───────────────────────────────────────
 
 /**
- * Execute a findMany + count pair in parallel with shared where clause.
- * This is the most common pattern across all service layers.
- *
- * Usage:
- *   const { items, total } = await paginatedFetch({
- *     findMany: (args) => prisma.artwork.findMany(args),
- *     count: (args) => prisma.artwork.count(args),
- *     where: { isPublic: true },
- *     orderBy: { createdAt: "desc" },
- *     pagination,
- *     select: artworkListSelect,
- *   });
+ * NOTE: The generic `paginatedFetch` helper was removed in the 08-07
+ * maintenance pass — every service layer now inlines its own
+ * `Promise.all([findMany, count])` pair (which is identical to what the
+ * helper did, but keeps per-entity selects/where clauses co-located with
+ * their entity). Keeping a single generic wrapper here added indirection
+ * with zero call sites.
  */
-export async function paginatedFetch<
-  TSelect,
-  TWhere extends Record<string, unknown>,
-  TOrderBy extends Record<string, unknown>,
-  TItem,
->(
-  params: {
-    findMany: (args: {
-      where: TWhere;
-      orderBy: TOrderBy;
-      skip: number;
-      take: number;
-      select: TSelect;
-    }) => Promise<TItem[]>;
-    count: (args: { where: TWhere }) => Promise<number>;
-    where: TWhere;
-    orderBy: TOrderBy;
-    pagination: PaginationParams;
-    select: TSelect;
-  },
-): Promise<{ items: TItem[]; total: number }> {
-  const [items, total] = await Promise.all([
-    params.findMany({
-      where: params.where,
-      orderBy: params.orderBy,
-      skip: params.pagination.skip,
-      take: params.pagination.limit,
-      select: params.select,
-    }),
-    params.count({ where: params.where }),
-  ]);
-
-  return { items, total };
-}

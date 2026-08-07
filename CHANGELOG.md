@@ -4,6 +4,18 @@ All notable changes to AniVerse are documented here.
 
 ## [Unreleased]
 
+### Performance & Maintenance (2026-08-07)
+- Security audit fix: `npm audit fix` bumped `js-yaml` `4.3.0` → `4.3.1` (transitive via `eslint` → `@eslint/eslintrc`) — closes CVE-2026-59870 (GHSA-5p4m-2wfm-xmqj, quadratic CPU consumption in `!!omap` resolution). `npm audit` → **0 vulnerabilities**
+- Cleaned dead code (verified 0 imports across `src/`, e2e, `.cron`):
+  - `src/lib/query-builder.ts`: removed unused `paginatedFetch` generic helper (every service layer inlines its own `Promise.all([findMany, count])` — zero call sites)
+  - `src/lib/services/user.service.ts`: removed 4 unused functions — `findUserById`, `findUserByEmail`, `isEmailRegistered`, `getUserCounts` (only `findUsers` is consumed, by `/api/users`)
+  - `src/lib/services/artwork.service.ts`: removed unused `findArtworkById` (no `/api/artworks/[id]` route exists)
+  - `src/components/ui/spinner.tsx`: removed unused `InlineSpinner` + `PageLoadingShell` exports (only `Spinner` is consumed) and the orphaned `Loader2` import
+  - De-exported internal-only symbols (used solely inside their own modules): `rateLimiter`, `rateLimitResponse`, `RateLimiterOptions`, `RateLimitResult` (`rate-limiter.ts`), `SITE_URL`, `SITE_TITLE`, `SITE_DESCRIPTION`, `findRssArticles`, `RSS_FEED_LIMIT` (`rss.service.ts`), `reducer` (`use-toast.ts`), `authenticateRequest`, `AuthResult`, `encodeCursor`, `computeEtag` (`api-helpers.ts` — all remain as internal helpers)
+- Verified structured error handling: all **15** API routes use try/catch + `console.error` + standardized helpers from `@/lib/api-helpers` (no raw 500s leak internal details)
+- Security audit: `.env` NOT tracked in git (only `.env.example` with placeholders); no secrets in tracked files; no `console.log` statements in `src/`
+- Verified `npm run lint` → 0 errors, 0 warnings; `npm run build` → clean production build, all 30 routes + Proxy (middleware) intact
+
 ### Performance & Maintenance (2026-08-05)
 - Security audit fix: bumped `postcss` override `8.5.22` → `^8.5.25` in `package.json` — closes GHSA-fxqj-rqcc-2cmp (attacker-controlled `sourceMappingURL` reads arbitrary `.map` files; affects postcss ≤8.5.22 via the `next` dependency chain)
 - `npm audit fix` → **0 vulnerabilities** (was 2 high: `brace-expansion` <5.0.9 DoS via unbounded intermediate arrays, `fast-uri` <3.1.5 host confusion via backslash authority introducer)

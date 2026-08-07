@@ -10,14 +10,14 @@
  *   if (result.blocked) return rateLimitResponse();
  */
 
-export interface RateLimiterOptions {
+interface RateLimiterOptions {
   /** Time window in milliseconds (default: 60_000 = 1 minute) */
   windowMs?: number;
   /** Maximum requests per window (default: 30) */
   max?: number;
 }
 
-export interface RateLimitResult {
+interface RateLimitResult {
   blocked: boolean;
   remaining: number;
   resetInMs: number;
@@ -59,7 +59,7 @@ function startCleanup(): void {
 
 // ─── Limiter Factory ──────────────────────────────────────────────
 
-export function rateLimiter(options?: RateLimiterOptions) {
+function rateLimiter(options?: RateLimiterOptions) {
   const windowMs = options?.windowMs ?? 60_000;
   const max = options?.max ?? 30;
 
@@ -140,7 +140,7 @@ import { NextResponse } from "next/server";
 /**
  * Create a 429 Too Many Requests response with Retry-After header.
  */
-export function rateLimitResponse(
+function rateLimitResponse(
   result: RateLimitResult,
 ): NextResponse {
   return NextResponse.json(
