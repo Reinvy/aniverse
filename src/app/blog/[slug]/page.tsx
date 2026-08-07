@@ -13,15 +13,21 @@ import {
   Tag,
   Sparkles,
   BookOpen,
+  Share2,
+  Copy,
+  Check,
+  Link2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Modal } from "@/components/ui/modal";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { PageBackground } from "@/components/ui/page-background";
-import { APP_NAME } from "@/lib/constants";
+import { APP_NAME, APP_URL } from "@/lib/constants";
+import { toast } from "@/hooks/use-toast";
 
 // ─── Types ────────────────────────────────────────────────────────
 
@@ -173,6 +179,33 @@ export default function BlogArticlePage() {
   const [related, setRelated] = useState<RelatedArticle[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [shareOpen, setShareOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  // Share URL for the current article (built client-side to stay SSR-safe)
+  const shareUrl =
+    typeof window !== "undefined"
+      ? window.location.href
+      : `${APP_URL}/blog/${slug}`;
+
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      toast({
+        title: "Link copied",
+        description: "Article link copied to clipboard.",
+        variant: "success",
+      });
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast({
+        title: "Copy failed",
+        description: "Please copy the link manually.",
+        variant: "error",
+      });
+    }
+  };
 
   useEffect(() => {
     if (!slug) return;
@@ -303,6 +336,15 @@ export default function BlogArticlePage() {
                     <Clock className="h-3.5 w-3.5" />
                     {estimateReadTime(article.content)}
                   </span>
+                  <button
+                    type="button"
+                    onClick={() => setShareOpen(true)}
+                    className="ml-auto flex items-center gap-1.5 rounded-[4px] border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs text-white/50 transition-all duration-300 hover:scale-105 hover:border-[rgba(229,197,135,0.3)] hover:text-gold-300"
+                    aria-label="Share this article"
+                  >
+                    <Share2 className="h-3.5 w-3.5" />
+                    Share
+                  </button>
                 </div>
               </motion.div>
 
@@ -422,6 +464,48 @@ export default function BlogArticlePage() {
 
               {/* Related Articles */}
               <RelatedArticles articles={related} />
+
+              {/* Share Modal */}
+              <Modal
+                open={shareOpen}
+                onClose={() => setShareOpen(false)}
+                title="Share this article"
+                microLabel={{ en: "SHARE // LINK", ja: "シェア" }}
+                size="sm"
+                footer={
+                  <>
+                    <Button variant="ghost" size="sm" onClick={() => setShareOpen(false)}>
+                      Close
+                    </Button>
+                    <Button size="sm" className="gap-2" onClick={handleCopyLink}>
+                      {copied ? (
+                        <>
+                          <Check className="h-4 w-4" />
+                          Copied!
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="h-4 w-4" />
+                          Copy Link
+                        </>
+                      )}
+                    </Button>
+                  </>
+                }
+              >
+                <div className="space-y-4">
+                  <p className="text-sm text-white/50">
+                    Share this article with your community. Anyone with the
+                    link can read it.
+                  </p>
+                  <div className="flex items-center gap-2 rounded-[4px] border border-white/10 bg-[rgba(0,0,0,0.4)] p-2.5">
+                    <Link2 className="h-4 w-4 shrink-0 text-gold-400" />
+                    <span className="truncate text-xs text-white/40">
+                      {shareUrl}
+                    </span>
+                  </div>
+                </div>
+              </Modal>
             </article>
           )}
         </div>
