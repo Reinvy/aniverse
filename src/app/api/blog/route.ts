@@ -5,6 +5,7 @@ import {
   projectFields,
   buildPaginationMeta,
   buildNextCursor,
+  buildCursorPaginationMeta,
   conditionalJsonResponse,
   errorResponse,
   decodeCursor,
@@ -70,14 +71,13 @@ export async function GET(request: NextRequest) {
     if (cursor) {
       const result = await findPublishedArticlesCursor(pagination, filters, cursor);
       articles = result.articles;
-      paginationMeta = {
-        ...buildPaginationMeta(result.total, 1, pagination.limit),
-        nextCursor: buildNextCursor(
-          articles as unknown as Record<string, unknown>[],
-          pagination.sort,
-          result.hasNextPage,
-        ),
-      };
+      paginationMeta = buildCursorPaginationMeta(
+        articles as unknown as Record<string, unknown>[],
+        result.total,
+        pagination.limit,
+        pagination.sort,
+        result.hasNextPage,
+      );
     } else {
       const result = await findPublishedArticles(pagination, filters);
       articles = result.articles;

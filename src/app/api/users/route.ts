@@ -6,6 +6,7 @@ import {
   projectFields,
   buildPaginationMeta,
   buildNextCursor,
+  buildCursorPaginationMeta,
   conditionalJsonResponse,
   errorResponse,
   decodeCursor,
@@ -80,14 +81,13 @@ export async function GET(request: NextRequest) {
         request,
         {
           users: projectFields(users, fields),
-          pagination: {
-            ...buildPaginationMeta(total, 1, pagination.limit),
-            nextCursor: buildNextCursor(
-              users as unknown as Record<string, unknown>[],
-              pagination.sort,
-              hasNextPage,
-            ),
-          },
+          pagination: buildCursorPaginationMeta(
+            users as unknown as Record<string, unknown>[],
+            total,
+            pagination.limit,
+            pagination.sort,
+            hasNextPage,
+          ),
         },
         { cache: "short", private: true },
       );
