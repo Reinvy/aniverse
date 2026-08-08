@@ -61,6 +61,28 @@ const productListSelect = {
   },
 } satisfies Prisma.ProductSelect;
 
+// ─── Sort Resolution ──────────────────────────────────────────────
+
+/**
+ * Resolve the marketplace `sort` query token to a (sortField, order) pair.
+ *
+ *   "newest"     → createdAt DESC (default)
+ *   "price-asc"  → price ASC
+ *   "price-desc" → price DESC
+ *
+ * Both `createdAt` and `price` are keyset-safe (DateTime/Decimal columns
+ * accept range predicates with string cursor values), so cursor pagination
+ * works for every marketplace sort.
+ */
+export function resolveMarketplaceSort(sort?: string): {
+  sortField: "createdAt" | "price";
+  order: "asc" | "desc";
+} {
+  if (sort === "price-asc") return { sortField: "price", order: "asc" };
+  if (sort === "price-desc") return { sortField: "price", order: "desc" };
+  return { sortField: "createdAt", order: "desc" };
+}
+
 // ─── Listing Query ────────────────────────────────────────────────
 
 /**
@@ -83,11 +105,10 @@ export async function findMarketplaceProducts(
     }
   }
 
-  let orderBy: Prisma.ProductOrderByWithRelationInput = {
-    createdAt: "desc",
+  const { sortField, order } = resolveMarketplaceSort(filters?.sort);
+  const orderBy: Prisma.ProductOrderByWithRelationInput = {
+    [sortField]: order,
   };
-  if (filters?.sort === "price-asc") orderBy = { price: "asc" };
-  if (filters?.sort === "price-desc") orderBy = { price: "desc" };
 
   const [products, total] = await Promise.all([
     prisma.product.findMany({
@@ -101,6 +122,88 @@ export async function findMarketplaceProducts(
   ]);
 
   return { products, total };
+}
+
+/**
+ * Keyset (cursor) pagination over ACTIVE marketplace products — the scalable
+ * deep-page alternative to OFFSET pagination.
+ *
+ * Same contract as the other cursor services (`findPublicArtworksCursor`,
+ * `findUsersCursor`, ...): walks the index with a range predicate
+ * (`sortField < :cursorValue OR (= AND id < :cursorId)`) instead of
+ * `OFFSET n LIMIT k`, so page depth stays O(log n). The `+1` lookahead row is
+ * used to compute `hasNextPage`/`nextCursor` without a boundary count query.
+ *
+ * Works for every marketplace sort token — `newest` drives a `createdAt`
+ * keyset, `price-asc`/`price-desc` drive a `price` keyset (Decimal columns
+ * accept string cursor values like "12.99"). Search composes via AND.
+ *
+ * @param cursor  Decoded cursor from `decodeCursor()` (or null for page 1).
+ *                The route must only pass a cursor when the resolved sort is
+ *                keyset-safe (always true here: createdAt | price).
+ */
+export async function findMarketplaceProductsCursor(
+  pagination: PaginationParams,
+  filters?: MarketplaceFilters,
+  cursor?: { sortValue: string; id: string } | null,
+): Promise<{
+  products: MarketplaceProductItem[];
+  total: number;
+  hasNextPage: boolean;
+}> {
+  const where: Prisma.ProductWhereInput = { isActive: true };
+
+  if (filters?.search) {
+    const searchClause = buildSearchClause(filters.search, [
+      "name",
+      "description",
+    ]);
+    if (searchClause) {
+      where.OR = searchClause;
+    }
+  }
+
+  const { sortField, order } = resolveMarketplaceSort(filters?.sort);
+
+  // Count against the base filters only (no keyset predicate).
+  const baseWhere: Prisma.ProductWhereInput = { ...where };
+
+  if (cursor) {
+    const cmp = order === "desc" ? "lt" : "gt";
+    where.AND = [
+      {
+        OR: [
+          { [sortField]: { [cmp]: cursor.sortValue } },
+          { [sortField]: cursor.sortValue, id: { [cmp]: cursor.id } },
+        ],
+      },
+    ];
+  }
+
+  // Prisma 7 requires ARRAY form for multi-field orderBy (a two-key object
+  // passes typecheck but fails runtime validation). Cast is intentional: the
+  // generated types accept the single-object form that Prisma rejects at
+  // runtime — the array form is the only shape that actually works.
+  const orderBy = [
+    { [sortField]: order },
+    { id: order },
+  ] as Prisma.ProductOrderByWithRelationInput[];
+
+  // Fetch one extra row to detect whether another page exists.
+  const [rows, total] = await Promise.all([
+    prisma.product.findMany({
+      where,
+      orderBy,
+      take: pagination.limit + 1,
+      select: productListSelect,
+    }),
+    prisma.product.count({ where: baseWhere }),
+  ]);
+
+  const hasNextPage = rows.length > pagination.limit;
+  const products = hasNextPage ? rows.slice(0, pagination.limit) : rows;
+
+  return { products, total, hasNextPage };
 }
 
 // ─── Aggregate Stats (TTL-cached) ─────────────────────────────────

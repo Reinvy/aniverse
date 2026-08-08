@@ -151,6 +151,15 @@ const KEYSET_SAFE_SORT_FIELDS = new Set([
   "updatedAt",
   "title",
   "publishedAt",
+  // String columns — Prisma StringFilter supports lt/gt range predicates.
+  "name",
+  // DateTime columns — Prisma DateTimeFilter accepts ISO-8601 string cursor
+  // values (same contract as createdAt/updatedAt above).
+  "startsAt",
+  "endsAt",
+  // Decimal columns — Prisma DecimalFilter accepts string cursor values
+  // (e.g. "12.99") for lt/gt range predicates.
+  "price",
 ]);
 
 /**
@@ -232,6 +241,33 @@ export function buildNextCursor(
   const sortValue = last[sort];
   if (sortValue === undefined || sortValue === null) return null;
   return encodeCursor(sortValue as string | number | Date, String(last.id));
+}
+
+/**
+ * Build the pagination meta for a keyset (cursor) page of rows.
+ *
+ * DRY helper that consolidates the repeated pattern in cursor-mode list
+ * routes:
+ *   pagination: {
+ *     ...buildPaginationMeta(total, 1, limit),
+ *     nextCursor: buildNextCursor(rows, sort, hasNextPage),
+ *   }
+ *
+ * In cursor mode the page number is always 1 (the cursor IS the position);
+ * `nextCursor` is null on the last page. `sort` must be the active sort field
+ * (already whitelisted/keyset-safe by the caller).
+ */
+export function buildCursorPaginationMeta(
+  rows: ReadonlyArray<Record<string, unknown>>,
+  total: number,
+  limit: number,
+  sort: string,
+  hasNextPage: boolean,
+): PaginationMeta & { nextCursor: string | null } {
+  return {
+    ...buildPaginationMeta(total, 1, limit),
+    nextCursor: buildNextCursor(rows, sort, hasNextPage),
+  };
 }
 
 /**
