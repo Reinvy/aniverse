@@ -23,6 +23,8 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Modal } from "@/components/ui/modal";
+import { SectionHeading } from "@/components/ui/section-heading";
+import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { PageBackground } from "@/components/ui/page-background";
@@ -103,13 +105,12 @@ function RelatedArticles({ articles }: { articles: RelatedArticle[] }) {
       transition={{ delay: 0.7, duration: 0.5 }}
       className="mt-12"
     >
-      <div className="flex items-center gap-2 mb-6">
-        <BookOpen className="h-5 w-5 text-gold-400" />
-        <h2 className="text-xl font-bold text-white sys-label">
-          RELATED ARTICLES
-        </h2>
-        <span className="h-px flex-1 bg-gradient-to-r from-stroke-gold/40 to-transparent" />
-      </div>
+      <SectionHeading
+        title="Related Articles"
+        icon={BookOpen}
+        titleClassName="text-base sm:text-lg font-bold text-white"
+        className="mb-6"
+      />
 
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {articles.map((item) => (
@@ -256,6 +257,7 @@ export default function BlogArticlePage() {
         <PageBackground starfieldOpacity={0.3} gridOpacity={0.1} />
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <ErrorBoundary compact message="Failed to load article">
           {loading ? (
             <ArticleSkeleton />
           ) : error || !article ? (
@@ -508,6 +510,7 @@ export default function BlogArticlePage() {
               </Modal>
             </article>
           )}
+          </ErrorBoundary>
         </div>
       </main>
       <Footer />

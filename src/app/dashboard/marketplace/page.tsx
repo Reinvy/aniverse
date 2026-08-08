@@ -353,7 +353,7 @@ export default function MarketplacePage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.05, duration: 0.3 }}
                   >
-                    <Card className="group diamond-indicator overflow-hidden h-full flex flex-col">
+                    <Card className="group diamond-indicator overflow-hidden h-full flex flex-col transition-all duration-300 premium-transition hover:scale-[1.02] hover:border-[rgba(229,197,135,0.35)] hover:shadow-[0_0_24px_rgba(229,197,135,0.12)]">
                       {/* Thumbnail */}
                       <div className="relative aspect-[4/3] flex items-center justify-center bg-[rgba(0,0,0,0.3)] text-white/10 border-b border-white/5 overflow-hidden">
                         {item.artwork?.imageUrl ? (
