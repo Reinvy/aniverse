@@ -214,6 +214,48 @@ test.describe("API Endpoints", () => {
     expect(overlap).toEqual([]);
   });
 
+  test("GET /api/challenges?type=DAILY should return only DAILY challenges", async ({
+    request,
+  }) => {
+    // Regression for PR #100 — type filter on the challenges list endpoint.
+    const response = await request.get("/api/challenges?scope=all&type=DAILY&limit=20");
+    expect(response.ok()).toBe(true);
+    const body = await response.json();
+    const challenges = body.challenges ?? [];
+    expect(challenges.length).toBeGreaterThan(0);
+    const types = new Set<string>(
+      challenges.map((c: { type?: string }) => c.type ?? "DAILY"),
+    );
+    expect(Array.from(types)).toEqual(["DAILY"]);
+  });
+
+  test("GET /api/challenges?type=WEEKLY should return only WEEKLY challenges", async ({
+    request,
+  }) => {
+    const response = await request.get("/api/challenges?scope=all&type=WEEKLY&limit=20");
+    expect(response.ok()).toBe(true);
+    const body = await response.json();
+    const challenges = body.challenges ?? [];
+    expect(challenges.length).toBeGreaterThan(0);
+    const types = new Set<string>(
+      challenges.map((c: { type?: string }) => c.type ?? "WEEKLY"),
+    );
+    expect(Array.from(types)).toEqual(["WEEKLY"]);
+  });
+
+  test("GET /api/challenges?type=INVALID should ignore unknown type gracefully", async ({
+    request,
+  }) => {
+    // Unknown type values must not 500 — they fall back to the unfiltered list.
+    const response = await request.get(
+      "/api/challenges?scope=all&type=NOT_A_REAL_TYPE&limit=3",
+    );
+    expect(response.ok()).toBe(true);
+    const body = await response.json();
+    expect(Array.isArray(body.challenges)).toBe(true);
+    expect(body.challenges.length).toBeGreaterThan(0);
+  });
+
   test("GET /feed.xml should return XML with 200", async ({ request }) => {
     const response = await request.get("/feed.xml");
     expect(response.ok()).toBe(true);
