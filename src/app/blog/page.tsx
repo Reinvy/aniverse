@@ -19,6 +19,7 @@ import { SearchBar } from "@/components/ui/search-bar";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Pagination } from "@/components/ui/pagination";
 import { FetchErrorState } from "@/components/ui/fetch-error";
+import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { FeaturedArticleHero, type FeaturedArticle } from "@/components/blog/featured-article-hero";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
@@ -131,6 +132,7 @@ export default function BlogPage() {
         <PageBackground />
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <ErrorBoundary compact message="Failed to load blog section">
           {/* Page Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -260,7 +262,7 @@ export default function BlogPage() {
                   transition={{ delay: i * 0.05, duration: 0.4 }}
                 >
                   <Link href={`/blog/${article.slug}`}>
-                    <Card className="group h-full cut-corner energy-sweep relative overflow-hidden">
+                    <Card className="group h-full cut-corner energy-sweep relative overflow-hidden transition-all duration-300 premium-transition hover:scale-[1.02] hover:border-[rgba(229,197,135,0.35)] hover:shadow-[0_0_24px_rgba(229,197,135,0.12)]">
                       {/* Cover Image */}
                       {article.coverImage && (
                         <div className="relative h-48 overflow-hidden">
@@ -351,6 +353,7 @@ export default function BlogPage() {
               </Link>
             </div>
           </motion.div>
+          </ErrorBoundary>
         </div>
       </main>
       <Footer />

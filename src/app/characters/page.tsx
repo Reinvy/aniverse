@@ -20,6 +20,7 @@ import { SearchBar } from "@/components/ui/search-bar";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Pagination } from "@/components/ui/pagination";
 import { FetchErrorState } from "@/components/ui/fetch-error";
+import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { PageBackground } from "@/components/ui/page-background";
@@ -135,6 +136,7 @@ export default function CharactersPage() {
         <PageBackground />
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <ErrorBoundary compact message="Failed to load characters section">
           {/* Page Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -314,6 +316,7 @@ export default function CharactersPage() {
               </Link>
             </div>
           </motion.div>
+          </ErrorBoundary>
         </div>
       </main>
       <Footer />

@@ -221,6 +221,10 @@ export default function GalleryPage() {
                     <Card
                       className={cn(
                         "group cursor-pointer diamond-indicator overflow-hidden",
+                        "transition-all duration-300 premium-transition",
+                        viewMode === "grid"
+                          ? "hover:scale-[1.02] hover:border-[rgba(229,197,135,0.35)] hover:shadow-[0_0_24px_rgba(229,197,135,0.12)]"
+                          : "hover:border-white/20 hover:bg-white/[0.04]",
                         viewMode === "list" && "flex items-center gap-4 p-3",
                       )}
                     >

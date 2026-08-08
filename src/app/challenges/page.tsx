@@ -20,6 +20,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { EmptyState } from "@/components/ui/empty-state";
 import { FetchErrorState } from "@/components/ui/fetch-error";
 import { FilterChips } from "@/components/ui/filter-chips";
+import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { PageBackground } from "@/components/ui/page-background";
@@ -268,6 +269,7 @@ export default function ChallengesPage() {
         <PageBackground />
 
         <div className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+          <ErrorBoundary compact message="Failed to load challenges section">
           {/* Page Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -461,6 +463,7 @@ export default function ChallengesPage() {
               </Link>
             </div>
           </motion.div>
+          </ErrorBoundary>
         </div>
       </main>
       <Footer />

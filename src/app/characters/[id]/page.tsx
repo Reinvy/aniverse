@@ -17,6 +17,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { SectionHeading } from "@/components/ui/section-heading";
+import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { PageBackground } from "@/components/ui/page-background";
@@ -82,13 +84,7 @@ function InfoPanel({
       transition={{ delay, duration: 0.5 }}
       className="glass rounded-[4px] cut-corner p-6 sm:p-8"
     >
-      <div className="flex items-center gap-2 mb-4">
-        <span className="h-1.5 w-1.5 rotate-45 bg-gold-400" />
-        <h2 className="text-sm font-bold tracking-[0.2em] text-gold-300 sys-label">
-          {title}
-        </h2>
-        <span className="h-px flex-1 bg-gradient-to-r from-stroke-gold/40 to-transparent" />
-      </div>
+      <SectionHeading title={title} className="mb-4" />
       <p className="text-white/70 leading-relaxed whitespace-pre-line">
         {children}
       </p>
@@ -155,6 +151,7 @@ export default function CharacterDetailPage() {
         <PageBackground starfieldOpacity={0.3} gridOpacity={0.1} />
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <ErrorBoundary compact message="Failed to load character">
           {loading ? (
             <CharacterDetailSkeleton />
           ) : error || !character ? (
@@ -361,6 +358,7 @@ export default function CharacterDetailPage() {
               </motion.div>
             </article>
           )}
+          </ErrorBoundary>
         </div>
       </main>
       <Footer />
