@@ -35,16 +35,8 @@ export interface CreateArtworkInput {
   isPublic?: boolean;
 }
 
-export type ArtworkListItem = Prisma.ArtworkGetPayload<{
-  select: typeof artworkListSelect;
-}>;
-
 export type ArtworkDetailItem = Prisma.ArtworkGetPayload<{
   select: typeof artworkDetailSelect;
-}>;
-
-export type PublicArtworkItem = Prisma.ArtworkGetPayload<{
-  select: typeof publicArtworkSelect;
 }>;
 
 // ─── Selects (optimized — only fetch required fields) ────────────

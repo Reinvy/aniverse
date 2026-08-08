@@ -14,10 +14,6 @@ import { CHALLENGE_SORT_FIELDS } from "@/lib/services/sort-config";
 
 // ─── Types ────────────────────────────────────────────────────────
 
-export type ChallengeListItem = Prisma.ChallengeGetPayload<{
-  select: typeof challengeListSelect;
-}>;
-
 export type ChallengeDetail = Prisma.ChallengeGetPayload<{
   select: typeof challengeDetailSelect;
 }>;

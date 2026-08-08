@@ -18,10 +18,6 @@ export interface CharacterFilters {
   search?: string;
 }
 
-export type CharacterListItem = Prisma.CharacterGetPayload<{
-  select: typeof characterListSelect;
-}>;
-
 export type CharacterDetail = Prisma.CharacterGetPayload<{
   select: typeof characterDetailSelect;
 }>;

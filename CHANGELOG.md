@@ -4,6 +4,17 @@ All notable changes to AniVerse are documented here.
 
 ## [Unreleased]
 
+### Performance & Maintenance (2026-08-08)
+- Security audit fix: `npm audit fix` bumped `nanoid` `3.3.16` → `3.3.18` (transitive via `postcss` → `@tailwindcss/postcss`) — closes GHSA-2v37-7h3g-55p8 (custom generators can loop indefinitely when size is zero; high severity). `npm audit --audit-level=high` → **0 vulnerabilities**
+- Cleaned dead code (verified 0 references across `src/`, e2e, `.cron`):
+  - `src/lib/services/artwork.service.ts`: removed unused `ArtworkListItem` + `PublicArtworkItem` type aliases (Prisma `GetPayload` projections over `artworkListSelect`/`publicArtworkSelect` — the selects remain, used by the list/detail queries; only the exported aliases were orphaned)
+  - `src/lib/services/challenge.service.ts`: removed unused `ChallengeListItem` type alias (only `ChallengeDetail` is consumed)
+  - `src/lib/services/character.service.ts`: removed unused `CharacterListItem` type alias (only `CharacterDetail` is consumed)
+  - `src/lib/services/sort-config.ts`: removed 5 unused derived type aliases (`ArtworkSortField`, `BlogArticleSortField`, `CharacterSortField`, `ChallengeSortField`, `UserSortField`) — callers already use `(typeof X_SORT_FIELDS)[number]` inline, the standalone aliases had zero consumers
+- Verified structured error handling: all **15** API routes use try/catch + `console.error` + standardized helpers from `@/lib/api-helpers` (no raw 500s leak internal details)
+- Verified bundle/design consistency: `next.config.ts` already optimal (`removeConsole` prod-only, `productionBrowserSourceMaps: false`, AVIF/WebP image formats, capped device sizes, `poweredByHeader: false`, no-store on `/api/*`); design tokens (`bg-eclipse`, `bg-starfield`, `glass`, `cut-corner`, `sys-label`) present across page components; Button uses Astral Luxury `chamfered-sm` + `light-sweep`
+- Verified `npm run lint` → 0 errors, 0 warnings; `npm run build` → clean production build, all 29 routes + Proxy (middleware) intact
+
 ### Performance & Maintenance (2026-08-07)
 - Security audit fix: `npm audit fix` bumped `js-yaml` `4.3.0` → `4.3.1` (transitive via `eslint` → `@eslint/eslintrc`) — closes CVE-2026-59870 (GHSA-5p4m-2wfm-xmqj, quadratic CPU consumption in `!!omap` resolution). `npm audit` → **0 vulnerabilities**
 - Cleaned dead code (verified 0 imports across `src/`, e2e, `.cron`):

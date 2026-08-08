@@ -41,8 +41,3 @@ export const USER_SORT_FIELDS = [
   "premiumTier",
 ] as const;
 
-export type ArtworkSortField = (typeof ARTWORK_SORT_FIELDS)[number];
-export type BlogArticleSortField = (typeof BLOG_ARTICLE_SORT_FIELDS)[number];
-export type CharacterSortField = (typeof CHARACTER_SORT_FIELDS)[number];
-export type ChallengeSortField = (typeof CHALLENGE_SORT_FIELDS)[number];
-export type UserSortField = (typeof USER_SORT_FIELDS)[number];
