@@ -58,12 +58,19 @@ const challengeDetailSelect = {
 
 /**
  * List active challenges with pagination.
+ *
+ * @param type Optional ChallengeType filter ("DAILY" | "WEEKLY"). When set,
+ *   only challenges of that type are returned.
  */
-export async function findActiveChallenges(pagination: PaginationParams) {
+export async function findActiveChallenges(
+  pagination: PaginationParams,
+  type?: "DAILY" | "WEEKLY",
+) {
   const where: Prisma.ChallengeWhereInput = {
     status: "ACTIVE",
     startsAt: { lte: new Date() },
     endsAt: { gte: new Date() },
+    ...(type ? { type } : {}),
   };
 
   const orderBy = buildOrderBy(pagination, CHALLENGE_SORT_FIELDS, "endsAt");
@@ -137,18 +144,26 @@ export async function findCurrentChallenge(): Promise<ChallengeDetail | null> {
 
 /**
  * List all challenges (including past) with pagination.
+ *
+ * @param type Optional ChallengeType filter ("DAILY" | "WEEKLY"). When set,
+ *   only challenges of that type are returned.
  */
-export async function findAllChallenges(pagination: PaginationParams) {
+export async function findAllChallenges(
+  pagination: PaginationParams,
+  type?: "DAILY" | "WEEKLY",
+) {
+  const where: Prisma.ChallengeWhereInput = type ? { type } : {};
   const orderBy = buildOrderBy(pagination, CHALLENGE_SORT_FIELDS, "startsAt");
 
   const [challenges, total] = await Promise.all([
     prisma.challenge.findMany({
+      where,
       orderBy,
       skip: pagination.skip,
       take: pagination.limit,
       select: challengeListSelect,
     }),
-    prisma.challenge.count(),
+    prisma.challenge.count({ where }),
   ]);
 
   return { challenges, total };

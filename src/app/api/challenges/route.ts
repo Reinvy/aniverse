@@ -27,6 +27,9 @@ export async function GET(request: NextRequest) {
 
     const scope = searchParams.get("scope") || "active";
     const id = searchParams.get("id") || undefined;
+    const rawType = searchParams.get("type")?.toUpperCase();
+    const type =
+      rawType === "DAILY" || rawType === "WEEKLY" ? rawType : undefined;
 
     // Single challenge by ID
     if (id) {
@@ -43,14 +46,14 @@ export async function GET(request: NextRequest) {
 
     // All or active challenges
     if (scope === "all") {
-      const { challenges, total } = await findAllChallenges(pagination);
+      const { challenges, total } = await findAllChallenges(pagination, type);
       return conditionalJsonResponse(request, {
         challenges: projectFields(challenges, fields),
         pagination: buildPaginationMeta(total, pagination.page, pagination.limit),
       }, { cache: "short" });
     }
 
-    const { challenges, total } = await findActiveChallenges(pagination);
+    const { challenges, total } = await findActiveChallenges(pagination, type);
     return conditionalJsonResponse(request, {
       challenges: projectFields(challenges, fields),
       pagination: buildPaginationMeta(total, pagination.page, pagination.limit),
