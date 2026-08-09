@@ -521,6 +521,12 @@ model Product {
   @@index([creatorId])
   @@index([artworkId])
   @@index([isActive])
+  // Composite indexes matching the marketplace listing query paths
+  // (`WHERE isActive = true ORDER BY createdAt|price`): the single-column
+  // isActive index cannot serve the sort, so Postgres would seq-scan or
+  // sort all active rows. These composites keep the catalog O(log n).
+  @@index([isActive, createdAt])
+  @@index([isActive, price])
 }
 
 // ============================================================
