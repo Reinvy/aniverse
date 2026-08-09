@@ -41,8 +41,8 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           <select
             ref={ref}
             className={cn(
-              "h-10 w-full appearance-none rounded-[4px] border border-white/10",
-              "bg-[rgba(0,0,0,0.4)] pl-3 pr-9 text-sm text-white/75",
+            "h-11 w-full appearance-none rounded-[4px] border border-white/10 sm:h-10",
+            "bg-[rgba(0,0,0,0.4)] pl-3 pr-9 text-sm text-white/75",
               "backdrop-blur-xl",
               "input-astral",
               "focus-visible:outline-none focus-visible:border-[rgba(230,194,128,0.4)]",

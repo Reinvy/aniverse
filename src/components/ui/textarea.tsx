@@ -25,7 +25,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       <div className={cn("relative w-full", containerClassName)}>
         <textarea
           className={cn(
-            "min-h-[100px] w-full rounded-[4px]",
+            "min-h-[112px] w-full rounded-[4px] sm:min-h-[100px]",
             "border border-white/10 bg-[rgba(0,0,0,0.45)]",
             "p-3 text-sm text-white/85 placeholder:text-white/25",
             "backdrop-blur-xl resize-none",

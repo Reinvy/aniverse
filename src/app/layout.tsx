@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { APP_NAME, APP_DESCRIPTION, APP_URL } from "@/lib/constants";
 import { AuthProvider } from "@/components/auth/AuthProvider";
+import { MotionProvider } from "@/components/ui/motion-provider";
 import { Toaster } from "@/components/ui/toaster";
 
 const geistSans = Geist({
@@ -110,7 +111,9 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full bg-eclipse font-sans text-white/85 bg-starfield scanline">
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <MotionProvider>{children}</MotionProvider>
+        </AuthProvider>
         <Toaster />
       </body>
     </html>
