@@ -10,7 +10,7 @@
 import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@/generated/prisma/client";
 import type { PaginationParams } from "@/lib/api-helpers";
-import { buildOrderBy, buildSearchClause } from "@/lib/query-builder";
+import { buildOrderBy, buildSearchClause, applyKeysetWhere, buildKeysetOrderBy } from "@/lib/query-builder";
 import { createTtlCache } from "@/lib/ttl-cache";
 import { BLOG_ARTICLE_SORT_FIELDS } from "@/lib/services/sort-config";
 
@@ -180,26 +180,12 @@ export async function findPublishedArticlesCursor(
   // Count against the base filters only (no keyset predicate).
   const baseWhere: Prisma.BlogArticleWhereInput = { ...where };
 
-  if (cursor) {
-    const cmp = pagination.order === "desc" ? "lt" : "gt";
-    where.AND = [
-      {
-        OR: [
-          { [sortField]: { [cmp]: cursor.sortValue } },
-          { [sortField]: cursor.sortValue, id: { [cmp]: cursor.id } },
-        ],
-      },
-    ];
-  }
-
-  // Prisma 7 requires ARRAY form for multi-field orderBy (a two-key object
-  // passes typecheck but fails runtime validation). Cast is intentional: the
-  // generated types accept the single-object form that Prisma rejects at
-  // runtime — the array form is the only shape that actually works.
-  const orderBy = [
-    { [sortField]: pagination.order },
-    { id: pagination.order },
-  ] as Prisma.BlogArticleOrderByWithRelationInput[];
+  // Keyset predicate + array orderBy (see query-builder helpers).
+  applyKeysetWhere(where, cursor, sortField, pagination.order);
+  const orderBy = buildKeysetOrderBy<Prisma.BlogArticleOrderByWithRelationInput>(
+    sortField,
+    pagination.order,
+  );
 
   // Fetch one extra row to detect whether another page exists.
   const [rows, total] = await Promise.all([
