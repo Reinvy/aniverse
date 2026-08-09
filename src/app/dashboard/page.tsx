@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import {
   Image as ImageIcon,
@@ -63,30 +63,36 @@ export default function DashboardPage() {
   const [activity, setActivity] = useState<ActivityItem[]>([]);
   const [loadState, setLoadState] = useState<LoadState>("loading");
 
-  useEffect(() => {
+  // ── Single source of truth for loading dashboard data ──
+  // Used by both the initial mount effect and the "Try Again" retry
+  // button — no duplicated fetch logic.
+  const loadStats = useCallback(async () => {
     const token = getToken();
     if (!token) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setLoadState("error");
       return;
     }
 
-    fetch("/api/dashboard/stats", {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch");
-        return res.json();
-      })
-      .then((data) => {
-        setStats(data.stats);
-        setActivity(data.activity || []);
-        setLoadState("loaded");
-      })
-      .catch(() => {
-        setLoadState("error");
+    try {
+      const res = await fetch("/api/dashboard/stats", {
+        headers: { Authorization: `Bearer ${token}` },
       });
+      if (!res.ok) throw new Error("Failed to fetch");
+      const data = await res.json();
+      setStats(data.stats);
+      setActivity(data.activity || []);
+      setLoadState("loaded");
+    } catch {
+      setLoadState("error");
+    }
   }, []);
+
+  useEffect(() => {
+    // loadStats() updates state after fetch resolves — legitimate
+    // data-fetch-on-mount; guarded for the react-hooks rule.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    loadStats();
+  }, [loadStats]);
 
   // ── Build stats cards from real data ──────────────────────────
   const statsCards = stats
@@ -221,27 +227,7 @@ export default function DashboardPage() {
               <Button
                 variant="outline"
                 className="mt-6 gap-2"
-                onClick={() => {
-                  setLoadState("loading");
-                  const token = getToken();
-                  if (!token) {
-                    setLoadState("error");
-                    return;
-                  }
-                  fetch("/api/dashboard/stats", {
-                    headers: { Authorization: `Bearer ${token}` },
-                  })
-                    .then((res) => {
-                      if (!res.ok) throw new Error("Failed");
-                      return res.json();
-                    })
-                    .then((data) => {
-                      setStats(data.stats);
-                      setActivity(data.activity || []);
-                      setLoadState("loaded");
-                    })
-                    .catch(() => setLoadState("error"));
-                }}
+                onClick={() => loadStats()}
               >
                 <Loader2 className="h-4 w-4" />
                 Try Again

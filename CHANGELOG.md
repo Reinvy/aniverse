@@ -4,6 +4,17 @@ All notable changes to AniVerse are documented here.
 
 ## [Unreleased]
 
+### Performance & Maintenance (2026-08-09)
+- **Performance — parallelized dashboard stats & activity queries** (`src/lib/services/dashboard.service.ts`):
+  - `getDashboardStats`: `likesReceived` count + `buildActivityFeed` now run concurrently (batch #2 via `Promise.all`) instead of serially — both only depend on `artworkIds` from batch #1 → saves 1 round trip per `/api/dashboard/stats` request
+  - `buildActivityFeed`: the 3 feed queries (recent artworks / likes / comments) now run in one `Promise.all` — 3 sequential round trips → 1
+- **DRY refactor — dashboard page fetch logic** (`src/app/dashboard/page.tsx`): extracted the duplicated `/api/dashboard/stats` fetch (initial mount effect + "Try Again" retry button) into a single `loadStats` `useCallback`; the retry button now calls `loadStats()` instead of re-implementing the fetch. Also removed the now-unneeded inline eslint-disable for the direct `setState` in effect (moved to the shared callback).
+- Security audit: `npm audit --audit-level=high` → **0 vulnerabilities** (verified; no new advisories)
+- Verified structured error handling: all **16** API routes use try/catch + `console.error` + standardized helpers from `@/lib/api-helpers` (no raw 500s leak internal details)
+- Verified no secrets in tracked files: `.env` NOT in git (only `.env.example` with placeholders); no `console.log`/`console.debug` in `src/`; no TODO/FIXME markers
+- Verified bundle/config consistency: `next.config.ts` optimal (`removeConsole` prod-only, `productionBrowserSourceMaps: false`, AVIF/WebP, `poweredByHeader: false`, no-store on `/api/*`); lucide-react named imports tree-shake cleanly; no unused component files (all `src/components/**` & `src/lib/**` modules have ≥1 consumer)
+- Verified `npm run lint` → 0 errors, 0 warnings; `npm run build` → clean production build, all 31 routes + Proxy (middleware) intact
+
 ### Performance & Maintenance (2026-08-08)
 - Security audit fix: `npm audit fix` bumped `nanoid` `3.3.16` → `3.3.18` (transitive via `postcss` → `@tailwindcss/postcss`) — closes GHSA-2v37-7h3g-55p8 (custom generators can loop indefinitely when size is zero; high severity). `npm audit --audit-level=high` → **0 vulnerabilities**
 - Cleaned dead code (verified 0 references across `src/`, e2e, `.cron`):

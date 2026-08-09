@@ -106,19 +106,20 @@ export async function getDashboardStats(userId: string): Promise<{
   // ── Earnings ──
   const totalEarnings = Number(earningsAgg._sum.amount ?? 0);
 
-  // ── Likes received ──
-  const likesReceived =
+  // ── Likes received + activity feed (parallel batch #2) ──
+  // Both depend only on `artworkIds` from batch #1 — running them
+  // concurrently instead of serially saves a round trip per request.
+  const [likesReceived, activity] = await Promise.all([
     artworkIds.length > 0
-      ? await prisma.like.count({
+      ? prisma.like.count({
           where: {
             targetType: "Artwork",
             targetId: { in: artworkIds },
           },
         })
-      : 0;
-
-  // ── Activity feed ──
-  const activity = await buildActivityFeed(userId, artworkIds);
+      : Promise.resolve(0),
+    buildActivityFeed(userId, artworkIds),
+  ]);
 
   // ── Days until reset ──
   const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
@@ -164,17 +165,47 @@ async function buildActivityFeed(
 ): Promise<ActivityItem[]> {
   const feed: ActivityItem[] = [];
 
-  // Recent artworks
-  const recentArtworks = await prisma.artwork.findMany({
-    where: { creatorId: userId },
-    orderBy: { createdAt: "desc" },
-    take: 5,
-    select: {
-      id: true,
-      title: true,
-      createdAt: true,
-    },
-  });
+  // ── Parallel: recent artworks, likes, and comments ──
+  // All three only depend on (userId, artworkIds) and are independent,
+  // so they run concurrently (3 sequential round trips → 1).
+  const [recentArtworks, recentLikes, recentComments] = await Promise.all([
+    prisma.artwork.findMany({
+      where: { creatorId: userId },
+      orderBy: { createdAt: "desc" },
+      take: 5,
+      select: {
+        id: true,
+        title: true,
+        createdAt: true,
+      },
+    }),
+    artworkIds.length > 0
+      ? prisma.like.findMany({
+          where: {
+            targetType: "Artwork",
+            targetId: { in: artworkIds },
+          },
+          orderBy: { createdAt: "desc" },
+          take: 5,
+          select: {
+            createdAt: true,
+            user: { select: { name: true } },
+            targetId: true,
+          },
+        })
+      : Promise.resolve([]),
+    prisma.comment.findMany({
+      where: { authorId: userId },
+      orderBy: { createdAt: "desc" },
+      take: 5,
+      select: {
+        id: true,
+        content: true,
+        createdAt: true,
+        targetType: true,
+      },
+    }),
+  ]);
 
   for (const art of recentArtworks) {
     feed.push({
@@ -186,44 +217,16 @@ async function buildActivityFeed(
   }
 
   // Recent likes
-  if (artworkIds.length > 0) {
-    const recentLikes = await prisma.like.findMany({
-      where: {
-        targetType: "Artwork",
-        targetId: { in: artworkIds },
-      },
-      orderBy: { createdAt: "desc" },
-      take: 5,
-      select: {
-        createdAt: true,
-        user: { select: { name: true } },
-        targetId: true,
-      },
+  for (const like of recentLikes) {
+    feed.push({
+      type: "like",
+      action: "Liked your artwork",
+      detail: `by ${like.user?.name ?? "someone"}`,
+      time: like.createdAt.toISOString(),
     });
-
-    for (const like of recentLikes) {
-      feed.push({
-        type: "like",
-        action: "Liked your artwork",
-        detail: `by ${like.user?.name ?? "someone"}`,
-        time: like.createdAt.toISOString(),
-      });
-    }
   }
 
   // Recent comments by user
-  const recentComments = await prisma.comment.findMany({
-    where: { authorId: userId },
-    orderBy: { createdAt: "desc" },
-    take: 5,
-    select: {
-      id: true,
-      content: true,
-      createdAt: true,
-      targetType: true,
-    },
-  });
-
   for (const comment of recentComments) {
     feed.push({
       type: "comment",
