@@ -280,6 +280,7 @@ model Character {
 
   @@index([creatorId])
   @@index([name])
+  @@index([isPublic, createdAt])
 }
 
 // ============================================================
