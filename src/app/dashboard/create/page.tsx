@@ -355,7 +355,8 @@ export default function CreatePage() {
                 <div className="flex items-center gap-1 sm:gap-2">
                   <Button
                     variant="ghost"
-                    size="icon-sm"
+                    size="icon"
+                    className="sm:h-8 sm:w-8"
                     onClick={handleDownload}
                     title="Download image"
                   >
@@ -364,7 +365,8 @@ export default function CreatePage() {
                   {saveState !== "saved" && (
                     <Button
                       variant="ghost"
-                      size="icon-sm"
+                      size="icon"
+                      className="sm:h-8 sm:w-8"
                       onClick={handleSave}
                       disabled={saveState === "saving"}
                       title="Save to gallery"
@@ -378,7 +380,8 @@ export default function CreatePage() {
                   )}
                   <Button
                     variant="ghost"
-                    size="icon-sm"
+                    size="icon"
+                    className="sm:h-8 sm:w-8"
                     onClick={handleReset}
                     title="Reset"
                   >

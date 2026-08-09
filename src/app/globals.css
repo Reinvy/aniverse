@@ -87,6 +87,9 @@
 
   /* Recessed form background */
   --color-recessed: rgba(0, 0, 0, 0.4);
+
+  /* Breakpoints — add `xs` (used by `hidden xs:inline` etc.) */
+  --breakpoint-xs: 30rem;
 }
 
 /* ─── Global Styles ────────────────────────────────────────── */

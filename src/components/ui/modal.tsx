@@ -134,7 +134,7 @@ export function Modal({
                     type="button"
                     onClick={onClose}
                     aria-label="Close"
-                    className="flex h-8 w-8 items-center justify-center rounded-[4px] border border-white/10 bg-white/[0.03] text-white/50 transition-all duration-300 hover:scale-105 hover:border-[rgba(229,197,135,0.3)] hover:text-gold-300"
+                    className="flex h-11 w-11 items-center justify-center rounded-[4px] border border-white/10 bg-white/[0.03] text-white/50 transition-all duration-300 hover:scale-105 hover:border-[rgba(229,197,135,0.3)] hover:text-gold-300 sm:h-8 sm:w-8"
                   >
                     <X className="h-4 w-4" />
                   </button>

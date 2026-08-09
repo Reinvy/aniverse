@@ -86,7 +86,8 @@ export function Pagination({
         {/* Previous */}
         <Button
           variant="outline"
-          size="icon-sm"
+          size="icon"
+          className="sm:h-8 sm:w-8"
           disabled={prevDisabled}
           onClick={() => onPageChange(page - 1)}
           aria-label="Previous page"
@@ -113,14 +114,14 @@ export function Pagination({
               <Button
                 key={item}
                 variant={isActive ? "default" : "ghost"}
-                size="icon-sm"
+                size="icon"
+                className={cn(
+                  "min-w-8 font-mono text-xs sm:h-8 sm:w-8",
+                  isActive && "border-[rgba(230,194,128,0.35)] text-[#e6c280] shadow-[inset_0_0_12px_rgba(230,194,128,0.1)]",
+                )}
                 onClick={() => onPageChange(item)}
                 aria-label={`Page ${item}`}
                 aria-current={isActive ? "page" : undefined}
-                className={cn(
-                  "min-w-8 font-mono text-xs",
-                  isActive && "border-[rgba(230,194,128,0.35)] text-[#e6c280] shadow-[inset_0_0_12px_rgba(230,194,128,0.1)]",
-                )}
               >
                 {item}
               </Button>
@@ -131,7 +132,8 @@ export function Pagination({
         {/* Next */}
         <Button
           variant="outline"
-          size="icon-sm"
+          size="icon"
+          className="sm:h-8 sm:w-8"
           disabled={nextDisabled}
           onClick={() => onPageChange(page + 1)}
           aria-label="Next page"

@@ -54,7 +54,7 @@ export function FilterChips<T extends string = string>({
             onClick={() => onChange(option.id)}
             aria-pressed={isActive}
             className={cn(
-              "relative inline-flex min-h-[36px] items-center gap-1.5 rounded-[4px] px-3 py-2 text-xs font-medium",
+              "relative inline-flex min-h-[44px] items-center gap-1.5 rounded-[4px] px-4 py-2 text-xs font-medium sm:min-h-[36px] sm:px-3",
               "transition-all duration-300 premium-transition",
               isActive
                 ? "border border-[rgba(230,194,128,0.35)] bg-[rgba(230,194,128,0.1)] text-gold-400 shadow-[inset_0_0_12px_rgba(230,194,128,0.08)]"

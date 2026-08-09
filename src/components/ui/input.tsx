@@ -19,7 +19,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         <input
           type={type}
           className={cn(
-            "flex h-10 w-full rounded-[4px] border border-white/[0.06] bg-[rgba(0,0,0,0.5)] px-3 py-2 text-sm text-white/85 placeholder:text-white/25",
+            "flex h-11 w-full rounded-[4px] border border-white/[0.06] bg-[rgba(0,0,0,0.5)] px-3 py-2 text-sm text-white/85 placeholder:text-white/25 sm:h-10",
             "backdrop-blur-xl",
             "file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-white/70",
             "input-astral",

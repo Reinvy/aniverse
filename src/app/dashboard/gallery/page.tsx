@@ -137,7 +137,8 @@ export default function GalleryPage() {
             <div className="flex items-center gap-2">
               <Button
                 variant={viewMode === "grid" ? "default" : "ghost"}
-                size="icon-sm"
+                size="icon"
+                className="sm:h-8 sm:w-8"
                 onClick={() => setViewMode("grid")}
                 aria-label="Grid view"
               >
@@ -145,7 +146,8 @@ export default function GalleryPage() {
               </Button>
               <Button
                 variant={viewMode === "list" ? "default" : "ghost"}
-                size="icon-sm"
+                size="icon"
+                className="sm:h-8 sm:w-8"
                 onClick={() => setViewMode("list")}
                 aria-label="List view"
               >
