@@ -119,6 +119,25 @@ test.describe("Navigation", () => {
     await expect(page.locator("body")).toBeVisible();
   });
 
+  test("unknown blog slug should render graceful not-found (no crash)", async ({
+    page,
+  }) => {
+    // Blog detail is a CSR page: on 404 from /api/blog/[slug] it renders a
+    // graceful "Article not found" card with a Back to Blog action (HTTP 200
+    // shell + client-side not-found state — same pattern as /characters/[id]).
+    await page.goto("/blog/this-slug-does-not-exist-xyz");
+    await expect(
+      page.getByText(/article.*not found|doesn't exist/i).first(),
+    ).toBeVisible({ timeout: 10000 });
+    await expect(page.locator("body")).toBeVisible();
+    // Recovery action returns to the blog listing
+    await page
+      .getByRole("link", { name: /back to blog/i })
+      .first()
+      .click();
+    await expect(page).toHaveURL(/\/blog$/);
+  });
+
   test("landing page quick links should navigate to real pages", async ({
     page,
   }) => {

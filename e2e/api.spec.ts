@@ -146,6 +146,25 @@ test.describe("API Endpoints", () => {
     expect(body.status).toBeDefined();
   });
 
+  test("GET /api/content/overview should return 200 with DB-driven snapshot", async ({
+    request,
+  }) => {
+    // Content orchestration snapshot — counts + featured article + current
+    // challenge + recent characters. Must be DB-driven, never hardcoded.
+    const response = await request.get("/api/content/overview");
+    expect(response.ok()).toBe(true);
+    const body = await response.json();
+    expect(body.counts).toBeDefined();
+    expect(typeof body.counts.articles).toBe("number");
+    expect(typeof body.counts.challenges).toBe("number");
+    expect(typeof body.counts.characters).toBe("number");
+    expect(Array.isArray(body.recentCharacters)).toBe(true);
+    // featuredArticle/currentChallenge may be null (empty DB state) but the
+    // keys must exist — graceful shape, not a 500.
+    expect(body).toHaveProperty("featuredArticle");
+    expect(body).toHaveProperty("currentChallenge");
+  });
+
   test("GET /api/gallery cursor pagination: page1 emits nextCursor, page2 has no overlap", async ({
     request,
   }) => {
