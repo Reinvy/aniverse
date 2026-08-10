@@ -178,6 +178,13 @@ model User {
   @@index([role])
   @@index([premiumTier])
   @@index([createdAt])
+  // Composite indexes for filtered user-list query paths
+  // (`WHERE role = ? | premiumTier = ? ORDER BY createdAt DESC`): the
+  // single-column role/premiumTier indexes cannot serve the createdAt
+  // sort, so Postgres would sort all matching rows. These keep the
+  // /api/users admin-discovery path O(log n).
+  @@index([role, createdAt])
+  @@index([premiumTier, createdAt])
 }
 
 model Account {
@@ -253,6 +260,14 @@ model Artwork {
   @@index([createdAt])
   @@index([isPublic])
   @@index([isPublic, createdAt])
+  // Composite index for the user-artwork list query path
+  // (`WHERE creatorId = ? ORDER BY createdAt DESC`): the single-column
+  // creatorId index cannot serve the sort, so Postgres would sort all of a
+  // user's rows. The composite keeps the dashboard/API list O(log n).
+  @@index([creatorId, createdAt])
+  // Composite index for the gallery query path filtered by creator
+  // (`WHERE isPublic = true AND creatorId = ? ORDER BY createdAt DESC`).
+  @@index([isPublic, creatorId, createdAt])
 }
 
 // ============================================================
@@ -281,6 +296,12 @@ model Character {
   @@index([creatorId])
   @@index([name])
   @@index([isPublic, createdAt])
+  // Composite index for the public character list sorted by name
+  // (`WHERE isPublic = true ORDER BY name`): the single-column isPublic
+  // index cannot serve the name sort, so Postgres would seq-scan or sort
+  // all public rows. The composite keeps the /api/characters?sort=name
+  // path O(log n).
+  @@index([isPublic, name])
 }
 
 // ============================================================
@@ -707,6 +728,15 @@ model Challenge {
   @@index([status])
   @@index([startsAt, endsAt])
   @@index([status, startsAt, endsAt])
+  // Composite index for the default active-challenges list query
+  // (`WHERE status = 'ACTIVE' ORDER BY endsAt ASC`): the existing
+  // `[status, startsAt, endsAt]` index cannot serve a sort on `endsAt`
+  // (the sort column is not a prefix), so the default list path would
+  // seq-scan all rows. `[status, endsAt]` keeps it O(log n).
+  @@index([status, endsAt])
+  // Single-column index for the `scope=all` list (no status filter),
+  // which also defaults to `ORDER BY endsAt ASC`.
+  @@index([endsAt])
 }
 
 // ============================================================

@@ -83,16 +83,14 @@ export function resolveMarketplaceSort(sort?: string): {
   return { sortField: "createdAt", order: "desc" };
 }
 
-// ─── Listing Query ────────────────────────────────────────────────
-
 /**
- * List ACTIVE marketplace products with pagination, free-text search, and
- * price sorting. Returns `{ products, total }`.
+ * Build the shared ACTIVE-product where clause (isActive: true + optional
+ * search filter). DRY: used by both the offset listing
+ * (`findMarketplaceProducts`) and the keyset variant
+ * (`findMarketplaceProductsCursor`) so filter semantics never drift between
+ * the two pagination paths.
  */
-export async function findMarketplaceProducts(
-  pagination: PaginationParams,
-  filters?: MarketplaceFilters,
-): Promise<{ products: MarketplaceProductItem[]; total: number }> {
+function buildProductWhere(filters?: MarketplaceFilters): Prisma.ProductWhereInput {
   const where: Prisma.ProductWhereInput = { isActive: true };
 
   if (filters?.search) {
@@ -104,6 +102,21 @@ export async function findMarketplaceProducts(
       where.OR = searchClause;
     }
   }
+
+  return where;
+}
+
+// ─── Listing Query ────────────────────────────────────────────────
+
+/**
+ * List ACTIVE marketplace products with pagination, free-text search, and
+ * price sorting. Returns `{ products, total }`.
+ */
+export async function findMarketplaceProducts(
+  pagination: PaginationParams,
+  filters?: MarketplaceFilters,
+): Promise<{ products: MarketplaceProductItem[]; total: number }> {
+  const where = buildProductWhere(filters);
 
   const { sortField, order } = resolveMarketplaceSort(filters?.sort);
   const orderBy: Prisma.ProductOrderByWithRelationInput = {
@@ -151,17 +164,7 @@ export async function findMarketplaceProductsCursor(
   total: number;
   hasNextPage: boolean;
 }> {
-  const where: Prisma.ProductWhereInput = { isActive: true };
-
-  if (filters?.search) {
-    const searchClause = buildSearchClause(filters.search, [
-      "name",
-      "description",
-    ]);
-    if (searchClause) {
-      where.OR = searchClause;
-    }
-  }
+  const where = buildProductWhere(filters);
 
   const { sortField, order } = resolveMarketplaceSort(filters?.sort);
 
