@@ -36,16 +36,13 @@ const userListSelect = {
   },
 } satisfies Prisma.UserSelect;
 
-// ─── Service Methods ──────────────────────────────────────────────
-
 /**
- * List users with pagination, search, and optional role/premiumTier filters.
- * Returns safe user data (no sensitive fields) suitable for discovery features.
+ * Build the shared User list where clause (search/role/premiumTier filters).
+ * DRY: used by both the offset listing (`findUsers`) and the keyset variant
+ * (`findUsersCursor`) so filter semantics never drift between pagination
+ * paths.
  */
-export async function findUsers(
-  pagination: PaginationParams,
-  filters?: UserFilters,
-) {
+function buildUserWhere(filters?: UserFilters): Prisma.UserWhereInput {
   const where: Prisma.UserWhereInput = {};
 
   if (filters?.search) {
@@ -67,6 +64,20 @@ export async function findUsers(
     where.premiumTier = filters.premiumTier;
   }
 
+  return where;
+}
+
+// ─── Service Methods ──────────────────────────────────────────────
+
+/**
+ * List users with pagination, search, and optional role/premiumTier filters.
+ * Returns safe user data (no sensitive fields) suitable for discovery features.
+ */
+export async function findUsers(
+  pagination: PaginationParams,
+  filters?: UserFilters,
+) {
+  const where = buildUserWhere(filters);
   const orderBy = buildOrderBy(pagination, USER_SORT_FIELDS, "createdAt");
 
   const [users, total] = await Promise.all([
@@ -103,26 +114,7 @@ export async function findUsersCursor(
   filters?: UserFilters,
   cursor?: { sortValue: string; id: string } | null,
 ) {
-  const where: Prisma.UserWhereInput = {};
-
-  if (filters?.search) {
-    const searchClause = buildSearchClause(filters.search, [
-      "name",
-      "username",
-      "email",
-    ]);
-    if (searchClause) {
-      where.OR = searchClause;
-    }
-  }
-
-  if (filters?.role) {
-    where.role = filters.role;
-  }
-
-  if (filters?.premiumTier) {
-    where.premiumTier = filters.premiumTier;
-  }
+  const where = buildUserWhere(filters);
 
   // The route already whitelisted the sort field; fall back to createdAt so
   // the keyset predicate below is always well-formed.

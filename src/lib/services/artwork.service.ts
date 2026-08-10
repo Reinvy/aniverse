@@ -134,6 +134,40 @@ function buildWhereClause(
   return where;
 }
 
+/**
+ * Build the shared PUBLIC artwork where clause (isPublic: true + optional
+ * style/search/creatorId filters). DRY: used by both the offset listing
+ * (`findPublicArtworks`) and the keyset variant (`findPublicArtworksCursor`)
+ * so filter semantics never drift between the two pagination paths.
+ */
+function buildPublicArtworksWhere(filters?: {
+  style?: ArtworkStyle;
+  search?: string;
+  creatorId?: string;
+}): Prisma.ArtworkWhereInput {
+  const where: Prisma.ArtworkWhereInput = { isPublic: true };
+
+  if (filters?.style) {
+    where.style = filters.style;
+  }
+
+  if (filters?.creatorId) {
+    where.creatorId = filters.creatorId;
+  }
+
+  if (filters?.search) {
+    const searchClause = buildSearchClause(filters.search, [
+      "title",
+      "prompt",
+    ]);
+    if (searchClause) {
+      where.OR = searchClause;
+    }
+  }
+
+  return where;
+}
+
 // ─── Service Methods ──────────────────────────────────────────────
 
 /**
@@ -221,26 +255,7 @@ export async function findPublicArtworks(
   pagination: PaginationParams,
   filters?: { style?: ArtworkStyle; search?: string; creatorId?: string },
 ) {
-  const where: Prisma.ArtworkWhereInput = { isPublic: true };
-
-  if (filters?.style) {
-    where.style = filters.style;
-  }
-
-  if (filters?.creatorId) {
-    where.creatorId = filters.creatorId;
-  }
-
-  if (filters?.search) {
-    const searchClause = buildSearchClause(filters.search, [
-      "title",
-      "prompt",
-    ]);
-    if (searchClause) {
-      where.OR = searchClause;
-    }
-  }
-
+  const where = buildPublicArtworksWhere(filters);
   const orderBy = buildOrderBy(pagination, ARTWORK_SORT_FIELDS, "createdAt");
 
   const [artworks, total] = await Promise.all([
@@ -284,25 +299,7 @@ export async function findPublicArtworksCursor(
   filters?: { style?: ArtworkStyle; search?: string; creatorId?: string },
   cursor?: { sortValue: string; id: string } | null,
 ) {
-  const where: Prisma.ArtworkWhereInput = { isPublic: true };
-
-  if (filters?.style) {
-    where.style = filters.style;
-  }
-
-  if (filters?.creatorId) {
-    where.creatorId = filters.creatorId;
-  }
-
-  if (filters?.search) {
-    const searchClause = buildSearchClause(filters.search, [
-      "title",
-      "prompt",
-    ]);
-    if (searchClause) {
-      where.OR = searchClause;
-    }
-  }
+  const where = buildPublicArtworksWhere(filters);
 
   // The sort field was already whitelisted by the route (keyset-safe check);
   // default to createdAt so the keyset predicate below is always well-formed.
@@ -341,4 +338,67 @@ export async function findPublicArtworksCursor(
   const artworks = hasNextPage ? rows.slice(0, pagination.limit) : rows;
 
   return { artworks, total, hasNextPage };
+}
+
+// ─── Update / Delete (ownership-scoped) ───────────────────────────
+
+export interface UpdateArtworkInput {
+  title?: string;
+  prompt?: string | null;
+  style?: ArtworkStyle;
+  isPublic?: boolean;
+}
+
+/**
+ * Update an artwork — ownership-scoped via `updateMany` so a non-owner can
+ * never mutate another user's row (the count is 0 → null, route returns 404).
+ * Only the provided fields are patched. Returns the updated detail row, or
+ * null when the artwork doesn't exist / isn't owned by `creatorId`.
+ */
+export async function updateArtwork(
+  artworkId: string,
+  creatorId: string,
+  data: UpdateArtworkInput,
+): Promise<ArtworkDetailItem | null> {
+  const payload: Prisma.ArtworkUpdateManyMutationInput = {};
+
+  if (data.title !== undefined) payload.title = data.title.trim();
+  if (data.prompt !== undefined) payload.prompt = data.prompt?.trim() || null;
+  if (data.style !== undefined) payload.style = data.style;
+  if (data.isPublic !== undefined) payload.isPublic = data.isPublic;
+
+  // Nothing to patch — return the current state (or null when not owned).
+  if (Object.keys(payload).length === 0) {
+    return prisma.artwork.findFirst({
+      where: { id: artworkId, creatorId },
+      select: artworkDetailSelect,
+    });
+  }
+
+  const result = await prisma.artwork.updateMany({
+    where: { id: artworkId, creatorId },
+    data: payload,
+  });
+
+  if (result.count === 0) return null;
+
+  return prisma.artwork.findUnique({
+    where: { id: artworkId },
+    select: artworkDetailSelect,
+  });
+}
+
+/**
+ * Delete an artwork — ownership-scoped via `deleteMany` (single query,
+ * count 0 → false when the artwork doesn't exist or belongs to someone
+ * else). Returns true when a row was deleted.
+ */
+export async function deleteArtwork(
+  artworkId: string,
+  creatorId: string,
+): Promise<boolean> {
+  const result = await prisma.artwork.deleteMany({
+    where: { id: artworkId, creatorId },
+  });
+  return result.count > 0;
 }
