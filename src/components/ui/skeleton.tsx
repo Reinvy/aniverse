@@ -13,6 +13,7 @@ function Skeleton({
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
+      aria-hidden="true"
       className={cn(
         "relative overflow-hidden rounded-[4px] bg-[rgba(255,255,255,0.04)]",
         "before:absolute before:inset-0 before:-translate-x-full",

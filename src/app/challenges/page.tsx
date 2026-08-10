@@ -264,7 +264,7 @@ export default function ChallengesPage() {
   return (
     <>
       <Header />
-      <main className="relative min-h-screen pt-24 pb-16">
+      <main id="main-content" tabIndex={-1} className="relative min-h-screen pt-24 pb-16">
         {/* Background layers */}
         <PageBackground />
 

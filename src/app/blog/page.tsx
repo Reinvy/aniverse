@@ -127,7 +127,7 @@ export default function BlogPage() {
   return (
     <>
       <Header />
-      <main className="relative min-h-screen pt-24 pb-16">
+      <main id="main-content" tabIndex={-1} className="relative min-h-screen pt-24 pb-16">
         {/* Starfield + grid background */}
         <PageBackground />
 
@@ -218,7 +218,9 @@ export default function BlogPage() {
 
           {/* Articles Grid */}
           {loading ? (
-            <BlogSkeleton />
+            <div role="status" aria-label="Loading articles">
+              <BlogSkeleton />
+            </div>
           ) : error ? (
             <motion.div
               initial={{ opacity: 0 }}

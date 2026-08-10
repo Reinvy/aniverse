@@ -105,6 +105,46 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* ─── Skip Link (keyboard a11y) ────────────────────────────── */
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 9999;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #e5c587;
+  background: rgba(11, 15, 25, 0.95);
+  border: 1px solid rgba(229, 197, 135, 0.4);
+  border-radius: 4px;
+  box-shadow: 0 0 20px rgba(229, 197, 135, 0.15);
+  backdrop-filter: blur(12px);
+  transform: translateY(-250%);
+  transition: transform 0.2s var(--ease-premium);
+}
+.skip-link:focus-visible {
+  transform: translateY(0);
+  outline: 2px solid rgba(229, 197, 135, 0.6);
+  outline-offset: 2px;
+}
+
+/* ─── Main landmark anchor (fixed header offset) ───────────── */
+#main-content {
+  scroll-margin-top: 6rem;
+}
+
+/* ─── Focus Ring (a11y for raw icon buttons) ───────────────── */
+.focus-ring:focus-visible {
+  outline: 2px solid rgba(229, 197, 135, 0.5);
+  outline-offset: 2px;
+}
+
 /* ─── Glass Surface Utility ────────────────────────────────── */
 .glass {
   background: var(--color-glass-200);

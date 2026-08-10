@@ -22,7 +22,7 @@ export default function DashboardLayout({
         <div className="fixed inset-x-0 top-0 z-30 flex h-14 items-center gap-3 border-b border-white/5 bg-[#0B0F19]/95 backdrop-blur-xl px-4 lg:hidden">
           <button
             onClick={() => setSidebarOpen(true)}
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-white/50 hover:bg-white/5 hover:text-white/80 transition-colors"
+            className="focus-ring flex h-11 w-11 items-center justify-center rounded-lg text-white/50 hover:bg-white/5 hover:text-white/80 transition-colors"
             aria-label="Open sidebar"
           >
             <Menu className="h-5 w-5" />
@@ -39,7 +39,7 @@ export default function DashboardLayout({
         </div>
 
         {/* Main content */}
-        <main className="flex-1 overflow-x-hidden pt-14 lg:ml-64 lg:pt-0 bg-starfield">
+        <main id="main-content" tabIndex={-1} className="flex-1 overflow-x-hidden pt-14 lg:ml-64 lg:pt-0 bg-starfield outline-none">
           {/* Subtle grid overlay */}
           <div className="fixed inset-0 pointer-events-none bg-grid opacity-30" />
           <div className="relative z-10 animate-stagger">{children}</div>

@@ -79,7 +79,7 @@ export default function RegisterPage() {
 
   return (
     <ErrorBoundary compact message="Registration error">
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-eclipse px-4">
+    <div id="main-content" className="relative flex min-h-screen items-center justify-center overflow-hidden bg-eclipse px-4">
       {/* Background effects */}
       <div className="pointer-events-none absolute inset-0 bg-starfield" />
       <div className="pointer-events-none absolute inset-0 bg-grid opacity-20" />
@@ -225,7 +225,8 @@ export default function RegisterPage() {
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="text-white/40 hover:text-gold-300 transition-colors"
+                      className="focus-ring text-white/40 hover:text-gold-300 transition-colors"
+                      aria-label={showPassword ? "Hide password" : "Show password"}
                       tabIndex={-1}
                     >
                       {showPassword ? (

@@ -106,8 +106,10 @@ export function Header() {
         {/* Mobile menu toggle */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="flex md:hidden items-center justify-center rounded-lg p-2 text-white/50 hover:bg-glass-300 hover:text-white transition-all duration-200"
+          className="focus-ring flex md:hidden h-11 w-11 items-center justify-center rounded-lg text-white/50 hover:bg-glass-300 hover:text-white transition-all duration-200"
           aria-label="Toggle menu"
+          aria-expanded={mobileOpen}
+          aria-controls="mobile-nav-menu"
         >
           {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
@@ -117,6 +119,7 @@ export function Header() {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
+            id="mobile-nav-menu"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}

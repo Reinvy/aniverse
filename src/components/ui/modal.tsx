@@ -55,15 +55,55 @@ export function Modal({
   className,
   closeOnBackdrop = true,
 }: ModalProps) {
-  // Close on Escape key
+  const panelRef = React.useRef<HTMLDivElement>(null);
+  const closeRef = React.useRef<HTMLButtonElement>(null);
+  const restoreFocusRef = React.useRef<HTMLElement | null>(null);
+
+  // Keep latest onClose without re-triggering the effect below
+  const onCloseRef = React.useRef(onClose);
+  React.useEffect(() => {
+    onCloseRef.current = onClose;
+  });
+
+  // Close on Escape + focus trap + restore focus on close
   React.useEffect(() => {
     if (!open) return;
+
+    restoreFocusRef.current = document.activeElement as HTMLElement | null;
+
     const handler = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") {
+        onCloseRef.current();
+        return;
+      }
+      if (e.key !== "Tab") return;
+      const panel = panelRef.current;
+      if (!panel) return;
+      const focusables = panel.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])',
+      );
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     };
     window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [open, onClose]);
+
+    // Initial focus lands on the close button (safe default)
+    const t = window.setTimeout(() => closeRef.current?.focus(), 0);
+
+    return () => {
+      window.removeEventListener("keydown", handler);
+      window.clearTimeout(t);
+      restoreFocusRef.current?.focus?.();
+    };
+  }, [open]);
 
   // Lock body scroll while open
   React.useEffect(() => {
@@ -93,6 +133,7 @@ export function Modal({
 
           {/* Panel */}
           <motion.div
+            ref={panelRef}
             role="dialog"
             aria-modal="true"
             initial={{ opacity: 0, y: 24, scale: 0.97 }}
@@ -131,10 +172,11 @@ export function Modal({
                 <div className="flex shrink-0 items-center gap-2">
                   {headerActions}
                   <button
+                    ref={closeRef}
                     type="button"
                     onClick={onClose}
                     aria-label="Close"
-                    className="flex h-11 w-11 items-center justify-center rounded-[4px] border border-white/10 bg-white/[0.03] text-white/50 transition-all duration-300 hover:scale-105 hover:border-[rgba(229,197,135,0.3)] hover:text-gold-300 sm:h-8 sm:w-8"
+                    className="focus-ring flex h-11 w-11 items-center justify-center rounded-[4px] border border-white/10 bg-white/[0.03] text-white/50 transition-all duration-300 hover:scale-105 hover:border-[rgba(229,197,135,0.3)] hover:text-gold-300 sm:h-8 sm:w-8"
                   >
                     <X className="h-4 w-4" />
                   </button>
