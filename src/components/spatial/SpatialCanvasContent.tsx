@@ -80,6 +80,7 @@ function HeroNode() {
 
   return (
     <motion.div
+      id="hero"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
@@ -170,6 +171,7 @@ function FeaturesNode() {
 
   return (
     <motion.div
+      id="features"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
@@ -242,6 +244,7 @@ const showcaseItems = [
 function ShowcaseNode() {
   return (
     <motion.div
+      id="showcase"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
@@ -325,6 +328,7 @@ function PricingNode() {
 
   return (
     <motion.div
+      id="pricing"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
@@ -444,6 +448,7 @@ function FAQNode() {
 
   return (
     <motion.div
+      id="faq"
       variants={containerVariants}
       initial="hidden"
       animate="visible"

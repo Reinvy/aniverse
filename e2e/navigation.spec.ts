@@ -198,4 +198,22 @@ test.describe("Navigation", () => {
       await page.waitForTimeout(1000);
     }
   });
+
+  test("url hash deep-links land on the matching spatial section", async ({
+    page,
+  }) => {
+    // Header/Footer nav anchors (/ #features, /#pricing) and HSR section ids must
+    // deep-link to the correct spatial section instead of always dropping to hero.
+    // Regression for the spatial-canvas hash-navigation gap.
+    const cases: Array<{ hash: string; marker: RegExp }> = [
+      { hash: "#features", marker: /everything you need to create/i },
+      { hash: "#pricing", marker: /supply pass|choose your plan|pricing|plans/i },
+    ];
+
+    for (const { hash, marker } of cases) {
+      await page.goto(`/${hash}`);
+      // Spatial transitions animate over ~700ms — wait for the section to render.
+      await expect(page.getByText(marker).first()).toBeVisible({ timeout: 10000 });
+    }
+  });
 });

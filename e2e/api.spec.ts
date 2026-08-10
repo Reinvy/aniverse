@@ -146,6 +146,27 @@ test.describe("API Endpoints", () => {
     expect(body.status).toBeDefined();
   });
 
+  test("GET /api/marketplace should return 200 with catalog shape", async ({
+    request,
+  }) => {
+    // Marketplace catalog endpoint — public listing with pagination + stats.
+    const response = await request.get("/api/marketplace");
+    expect(response.ok()).toBe(true);
+    const body = await response.json();
+    // Catalog shape: products array + pagination meta + aggregate stats.
+    // Empty DB state is valid (products: []) but the shape must exist.
+    expect(Array.isArray(body.products)).toBe(true);
+    expect(body.pagination).toBeDefined();
+    expect(body.stats).toBeDefined();
+    // Sort + search filters must not 500 (graceful degradation).
+    const filtered = await request.get(
+      "/api/marketplace?sort=price-asc&search=anime&limit=4",
+    );
+    expect(filtered.ok()).toBe(true);
+    const filteredBody = await filtered.json();
+    expect(Array.isArray(filteredBody.products)).toBe(true);
+  });
+
   test("GET /api/content/overview should return 200 with DB-driven snapshot", async ({
     request,
   }) => {

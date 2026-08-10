@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useCallback, useRef } from "react";
+import React, { createContext, useContext, useState, useCallback, useRef, useEffect } from "react";
 
 // ─── Section Definitions ───────────────────────────────────────
 
@@ -72,6 +72,30 @@ export function SpatialProvider({ children }: { children: React.ReactNode }) {
       setTimeout(() => setIsTransitioning(false), 700);
       return section;
     });
+  }, []);
+
+  // Support deep-linking via URL hash (e.g. /#features, /#pricing) so the
+  // Header / footer nav anchors (MAIN_NAV_LINKS / FOOTER_PRODUCT_LINKS) land
+  // on the intended spatial section instead of always dropping to "hero".
+  // Guards:
+  //  - only run on the client (useEffect never runs on the server)
+  //  - validate the hash is one of the known SECTIONS before navigating
+  //  - only handle the initial hash on mount, not later hash changes
+  //    (in-app section changes use navigateTo() state, not the URL)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const raw = window.location.hash.replace(/^#/, "");
+    if (!raw) return;
+    const match = SECTIONS.find((s) => s.id === raw);
+    if (match) {
+      // Defer so the viewport mounts before the animated transition fires.
+      const t = window.setTimeout(() => {
+        setActiveSection(match.id);
+        setIsTransitioning(true);
+        window.setTimeout(() => setIsTransitioning(false), 700);
+      }, 0);
+      return () => window.clearTimeout(t);
+    }
   }, []);
 
   // Subtle camera transform for desktop spatial feel
