@@ -66,10 +66,10 @@ export function Sidebar({
         </Link>
         <button
           onClick={onClose}
-          className="flex h-9 w-9 lg:h-8 lg:w-8 items-center justify-center rounded-lg text-white/40 hover:bg-white/5 hover:text-white/70 transition-colors lg:hidden"
+          className="focus-ring flex h-11 w-11 items-center justify-center rounded-lg text-white/40 hover:bg-white/5 hover:text-white/70 transition-colors lg:hidden"
           aria-label="Close sidebar"
         >
-          <X className="h-5 w-5 lg:h-4 lg:w-4" />
+          <X className="h-5 w-5" />
         </button>
       </div>
 

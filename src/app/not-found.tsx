@@ -21,7 +21,7 @@ export default function NotFound() {
   return (
     <>
       <Header />
-      <main className="relative flex min-h-screen items-center justify-center pt-24 pb-16">
+      <main id="main-content" tabIndex={-1} className="relative flex min-h-screen items-center justify-center pt-24 pb-16">
         <PageBackground starfieldOpacity={0.35} gridOpacity={0.12} />
 
         <div className="relative mx-auto w-full max-w-2xl px-4 sm:px-6 lg:px-8">

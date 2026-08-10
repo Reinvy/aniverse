@@ -146,7 +146,7 @@ export default function CharacterDetailPage() {
   return (
     <>
       <Header />
-      <main className="relative min-h-screen pt-24 pb-16">
+      <main id="main-content" tabIndex={-1} className="relative min-h-screen pt-24 pb-16">
         {/* Background layers */}
         <PageBackground starfieldOpacity={0.3} gridOpacity={0.1} />
 

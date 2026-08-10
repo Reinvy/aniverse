@@ -95,6 +95,7 @@ export function Footer() {
               href="https://github.com"
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="AniVerse on GitHub"
               className="text-white/30 hover:text-gold-400 transition-colors"
             >
               <Code2 className="h-4 w-4" />
@@ -103,6 +104,7 @@ export function Footer() {
               href="https://twitter.com"
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="AniVerse on Twitter"
               className="text-white/30 hover:text-gold-400 transition-colors"
             >
               <AtSign className="h-4 w-4" />

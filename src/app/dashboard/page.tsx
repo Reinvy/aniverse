@@ -17,6 +17,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { StatCard } from "@/components/ui/stat-card";
 import { StatCardSkeleton, ListItemSkeleton } from "@/components/ui/skeleton";
+import { HudProgress } from "@/components/ui/hud-progress";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { PageHeader } from "@/components/ui/page-header";
@@ -169,7 +170,7 @@ export default function DashboardPage() {
 
       {/* Loading State — Game style skeleton grid */}
       {loadState === "loading" && (
-        <div className="mt-6 sm:mt-8">
+        <div role="status" aria-label="Loading dashboard" className="mt-6 sm:mt-8">
           <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
             {Array.from({ length: 4 }).map((_, i) => (
               <StatCardSkeleton key={i} />
@@ -404,12 +405,13 @@ export default function DashboardPage() {
                   </div>
                   {stats && !stats.isUnlimited && (
                     <>
-                      <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-[rgba(255,255,255,0.08)]">
-                        <div
-                          className="h-full rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500"
-                          style={{
-                            width: `${Math.min(100, stats.usagePercent)}%`,
-                          }}
+                      <div className="mt-2.5">
+                        <HudProgress
+                          label="QUOTA"
+                          value={`${stats.generationsUsed}/${stats.generationLimit}`}
+                          percent={stats.usagePercent}
+                          variant="gold"
+                          sysNode="SYS.05"
                         />
                       </div>
                       <p className="mt-1.5 text-xs text-white/30">

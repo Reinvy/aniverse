@@ -131,7 +131,7 @@ export default function CharactersPage() {
   return (
     <>
       <Header />
-      <main className="relative min-h-screen pt-24 pb-16">
+      <main id="main-content" tabIndex={-1} className="relative min-h-screen pt-24 pb-16">
         {/* Background layers */}
         <PageBackground />
 
@@ -175,7 +175,9 @@ export default function CharactersPage() {
 
           {/* Characters Grid */}
           {loading ? (
-            <CharacterSkeleton />
+            <div role="status" aria-label="Loading characters">
+              <CharacterSkeleton />
+            </div>
           ) : error ? (
             <motion.div
               initial={{ opacity: 0 }}

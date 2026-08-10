@@ -90,7 +90,7 @@ export function SpatialViewport() {
   const variants = getVariants(direction, isMobile ?? false);
 
   return (
-    <div className="relative h-screen w-screen overflow-hidden bg-[#05080F]">
+    <div id="main-content" className="relative h-screen w-screen overflow-hidden bg-[#05080F]">
       {/* Background layers */}
       <ParticleBackground />
       <FallbackBackground />

@@ -299,10 +299,12 @@ export default function MarketplacePage() {
         {/* Listings grid */}
         <div className="mt-6 sm:mt-8">
           {loading ? (
-            <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {Array.from({ length: 8 }).map((_, i) => (
-                <ListingCardSkeleton key={i} />
-              ))}
+            <div role="status" aria-label="Loading marketplace">
+              <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <ListingCardSkeleton key={i} />
+                ))}
+              </div>
             </div>
           ) : error ? (
             <motion.div

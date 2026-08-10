@@ -193,7 +193,9 @@ export default function GalleryPage() {
               }}
             />
           ) : loading ? (
-            <GallerySkeleton />
+            <div role="status" aria-label="Loading gallery">
+              <GallerySkeleton />
+            </div>
           ) : artworks.length === 0 ? (
             <EmptyState
               icon={ImageIcon}

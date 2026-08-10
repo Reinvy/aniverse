@@ -111,6 +111,11 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full bg-eclipse font-sans text-white/85 bg-starfield scanline">
+        {/* Skip link — keyboard a11y: jump straight to main content */}
+        <a href="#main-content" className="skip-link">
+          <span aria-hidden="true">◆</span>
+          Skip to content
+        </a>
         <AuthProvider>
           <MotionProvider>{children}</MotionProvider>
         </AuthProvider>
