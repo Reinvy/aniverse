@@ -18,6 +18,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { SearchBar } from "@/components/ui/search-bar";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Pagination } from "@/components/ui/pagination";
+import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import { FetchErrorState } from "@/components/ui/fetch-error";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { FeaturedArticleHero, type FeaturedArticle } from "@/components/blog/featured-article-hero";
@@ -254,7 +255,8 @@ export default function BlogPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
-              className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+              id="results-top"
+              className="grid scroll-mt-28 gap-6 sm:grid-cols-2 lg:grid-cols-3"
             >
               {articles.map((article, i) => (
                 <motion.div
@@ -263,7 +265,10 @@ export default function BlogPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.05, duration: 0.4 }}
                 >
-                  <Link href={`/blog/${article.slug}`}>
+                  <Link
+                    href={`/blog/${article.slug}`}
+                    className="block rounded-[4px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(229,197,135,0.4)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05080F]"
+                  >
                     <Card className="group h-full cut-corner energy-sweep relative overflow-hidden transition-all duration-300 premium-transition hover:scale-[1.02] hover:border-[rgba(229,197,135,0.35)] hover:shadow-[0_0_24px_rgba(229,197,135,0.12)]">
                       {/* Cover Image */}
                       {article.coverImage && (
@@ -328,6 +333,7 @@ export default function BlogPage() {
               totalPages={pagination.totalPages}
               totalItems={pagination.total}
               onPageChange={setPage}
+              scrollTargetId="results-top"
             />
           )}
 
@@ -359,6 +365,7 @@ export default function BlogPage() {
         </div>
       </main>
       <Footer />
+      <ScrollToTop />
     </>
   );
 }

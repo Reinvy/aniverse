@@ -20,6 +20,7 @@ import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SearchBar } from "@/components/ui/search-bar";
 import { Pagination } from "@/components/ui/pagination";
+import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import { FetchErrorState } from "@/components/ui/fetch-error";
 import { FilterChips } from "@/components/ui/filter-chips";
 import { formatNumber, timeAgo, cn } from "@/lib/utils";
@@ -206,7 +207,9 @@ export default function GalleryPage() {
           ) : (
             <>
               <motion.div
+                id="results-top"
                 className={cn(
+                  "scroll-mt-28",
                   viewMode === "grid"
                     ? "grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
                     : "space-y-3 sm:space-y-4",
@@ -313,6 +316,7 @@ export default function GalleryPage() {
                     totalPages={pagination.totalPages}
                     totalItems={pagination.total}
                     onPageChange={setPage}
+                    scrollTargetId="results-top"
                   />
                 </div>
               )}
@@ -320,6 +324,7 @@ export default function GalleryPage() {
           )}
         </div>
       </div>
+      <ScrollToTop />
     </ErrorBoundary>
   );
 }
