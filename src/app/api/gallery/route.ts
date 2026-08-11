@@ -14,6 +14,7 @@ import {
 import {
   findPublicArtworks,
   findPublicArtworksCursor,
+  ARTWORK_STYLES,
 } from "@/lib/services/artwork.service";
 import { ARTWORK_SORT_FIELDS } from "@/lib/services/sort-config";
 import { applyRateLimit, readLimiter } from "@/lib/rate-limiter";
@@ -55,19 +56,11 @@ export async function GET(request: NextRequest) {
     const fields = parseFields(searchParams);
 
     const styleRaw = searchParams.get("style") || undefined;
-    const validStyles = [
-      "ANIME",
-      "MANGA",
-      "CHIBI",
-      "REALISTIC",
-      "SEMI_REALISTIC",
-      "WATERCOLOR",
-      "PIXEL_ART",
-      "OTHER",
-    ] as const;
+    // Whitelist derived from the Prisma enum — single source of truth, so a
+    // style added to the schema is automatically valid here.
     const style =
-      styleRaw && validStyles.includes(styleRaw as (typeof validStyles)[number])
-        ? (styleRaw as (typeof validStyles)[number])
+      styleRaw && ARTWORK_STYLES.includes(styleRaw as (typeof ARTWORK_STYLES)[number])
+        ? (styleRaw as (typeof ARTWORK_STYLES)[number])
         : undefined;
     const search = searchParams.get("search") || undefined;
     const creatorId = searchParams.get("creatorId") || undefined;

@@ -9,10 +9,20 @@
  */
 
 import { prisma } from "@/lib/prisma";
-import type { ArtworkStyle, Prisma } from "@/generated/prisma/client";
+import { ArtworkStyle, type Prisma } from "@/generated/prisma/client";
 import type { PaginationParams } from "@/lib/api-helpers";
 import { buildOrderBy, buildSearchClause, applyKeysetWhere, buildKeysetOrderBy } from "@/lib/query-builder";
 import { ARTWORK_SORT_FIELDS } from "@/lib/services/sort-config";
+
+// ─── Constants ────────────────────────────────────────────────────
+
+/**
+ * All valid ArtworkStyle values — single source of truth derived from the
+ * Prisma-generated enum const object, so whitelists in API routes can never
+ * drift from the schema. Routes use this for style validation instead of
+ * duplicating the enum inline.
+ */
+export const ARTWORK_STYLES: ArtworkStyle[] = Object.values(ArtworkStyle);
 
 // ─── Types ────────────────────────────────────────────────────────
 
