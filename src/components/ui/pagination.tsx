@@ -16,6 +16,12 @@ export interface PaginationProps {
   totalItems?: number;
   /** Max number of numbered page buttons to show (excluding ellipses) */
   maxPageButtons?: number;
+  /**
+   * Optional id of the results container to smooth-scroll to when the
+   * page changes — prevents the viewport from staying at the bottom of
+   * a long list after clicking "next page".
+   */
+  scrollTargetId?: string;
   /** Custom class */
   className?: string;
 }
@@ -67,6 +73,7 @@ export function Pagination({
   onPageChange,
   totalItems,
   maxPageButtons = 7,
+  scrollTargetId,
   className,
 }: PaginationProps) {
   if (totalPages <= 1) return null;
@@ -74,6 +81,23 @@ export function Pagination({
   const prevDisabled = page <= 1;
   const nextDisabled = page >= totalPages;
   const pageItems = getPageItems(page, totalPages, maxPageButtons);
+
+  // Scroll back to the top of the results list when the page changes,
+  // so the user isn't left at the bottom of a long grid. Respects
+  // prefers-reduced-motion (instant jump instead of smooth scroll).
+  const handlePageChange = (nextPage: number) => {
+    onPageChange(nextPage);
+    if (!scrollTargetId) return;
+    const target = document.getElementById(scrollTargetId);
+    if (!target) return;
+    const reduce =
+      typeof window !== "undefined" &&
+      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    target.scrollIntoView({
+      behavior: reduce ? "auto" : "smooth",
+      block: "start",
+    });
+  };
 
   return (
     <div
@@ -89,7 +113,7 @@ export function Pagination({
           size="icon"
           className="sm:h-8 sm:w-8"
           disabled={prevDisabled}
-          onClick={() => onPageChange(page - 1)}
+          onClick={() => handlePageChange(page - 1)}
           aria-label="Previous page"
         >
           <ChevronLeft className="h-4 w-4" />
@@ -119,7 +143,7 @@ export function Pagination({
                   "min-w-8 font-mono text-xs sm:h-8 sm:w-8",
                   isActive && "border-[rgba(230,194,128,0.35)] text-[#e6c280] shadow-[inset_0_0_12px_rgba(230,194,128,0.1)]",
                 )}
-                onClick={() => onPageChange(item)}
+                onClick={() => handlePageChange(item)}
                 aria-label={`Page ${item}`}
                 aria-current={isActive ? "page" : undefined}
               >
@@ -135,7 +159,7 @@ export function Pagination({
           size="icon"
           className="sm:h-8 sm:w-8"
           disabled={nextDisabled}
-          onClick={() => onPageChange(page + 1)}
+          onClick={() => handlePageChange(page + 1)}
           aria-label="Next page"
         >
           <ChevronRight className="h-4 w-4" />

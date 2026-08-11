@@ -20,6 +20,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { EmptyState } from "@/components/ui/empty-state";
 import { FetchErrorState } from "@/components/ui/fetch-error";
 import { FilterChips } from "@/components/ui/filter-chips";
+import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
@@ -467,6 +468,7 @@ export default function ChallengesPage() {
         </div>
       </main>
       <Footer />
+      <ScrollToTop />
     </>
   );
 }

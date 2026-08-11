@@ -21,6 +21,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { EmptyState } from "@/components/ui/empty-state";
 import { FetchErrorState } from "@/components/ui/fetch-error";
 import { Pagination } from "@/components/ui/pagination";
+import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import { PageHeader } from "@/components/ui/page-header";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { formatNumber } from "@/lib/utils";
@@ -346,7 +347,8 @@ export default function MarketplacePage() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2, duration: 0.4 }}
-                className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                id="results-top"
+                className="grid scroll-mt-28 gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
               >
                 {products.map((item, i) => (
                   <motion.div
@@ -423,6 +425,7 @@ export default function MarketplacePage() {
                   totalPages={pagination.totalPages}
                   totalItems={pagination.total}
                   onPageChange={setPage}
+                  scrollTargetId="results-top"
                 />
               )}
             </>
@@ -444,6 +447,7 @@ export default function MarketplacePage() {
           </span>
         </motion.div>
       </div>
+      <ScrollToTop />
     </ErrorBoundary>
   );
 }

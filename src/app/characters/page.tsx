@@ -19,6 +19,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { SearchBar } from "@/components/ui/search-bar";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Pagination } from "@/components/ui/pagination";
+import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import { FetchErrorState } from "@/components/ui/fetch-error";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { Header } from "@/components/layout/header";
@@ -215,7 +216,8 @@ export default function CharactersPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.15 }}
-              className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+              id="results-top"
+              className="grid scroll-mt-28 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
             >
               {characters.map((character, i) => {
                 const image = getFirstImage(character.referenceImages);
@@ -229,7 +231,7 @@ export default function CharactersPage() {
                   >
                     <Link
                       href={`/characters/${character.id}`}
-                      className="group block h-full"
+                      className="group block h-full rounded-[4px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(229,197,135,0.4)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05080F]"
                       aria-label={`View ${character.name} profile`}
                     >
                       <Card className="group h-full cut-corner energy-sweep relative overflow-hidden transition-all duration-300 group-hover:border-stroke-gold/50 group-hover:shadow-[0_0_24px_rgba(229,197,135,0.12)]">
@@ -291,6 +293,7 @@ export default function CharactersPage() {
               totalPages={pagination.totalPages}
               totalItems={pagination.total}
               onPageChange={setPage}
+              scrollTargetId="results-top"
             />
           )}
 
@@ -322,6 +325,7 @@ export default function CharactersPage() {
         </div>
       </main>
       <Footer />
+      <ScrollToTop />
     </>
   );
 }
