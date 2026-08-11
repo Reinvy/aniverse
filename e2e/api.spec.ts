@@ -307,4 +307,91 @@ test.describe("API Endpoints", () => {
     expect(text).not.toContain("/dashboard");
     expect(text).not.toContain("/login");
   });
+
+  test("GET /api/marketplace should return 200 with products, pagination, and stats", async ({
+    request,
+  }) => {
+    const response = await request.get("/api/marketplace");
+    expect(response.ok()).toBe(true);
+    const body = await response.json();
+    // Shape contract: products array + pagination meta + aggregate stats bar.
+    expect(Array.isArray(body.products)).toBe(true);
+    expect(body.pagination).toBeDefined();
+    expect(typeof body.pagination.total).toBe("number");
+    expect(body.stats).toBeDefined();
+    // Stats bar aggregates (may be zero in an empty DB — keys must exist).
+    expect(body.stats).toHaveProperty("totalListings");
+    expect(body.stats).toHaveProperty("activeCreators");
+    expect(body.stats).toHaveProperty("avgPrice");
+  });
+
+  test("GET /api/marketplace?sort=price-asc should return 200 with sorted products", async ({
+    request,
+  }) => {
+    const response = await request.get("/api/marketplace?sort=price-asc&limit=20");
+    expect(response.ok()).toBe(true);
+    const body = await response.json();
+    expect(Array.isArray(body.products)).toBe(true);
+    // When products exist, prices must be non-decreasing (ascending sort).
+    if (body.products.length > 1) {
+      const prices = body.products.map((p: { price: number }) => Number(p.price));
+      const sorted = [...prices].sort((a, b) => a - b);
+      expect(prices).toEqual(sorted);
+    }
+  });
+
+  test("GET /api/marketplace cursor pagination: page1 emits nextCursor, page2 has no overlap", async ({
+    request,
+  }) => {
+    // Regression for the keyset (cursor) pagination contract on marketplace —
+    // a public catalog endpoint with deep-page scalability requirements.
+    const page1 = await request.get("/api/marketplace?limit=2");
+    expect(page1.ok()).toBe(true);
+    const body1 = await page1.json();
+    const ids1 = body1.products.map((p: { id: string }) => p.id);
+    const nextCursor = body1.pagination?.nextCursor;
+    expect(nextCursor).toBeTruthy();
+
+    const page2 = await request.get(
+      `/api/marketplace?limit=2&cursor=${encodeURIComponent(nextCursor)}`,
+    );
+    expect(page2.ok()).toBe(true);
+    const body2 = await page2.json();
+    const ids2 = body2.products.map((p: { id: string }) => p.id);
+    expect(ids2.length).toBeGreaterThan(0);
+    const overlap = ids1.filter((id: string) => ids2.includes(id));
+    expect(overlap).toEqual([]);
+  });
+
+  test("GET /api/artworks/[id] should return 405 (route mounted, PATCH/DELETE only)", async ({
+    request,
+  }) => {
+    // The [id] route implements PATCH + DELETE (ownership-scoped). A GET must
+    // return 405 Method Not Allowed — proving the route is mounted without
+    // requiring authentication.
+    const response = await request.get("/api/artworks/some-artwork-id");
+    expect(response.status()).toBe(405);
+  });
+
+  test("PATCH /api/artworks/[id] should return 401 when not authenticated", async ({
+    request,
+  }) => {
+    const response = await request.patch("/api/artworks/some-artwork-id", {
+      data: { title: "Unauthorized edit" },
+    });
+    expect([401, 403]).toContain(response.status());
+  });
+
+  test("GET /api/marketplace?search= should gracefully return 200 with an array", async ({
+    request,
+  }) => {
+    // Search filter must never 500 — empty or non-matching queries return an
+    // empty products array with valid pagination.
+    const response = await request.get(
+      "/api/marketplace?search=" + encodeURIComponent("zzz-no-such-product"),
+    );
+    expect(response.ok()).toBe(true);
+    const body = await response.json();
+    expect(Array.isArray(body.products)).toBe(true);
+  });
 });
