@@ -10,6 +10,7 @@ import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@/generated/prisma/client";
 import type { PaginationParams } from "@/lib/api-helpers";
 import { buildOrderBy, buildSearchClause, applyKeysetWhere, buildKeysetOrderBy } from "@/lib/query-builder";
+import { createTtlCache } from "@/lib/ttl-cache";
 import { CHARACTER_SORT_FIELDS } from "@/lib/services/sort-config";
 
 // ─── Types ────────────────────────────────────────────────────────
@@ -175,14 +176,29 @@ export async function findPublicCharactersCursor(
 
 /**
  * Get a single character by ID.
+ *
+ * TTL-cached (60s) keyed by id: character profiles are static content that
+ * only changes when a creator edits them, so a 60s staleness window is
+ * imperceptible while the cache removes the detail query (which joins the
+ * creator + artwork counts) from every profile-page hit. `null` results are
+ * cached too (missing id → repeated 404s don't re-query). Per-instance
+ * cache — see ttl-cache docs.
  */
+const characterDetailCache = createTtlCache<CharacterDetail | null>(60_000);
+
 export async function findCharacterById(
   id: string,
 ): Promise<CharacterDetail | null> {
-  return prisma.character.findFirst({
+  const cached = characterDetailCache.get(id);
+  if (cached !== undefined) return cached;
+
+  const character = await prisma.character.findFirst({
     where: { id, isPublic: true },
     select: characterDetailSelect,
   });
+
+  characterDetailCache.set(id, character);
+  return character;
 }
 
 /**

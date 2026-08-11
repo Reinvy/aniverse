@@ -9,7 +9,9 @@ import {
 import {
   updateArtwork,
   deleteArtwork,
+  ARTWORK_STYLES,
 } from "@/lib/services/artwork.service";
+import { invalidateDashboardStats } from "@/lib/services/dashboard.service";
 import { writeLimiter } from "@/lib/rate-limiter";
 import {
   collectValidationErrors,
@@ -54,16 +56,9 @@ export async function PATCH(
     ]);
     if (errors) return validationErrorResponse(errors);
 
-    const VALID_STYLES: ArtworkStyle[] = [
-      "ANIME",
-      "MANGA",
-      "CHIBI",
-      "REALISTIC",
-      "SEMI_REALISTIC",
-      "WATERCOLOR",
-      "PIXEL_ART",
-      "OTHER",
-    ];
+    // Style whitelist derived from the Prisma enum (single source of truth —
+    // can never drift from the schema).
+    const VALID_STYLES: ArtworkStyle[] = ARTWORK_STYLES;
 
     const data: {
       title?: string;
@@ -130,6 +125,9 @@ export async function DELETE(
     const { id } = await params;
     const deleted = await deleteArtwork(id, auth.userId);
     if (!deleted) return notFoundResponse("Artwork not found");
+
+    // Deletion changes dashboard counts (totalArtworks, likesReceived, ...).
+    invalidateDashboardStats(auth.userId);
 
     return conditionalJsonResponse(request, { ok: true }, { status: 200 });
   } catch (error) {

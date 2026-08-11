@@ -13,6 +13,7 @@ import {
   createArtwork,
   findUserArtworks,
 } from "@/lib/services/artwork.service";
+import { invalidateDashboardStats } from "@/lib/services/dashboard.service";
 import { writeLimiter } from "@/lib/rate-limiter";
 import {
   collectValidationErrors,
@@ -45,6 +46,9 @@ export async function POST(request: NextRequest) {
       { title, prompt, style, imageUrl, width, height },
       auth.userId,
     );
+
+    // New artwork changes dashboard counts (totalArtworks, generationsUsed).
+    invalidateDashboardStats(auth.userId);
 
     return conditionalJsonResponse(request, { artwork }, { status: 201 });
   } catch (error) {

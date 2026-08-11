@@ -206,11 +206,23 @@ export async function findPublishedArticlesCursor(
 
 /**
  * Get a single published article by slug.
+ *
+ * TTL-cached (60s) keyed by slug: article content only changes when an admin
+ * publishes/edits, so a 60s staleness window is imperceptible, while the
+ * cache removes a full-content query (large `content` column) from every
+ * article-page hit on read-heavy traffic. `null` results are cached too
+ * (missing slug → repeated 404s don't re-query). See ttl-cache docs — this
+ * is a per-instance cache, not a cross-instance store.
  */
+const articleDetailCache = createTtlCache<BlogArticleDetail | null>(60_000);
+
 export async function findArticleBySlug(
   slug: string,
 ): Promise<BlogArticleDetail | null> {
-  return prisma.blogArticle.findFirst({
+  const cached = articleDetailCache.get(slug);
+  if (cached !== undefined) return cached;
+
+  const article = await prisma.blogArticle.findFirst({
     where: {
       slug,
       isPublished: true,
@@ -218,6 +230,9 @@ export async function findArticleBySlug(
     },
     select: blogDetailSelect,
   });
+
+  articleDetailCache.set(slug, article);
+  return article;
 }
 
 /**

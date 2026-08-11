@@ -14,7 +14,9 @@ import {
 } from "@/lib/api-helpers";
 import { findUsers, findUsersCursor } from "@/lib/services/user.service";
 import { USER_SORT_FIELDS } from "@/lib/services/sort-config";
-import type { Role, PremiumTier } from "@/generated/prisma/client";
+// Value imports: the Prisma-generated enums are const objects, so the
+// whitelists below derive directly from the schema (single source of truth).
+import { Role, PremiumTier } from "@/generated/prisma/client";
 
 /**
  * GET /api/users — List users with pagination, search, and filtering.
@@ -50,9 +52,10 @@ export async function GET(request: NextRequest) {
     const roleRaw = searchParams.get("role") || undefined;
     const premiumTierRaw = searchParams.get("premiumTier") || undefined;
 
-    // Validate enum params
-    const validRoles: Role[] = ["USER", "CREATOR", "ADMIN"];
-    const validTiers: PremiumTier[] = ["FREE", "PRO", "ULTIMATE"];
+    // Enum whitelists derived from the Prisma schema — a new role/tier added
+    // to the schema becomes valid here automatically.
+    const validRoles: Role[] = Object.values(Role);
+    const validTiers: PremiumTier[] = Object.values(PremiumTier);
     const role = roleRaw && validRoles.includes(roleRaw as Role) ? (roleRaw as Role) : undefined;
     const premiumTier =
       premiumTierRaw && validTiers.includes(premiumTierRaw as PremiumTier)

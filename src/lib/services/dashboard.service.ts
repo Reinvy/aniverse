@@ -7,6 +7,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { TIERS } from "@/lib/constants";
+import { createTtlCache } from "@/lib/ttl-cache";
 import { countUserArtworks, findUserArtworkIds } from "@/lib/services/artwork.service";
 
 // ─── Types ────────────────────────────────────────────────────────
@@ -35,16 +36,68 @@ export interface ActivityItem {
   time: string;
 }
 
+export interface DashboardResult {
+  stats: DashboardStats;
+  activity: ActivityItem[];
+  user: { name: string | null; email: string | null; role: string };
+}
+
+// ─── Per-user TTL cache ───────────────────────────────────────────
+
+/**
+ * The dashboard stats endpoint aggregates 5-6 DB queries per request
+ * (user + _count, monthly generations, earnings sum, artwork ids, likes
+ * received, and a 3-query activity feed). On a read-heavy dashboard that
+ * cost is paid on every navigation — even when the HTTP layer 304s, each
+ * serverless instance still re-runs the queries on every cache miss.
+ *
+ * A short per-user in-memory TTL (30s) collapses repeated visits into ONE
+ * computed payload per user per window. Freshness is preserved by
+ * {@link invalidateDashboardStats}, which mutation routes (artwork
+ * create/delete) call so counts reflect new activity immediately.
+ *
+ * NOTE: per-instance cache (see ttl-cache docs) — a scalability win for
+ * read-heavy repeat traffic, not a cross-instance store.
+ */
+const DASHBOARD_STATS_TTL_MS = 30_000;
+const dashboardStatsCache = createTtlCache<DashboardResult>(
+  DASHBOARD_STATS_TTL_MS,
+);
+
+/**
+ * Drop the cached dashboard payload for a user after a mutation that
+ * changes their counts (e.g. artwork created/deleted). Safe to call
+ * unconditionally — deleting a missing key is a no-op.
+ */
+export function invalidateDashboardStats(userId: string): void {
+  dashboardStatsCache.delete(userId);
+}
+
 // ─── Service Methods ──────────────────────────────────────────────
 
 /**
  * Get all dashboard stats for a user.
+ *
+ * Results are TTL-cached per user (30s) — see {@link dashboardStatsCache}.
+ * Mutation routes must call {@link invalidateDashboardStats} after
+ * create/delete so the cached counts don't go stale.
  */
-export async function getDashboardStats(userId: string): Promise<{
-  stats: DashboardStats;
-  activity: ActivityItem[];
-  user: { name: string | null; email: string | null; role: string };
-}> {
+export async function getDashboardStats(userId: string): Promise<DashboardResult> {
+  const cached = dashboardStatsCache.get(userId);
+  if (cached) return cached;
+
+  const result = await computeDashboardStats(userId);
+  dashboardStatsCache.set(userId, result);
+  return result;
+}
+
+/**
+ * Compute dashboard stats from the database (uncached).
+ *
+ * Extracted so the TTL wrapper above stays a one-liner; all query work
+ * lives here. 5-6 queries per call, batched into two parallel groups.
+ */
+async function computeDashboardStats(userId: string): Promise<DashboardResult> {
   const user = await prisma.user.findUnique({
     where: { id: userId },
     select: {
