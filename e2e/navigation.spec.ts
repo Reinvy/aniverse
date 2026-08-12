@@ -198,4 +198,77 @@ test.describe("Navigation", () => {
       await page.waitForTimeout(1000);
     }
   });
+
+  test("landing page honors deep-link section hash from header nav (#features)", async ({
+    page,
+  }) => {
+    // MAIN_NAV_LINKS point to /#features and /#pricing — the spatial canvas
+    // must land on that section (not always hero) when the URL carries the
+    // hash. Regression guard for the hash-anchor deep-linking fix.
+    await page.goto("/#features");
+    // Features node content: first feature card title + section sys label.
+    await expect(
+      page.getByText("AI-Powered Generation").first(),
+    ).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText("FEATURES", { exact: false }).first()).toBeVisible({
+      timeout: 10000,
+    });
+  });
+
+  test("landing page honors deep-link section hash from header nav (#pricing)", async ({
+    page,
+  }) => {
+    await page.goto("/#pricing");
+    // Pricing node content: tier cards render "<TIER> // TIER" mono labels
+    // and the annual toggle. "MOST POPULAR" badge marks the Pro tier.
+    await expect(page.getByText("MOST POPULAR").first()).toBeVisible({
+      timeout: 10000,
+    });
+    await expect(page.getByText(/\/\/ TIER/).first()).toBeVisible({
+      timeout: 10000,
+    });
+  });
+
+  test("header nav hash links (Features/Pricing) navigate to the right landing section", async ({
+    page,
+  }) => {
+    // From a non-landing page, the Header's "Features" link (/#features) must
+    // land on the features section of the spatial canvas — not the hero.
+    await page.goto("/characters");
+    const featuresLink = page.locator('header a[href="/#features"]').first();
+    await expect(featuresLink).toBeVisible();
+    await featuresLink.click();
+    await expect(page).toHaveURL(/#features/);
+    await expect(
+      page.getByText("AI-Powered Generation").first(),
+    ).toBeVisible({ timeout: 10000 });
+
+    // Same for "Pricing" (/#pricing)
+    await page.goto("/blog");
+    const pricingLink = page.locator('header a[href="/#pricing"]').first();
+    await expect(pricingLink).toBeVisible();
+    await pricingLink.click();
+    await expect(page).toHaveURL(/#pricing/);
+    await expect(page.getByText("MOST POPULAR").first()).toBeVisible({
+      timeout: 10000,
+    });
+  });
+
+  test("scroll-to-top button appears after scrolling and returns to top", async ({
+    page,
+  }) => {
+    // ScrollToTop (PR #114) — game-style floating back-to-top button on
+    // characters/blog/challenges/gallery/marketplace pages.
+    await page.goto("/characters");
+    const btn = page.getByRole("button", { name: "Back to top" });
+    // Hidden before scrolling (opacity-0 + pointer-events-none).
+    await expect(btn).not.toBeVisible();
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    await expect(btn).toBeVisible({ timeout: 5000 });
+    await btn.click();
+    // Smooth scroll — allow the animation to settle, then assert near top.
+    await page.waitForTimeout(1500);
+    const y = await page.evaluate(() => window.scrollY);
+    expect(y).toBeLessThan(150);
+  });
 });

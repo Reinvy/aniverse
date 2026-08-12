@@ -1,6 +1,13 @@
 "use client";
 
-import React, { createContext, useContext, useState, useCallback, useRef } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useRef,
+  useEffect,
+} from "react";
 
 // ─── Section Definitions ───────────────────────────────────────
 
@@ -37,6 +44,18 @@ interface SpatialContextValue {
 }
 
 const sectionOrder: SectionId[] = SECTIONS.map((s) => s.id);
+
+/**
+ * Map a URL hash (e.g. `#features`, `#pricing`) to a section id.
+ * Header nav links (MAIN_NAV_LINKS) point to `/#features` and `/#pricing`,
+ * so the spatial canvas must honor them as deep-link anchors instead of
+ * always mounting on the hero node. Unknown/empty hashes → null (hero).
+ */
+function sectionFromHash(hash: string): SectionId | null {
+  if (!hash || hash === "#" || hash === "#/") return null;
+  const id = hash.replace(/^#\/?/, "") as SectionId;
+  return SECTIONS.some((s) => s.id === id) ? id : null;
+}
 
 const SpatialContext = createContext<SpatialContextValue | null>(null);
 
@@ -85,6 +104,33 @@ export function SpatialProvider({ children }: { children: React.ReactNode }) {
     };
     return offsets[activeSection];
   })();
+
+  // ─── Hash-anchor deep linking ─────────────────────────────────
+  // Header nav links (MAIN_NAV_LINKS) point to /#features and /#pricing.
+  // On mount with a section hash (or when the hash changes), navigate to
+  // that section instead of always starting at hero. This makes the header
+  // nav work from any page AND makes section state shareable via URL.
+  useEffect(() => {
+    const initial = sectionFromHash(window.location.hash);
+    if (initial) setActiveSection(initial);
+
+    const onHashChange = () => {
+      const next = sectionFromHash(window.location.hash);
+      if (next) navigateTo(next);
+    };
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, [navigateTo]);
+
+  // Keep the URL hash in sync with the active section (replaceState, so HUD
+  // navigation doesn't spam history entries) — deep links stay valid after
+  // in-page navigation.
+  useEffect(() => {
+    const expected = `#${activeSection}`;
+    if (window.location.hash !== expected) {
+      window.history.replaceState(null, "", expected);
+    }
+  }, [activeSection]);
 
   return (
     <SpatialContext.Provider
