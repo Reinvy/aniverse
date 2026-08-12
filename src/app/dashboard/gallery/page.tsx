@@ -18,6 +18,7 @@ import { PageHeader } from "@/components/ui/page-header";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ArtworkImage } from "@/components/ui/artwork-image";
 import { SearchBar } from "@/components/ui/search-bar";
 import { Pagination } from "@/components/ui/pagination";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
@@ -236,29 +237,19 @@ export default function GalleryPage() {
                       )}
                     >
                       {/* Thumbnail */}
-                      <div
-                        className={cn(
-                          "relative flex items-center justify-center bg-[rgba(0,0,0,0.3)] text-white/10",
+                      <ArtworkImage
+                        src={art.imageUrl}
+                        alt={art.title}
+                        wrapperClassName={cn(
                           viewMode === "grid"
                             ? "aspect-[4/3] rounded-t-[4px] border-b border-white/5"
                             : "h-20 w-20 shrink-0 rounded-[4px] border border-white/5",
                         )}
-                      >
-                        {art.imageUrl ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img
-                            src={art.imageUrl}
-                            alt={art.title}
-                            className={cn(
-                              "object-cover",
-                              viewMode === "grid" ? "absolute inset-0 h-full w-full" : "h-full w-full",
-                            )}
-                            loading="lazy"
-                          />
-                        ) : (
-                          <ImageIcon className="h-8 w-8" />
+                        className={cn(
+                          "object-cover",
+                          viewMode === "grid" ? "absolute inset-0 h-full w-full" : "h-full w-full",
                         )}
-                      </div>
+                      />
 
                       <CardContent
                         className={cn(

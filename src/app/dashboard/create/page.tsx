@@ -23,6 +23,7 @@ import { PageHeader } from "@/components/ui/page-header";
 import { Spinner } from "@/components/ui/spinner";
 import { STYLE_PRESETS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import { toast } from "@/hooks/use-toast";
 
 const TOKEN_KEY = "aniverse_token";
 
@@ -133,6 +134,12 @@ export default function CreatePage() {
       // Even on "error", the image might render - try anyway
       setGeneratedImage(imageUrl);
       setIsGenerating(false);
+      toast({
+        title: "Generation warning",
+        description:
+          "The image service is slow to respond. Your artwork may take a moment to appear.",
+        variant: "warning",
+      });
     };
     img.src = imageUrl;
   }, [prompt, selectedStyle, imageDimensions.width, imageDimensions.height]);
@@ -174,11 +181,21 @@ export default function CreatePage() {
       }
 
       setSaveState("saved");
+      toast({
+        title: "Artwork saved",
+        description: "Your creation has been added to your gallery.",
+        variant: "success",
+      });
     } catch (err) {
       setSaveState("error");
-      setSaveError(
-        err instanceof Error ? err.message : "Failed to save artwork",
-      );
+      const message =
+        err instanceof Error ? err.message : "Failed to save artwork";
+      setSaveError(message);
+      toast({
+        title: "Save failed",
+        description: message,
+        variant: "error",
+      });
     }
   }, [generatedImage, generatedTitle, prompt, selectedStyle, imageDimensions]);
 

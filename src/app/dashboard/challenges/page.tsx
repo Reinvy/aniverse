@@ -18,6 +18,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/ui/page-header";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
+import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import { dailyChallenge } from "@/data/challenges/daily-20260724";
 import { weeklyChallenge } from "@/data/challenges/weekly-20260724";
 
@@ -314,6 +315,7 @@ export default function ChallengesPage() {
         </Card>
       </motion.div>
     </div>
+    <ScrollToTop />
     </ErrorBoundary>
   );
 }

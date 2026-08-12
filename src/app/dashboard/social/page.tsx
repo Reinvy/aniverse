@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { StatCard } from "@/components/ui/stat-card";
 import { PageHeader } from "@/components/ui/page-header";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
+import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import { APP_URL } from "@/lib/constants";
 import Link from "next/link";
 
@@ -325,6 +326,7 @@ export default function SocialDashboardPage() {
         </Card>
       </motion.div>
     </div>
+    <ScrollToTop />
     </ErrorBoundary>
   );
 }
