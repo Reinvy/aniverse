@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { StatCard } from "@/components/ui/stat-card";
 import { PageHeader } from "@/components/ui/page-header";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
+import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import { pricingTiers, coinPacks } from "@/lib/pricing";
 import Link from "next/link";
 
@@ -343,6 +344,7 @@ export default function MonetizationPage() {
         </motion.div>
       </div>
     </div>
+    <ScrollToTop />
     </ErrorBoundary>
   );
 }

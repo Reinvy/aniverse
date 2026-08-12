@@ -19,6 +19,7 @@ import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
+import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { PageBackground } from "@/components/ui/page-background";
@@ -362,6 +363,7 @@ export default function CharacterDetailPage() {
         </div>
       </main>
       <Footer />
+      <ScrollToTop />
     </>
   );
 }

@@ -6,7 +6,6 @@ import {
   Store,
   Search,
   ShoppingCart,
-  Image as ImageIcon,
   TrendingUp,
   Users,
   Coins,
@@ -18,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ArtworkImage } from "@/components/ui/artwork-image";
 import { EmptyState } from "@/components/ui/empty-state";
 import { FetchErrorState } from "@/components/ui/fetch-error";
 import { Pagination } from "@/components/ui/pagination";
@@ -359,19 +359,15 @@ export default function MarketplacePage() {
                   >
                     <Card className="group diamond-indicator overflow-hidden h-full flex flex-col transition-all duration-300 premium-transition hover:scale-[1.02] hover:border-[rgba(229,197,135,0.35)] hover:shadow-[0_0_24px_rgba(229,197,135,0.12)]">
                       {/* Thumbnail */}
-                      <div className="relative aspect-[4/3] flex items-center justify-center bg-[rgba(0,0,0,0.3)] text-white/10 border-b border-white/5 overflow-hidden">
-                        {item.artwork?.imageUrl ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img
-                            src={item.artwork.imageUrl}
-                            alt={item.name}
-                            loading="lazy"
-                            className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                          />
-                        ) : (
-                          <ImageIcon className="h-10 w-10" />
-                        )}
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#0b0e14] via-transparent to-transparent opacity-60" />
+                      <div className="relative">
+                        <ArtworkImage
+                          src={item.artwork?.imageUrl}
+                          alt={item.name}
+                          wrapperClassName="aspect-[4/3] border-b border-white/5"
+                          className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          fallbackLabel="NO PREVIEW"
+                        />
+                        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b0e14] via-transparent to-transparent opacity-60" />
                         {item.artwork?.style && (
                           <Badge
                             variant="secondary"
