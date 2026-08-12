@@ -4,6 +4,16 @@ All notable changes to AniVerse are documented here.
 
 ## [Unreleased]
 
+### Performance & Maintenance (2026-08-12)
+- **Fixed lint error — `react-hooks/set-state-in-effect`** (`src/lib/spatial-store.tsx`): the hash-anchor deep-link effect (added 2026-08-12 in the e2e PR) called `setActiveSection` synchronously in the effect body, which cascades an extra render. Split into two effects: the initial hash resolution now defers via `setTimeout(..., 0)` (state update happens after the commit phase) and the `hashchange` listener stays in its own effect. Behavior unchanged — deep links from header nav (`/#features`, `/#pricing`) still mount the correct section. `npm run lint` → 0 errors, 0 warnings.
+- **Performance — memoized `cameraTransform`** (`src/lib/spatial-store.tsx`): the desktop camera CSS-transform string is derived purely from `activeSection` but was rebuilt on every provider render; now wrapped in `useMemo([activeSection])` so it only recomputes on section change.
+- **Cleanup — de-exported internal-only `NavDirection`** (`src/lib/spatial-store.tsx`): the type is used solely inside `spatial-store.tsx` (context value, state, ref) — zero external consumers, so it no longer ships as a public export.
+- Security audit: `npm audit --audit-level=high` → **0 vulnerabilities** (verified; no new advisories)
+- Verified structured error handling: all **17** API routes use try/catch + `console.error` + standardized helpers from `@/lib/api-helpers` (no raw 500s leak internal details)
+- Verified no secrets in tracked files: `.env` NOT in git (only `.env.example` with placeholders); no `console.log`/`console.debug` in `src/`; no TODO/FIXME markers; no `any` escape hatches outside `src/generated/` (Prisma client output)
+- Verified bundle/config consistency: `next.config.ts` optimal (`removeConsole` prod-only, `productionBrowserSourceMaps: false`, AVIF/WebP, `poweredByHeader: false`, no-store on `/api/*`); lucide-react named imports tree-shake cleanly; all `src/components/**` & `src/lib/**` modules have ≥1 consumer; `ParticleBackground` keeps DPR cap (≤2) + 80-particle ceiling
+- Verified `npm run lint` → 0 errors, 0 warnings; `npm run build` → clean production build, all 31 routes + Proxy (middleware) intact
+
 ### Performance & Maintenance (2026-08-09)
 - **Performance — parallelized dashboard stats & activity queries** (`src/lib/services/dashboard.service.ts`):
   - `getDashboardStats`: `likesReceived` count + `buildActivityFeed` now run concurrently (batch #2 via `Promise.all`) instead of serially — both only depend on `artworkIds` from batch #1 → saves 1 round trip per `/api/dashboard/stats` request
