@@ -9,8 +9,7 @@ import {
   conditionalJsonResponse,
   errorResponse,
   notFoundResponse,
-  decodeCursor,
-  isKeysetSafeSort,
+  resolveCursorMode,
 } from "@/lib/api-helpers";
 import {
   findPublicCharacters,
@@ -71,13 +70,11 @@ export async function GET(request: NextRequest) {
     // must not decode a cursor, or the keyset predicate would compare against
     // the wrong column. The search filter composes fine with the keyset
     // predicate.
-    const canCursor =
-      isKeysetSafeSort(pagination.sort) &&
-      CHARACTER_SORT_FIELDS.includes(
-        pagination.sort as (typeof CHARACTER_SORT_FIELDS)[number],
-      );
-
-    const cursor = canCursor ? decodeCursor(searchParams.get("cursor")) : null;
+    const { canCursor, cursor } = resolveCursorMode(
+      searchParams,
+      pagination.sort,
+      CHARACTER_SORT_FIELDS,
+    );
 
     if (cursor) {
       const { characters, total, hasNextPage } =

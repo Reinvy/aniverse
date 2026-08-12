@@ -8,8 +8,7 @@ import {
   buildCursorPaginationMeta,
   conditionalJsonResponse,
   errorResponse,
-  decodeCursor,
-  isKeysetSafeSort,
+  resolveCursorMode,
 } from "@/lib/api-helpers";
 import {
   findPublicArtworks,
@@ -73,13 +72,11 @@ export async function GET(request: NextRequest) {
     // (e.g. `publishedAt`) must not decode a cursor, or the keyset predicate
     // would compare against the wrong column. The style/search/creatorId
     // filters compose fine with the keyset predicate.
-    const cursor =
-      isKeysetSafeSort(pagination.sort) &&
-      ARTWORK_SORT_FIELDS.includes(
-        pagination.sort as (typeof ARTWORK_SORT_FIELDS)[number],
-      )
-        ? decodeCursor(searchParams.get("cursor"))
-        : null;
+    const { canCursor, cursor } = resolveCursorMode(
+      searchParams,
+      pagination.sort,
+      ARTWORK_SORT_FIELDS,
+    );
 
     if (cursor) {
       const { artworks, total, hasNextPage } = await findPublicArtworksCursor(
@@ -109,17 +106,13 @@ export async function GET(request: NextRequest) {
 
     // Emit the first cursor from the offset page so clients can switch to
     // keyset pagination for deep pages (when the sort is keyset-safe).
-    const nextCursor =
-      isKeysetSafeSort(pagination.sort) &&
-      ARTWORK_SORT_FIELDS.includes(
-        pagination.sort as (typeof ARTWORK_SORT_FIELDS)[number],
-      )
-        ? buildNextCursor(
-            artworks as unknown as Record<string, unknown>[],
-            pagination.sort,
-            meta.hasNextPage,
-          )
-        : null;
+    const nextCursor = canCursor
+      ? buildNextCursor(
+          artworks as unknown as Record<string, unknown>[],
+          pagination.sort,
+          meta.hasNextPage,
+        )
+      : null;
 
     return conditionalJsonResponse(
       request,

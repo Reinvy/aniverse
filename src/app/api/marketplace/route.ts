@@ -8,8 +8,7 @@ import {
   buildCursorPaginationMeta,
   conditionalJsonResponse,
   errorResponse,
-  decodeCursor,
-  isKeysetSafeSort,
+  resolveCursorMode,
 } from "@/lib/api-helpers";
 import { applyRateLimit, readLimiter } from "@/lib/rate-limiter";
 import {
@@ -70,8 +69,11 @@ export async function GET(request: NextRequest) {
     // cursor always enables the index-range path. Resolve the sort so the
     // nextCursor is built from the ACTIVE sort column (price vs createdAt).
     const { sortField } = resolveMarketplaceSort(sort);
-    const canCursor = isKeysetSafeSort(sortField);
-    const cursor = canCursor ? decodeCursor(searchParams.get("cursor")) : null;
+    const { canCursor, cursor } = resolveCursorMode(
+      searchParams,
+      sortField,
+      [sortField],
+    );
 
     if (cursor) {
       const { products, total, hasNextPage } =

@@ -8,8 +8,7 @@ import {
   buildCursorPaginationMeta,
   conditionalJsonResponse,
   errorResponse,
-  decodeCursor,
-  isKeysetSafeSort,
+  resolveCursorMode,
 } from "@/lib/api-helpers";
 import {
   findPublishedArticles,
@@ -55,15 +54,13 @@ export async function GET(request: NextRequest) {
     };
 
     // Whether the active sort can drive a keyset cursor for this entity.
-    const canCursor =
-      isKeysetSafeSort(pagination.sort) &&
-      BLOG_ARTICLE_SORT_FIELDS.includes(
-        pagination.sort as (typeof BLOG_ARTICLE_SORT_FIELDS)[number],
-      );
-
     // Cursor mode requires a keyset-safe sort that is ALSO whitelisted for the
     // blog entity (avoids decoding a cursor for a sort the service would clamp).
-    const cursor = canCursor ? decodeCursor(searchParams.get("cursor")) : null;
+    const { canCursor, cursor } = resolveCursorMode(
+      searchParams,
+      pagination.sort,
+      BLOG_ARTICLE_SORT_FIELDS,
+    );
 
     let articles;
     let paginationMeta;
