@@ -7,6 +7,7 @@ import React, {
   useCallback,
   useRef,
   useEffect,
+  useMemo,
 } from "react";
 
 // ─── Section Definitions ───────────────────────────────────────
@@ -30,7 +31,7 @@ export const SECTIONS: SectionConfig[] = [
 ];
 
 /** Direction for entrance/exit animations — "none" means no dir change */
-export type NavDirection = "left" | "right" | "up" | "down" | "none";
+type NavDirection = "left" | "right" | "up" | "down" | "none";
 
 // ─── Context ───────────────────────────────────────────────────
 
@@ -93,8 +94,9 @@ export function SpatialProvider({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
-  // Subtle camera transform for desktop spatial feel
-  const cameraTransform = (() => {
+  // Subtle camera transform for desktop spatial feel — derived purely from
+  // activeSection, so memoize to avoid rebuilding the string every render.
+  const cameraTransform = useMemo(() => {
     const offsets: Record<SectionId, string> = {
       hero:     "perspective(1200px) rotateX(0deg) rotateY(0deg) translateZ(0px)",
       features: "perspective(1200px) rotateX(2deg) rotateY(4deg) translateZ(50px)",
@@ -103,17 +105,24 @@ export function SpatialProvider({ children }: { children: React.ReactNode }) {
       faq:      "perspective(1200px) rotateX(3deg) rotateY(0deg) translateZ(30px)",
     };
     return offsets[activeSection];
-  })();
+  }, [activeSection]);
 
   // ─── Hash-anchor deep linking ─────────────────────────────────
   // Header nav links (MAIN_NAV_LINKS) point to /#features and /#pricing.
   // On mount with a section hash (or when the hash changes), navigate to
   // that section instead of always starting at hero. This makes the header
   // nav work from any page AND makes section state shareable via URL.
+  // Initial hash-anchor deep link — deferred via setTimeout so the state
+  // update happens AFTER the commit phase (react-hooks/set-state-in-effect:
+  // a synchronous setState in the effect body would cascade an extra render).
   useEffect(() => {
     const initial = sectionFromHash(window.location.hash);
-    if (initial) setActiveSection(initial);
+    if (!initial) return;
+    const timer = window.setTimeout(() => setActiveSection(initial), 0);
+    return () => window.clearTimeout(timer);
+  }, []);
 
+  useEffect(() => {
     const onHashChange = () => {
       const next = sectionFromHash(window.location.hash);
       if (next) navigateTo(next);
