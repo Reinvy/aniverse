@@ -9,8 +9,7 @@ import {
   buildCursorPaginationMeta,
   conditionalJsonResponse,
   errorResponse,
-  decodeCursor,
-  isKeysetSafeSort,
+  resolveCursorMode,
 } from "@/lib/api-helpers";
 import { findUsers, findUsersCursor } from "@/lib/services/user.service";
 import { USER_SORT_FIELDS } from "@/lib/services/sort-config";
@@ -65,13 +64,11 @@ export async function GET(request: NextRequest) {
     const filters = { search, role, premiumTier };
 
     // Whether the active sort can drive a keyset cursor for this entity.
-    const canCursor =
-      isKeysetSafeSort(pagination.sort) &&
-      USER_SORT_FIELDS.includes(
-        pagination.sort as (typeof USER_SORT_FIELDS)[number],
-      );
-
-    const cursor = canCursor ? decodeCursor(searchParams.get("cursor")) : null;
+    const { canCursor, cursor } = resolveCursorMode(
+      searchParams,
+      pagination.sort,
+      USER_SORT_FIELDS,
+    );
 
     if (cursor) {
       const { users, total, hasNextPage } = await findUsersCursor(

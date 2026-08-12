@@ -222,6 +222,36 @@ export function decodeCursor(
 }
 
 /**
+ * Resolve whether the active sort can drive a keyset cursor for a given
+ * entity, and decode the incoming `cursor` param when it can.
+ *
+ * DRY helper consolidating the repeated preamble in every cursor-capable
+ * list route:
+ *
+ *   const canCursor =
+ *     isKeysetSafeSort(pagination.sort) &&
+ *     ENTITY_SORT_FIELDS.includes(pagination.sort as ...);
+ *   const cursor = canCursor ? decodeCursor(searchParams.get("cursor")) : null;
+ *
+ * Returns `{ canCursor, cursor }` where `cursor` is the decoded token (or
+ * null when absent/malformed/not keyset-safe). `sortFields` must be the
+ * entity's whitelist from `@/lib/services/sort-config` — a sort the service
+ * would clamp must never decode a cursor, or the keyset predicate would
+ * compare against the wrong column.
+ */
+export function resolveCursorMode(
+  searchParams: URLSearchParams,
+  sort: string,
+  sortFields: readonly string[],
+): { canCursor: boolean; cursor: { sortValue: string; id: string } | null } {
+  const canCursor = isKeysetSafeSort(sort) && sortFields.includes(sort);
+  return {
+    canCursor,
+    cursor: canCursor ? decodeCursor(searchParams.get("cursor")) : null,
+  };
+}
+
+/**
  * Compute the `nextCursor` token for a page of rows, or null when there is no
  * next page (or the row shape can't produce a cursor).
  *

@@ -9,8 +9,7 @@ import {
   conditionalJsonResponse,
   errorResponse,
   notFoundResponse,
-  decodeCursor,
-  isKeysetSafeSort,
+  resolveCursorMode,
 } from "@/lib/api-helpers";
 import {
   findActiveChallenges,
@@ -70,13 +69,11 @@ export async function GET(request: NextRequest) {
     // Whether the active sort can drive a keyset cursor for this entity.
     // rewardCoins (Int) is deliberately excluded — Int filters reject string
     // cursor values — and enum sorts never enter cursor mode.
-    const canCursor =
-      isKeysetSafeSort(pagination.sort) &&
-      CHALLENGE_SORT_FIELDS.includes(
-        pagination.sort as (typeof CHALLENGE_SORT_FIELDS)[number],
-      );
-
-    const cursor = canCursor ? decodeCursor(searchParams.get("cursor")) : null;
+    const { canCursor, cursor } = resolveCursorMode(
+      searchParams,
+      pagination.sort,
+      CHALLENGE_SORT_FIELDS,
+    );
 
     if (cursor) {
       const result =
