@@ -4,6 +4,28 @@ All notable changes to AniVerse are documented here.
 
 ## [Unreleased]
 
+### Performance & Maintenance (2026-08-13)
+- **🔐 SECURITY (critical) — removed hardcoded JWT fallback secret** (`src/lib/auth.ts`): the module previously fell back to `"aniverse-dev-secret-key"` when `JWT_SECRET` was unset, meaning any deployment without the env var silently accepted tokens signed with a publicly-known key (anyone who read the repo could forge JWTs for any user). `JWT_SECRET` is now resolved lazily via `getJwtSecret()` and **fails closed** — signing/verifying throws with a clear message when the env var is missing. Deployments MUST set `JWT_SECRET`:
+  - Set on Vercel project `prj_nCzg89eX82InxCfAz3bKKW6D5ZoR` for `production` + `preview` + `development` (generated via `openssl rand -base64 48`)
+  - Added to local `.env` (gitignored) and `.env.example` now documents it as REQUIRED
+- **Security audit**: `npm audit --audit-level=high` → **0 vulnerabilities** (verified; no new advisories)
+- **Cleaned dead exports** (verified 0 imports across `src/`, e2e, `.cron` — de-exported internal-only types, no runtime change):
+  - `src/lib/services/artwork.service.ts`: `ArtworkFilters`, `CreateArtworkInput`, `ArtworkDetailItem`, `UpdateArtworkInput`
+  - `src/lib/services/blog.service.ts`: `BlogArticleFilters`, `BlogArticleListItem`, `BlogArticleDetail`
+  - `src/lib/services/challenge.service.ts`: `ChallengeDetail`
+  - `src/lib/services/character.service.ts`: `CharacterFilters`, `CharacterDetail`
+  - `src/lib/services/content.service.ts`: `ContentCounts`, `ContentOverviewAggregates`, `ContentOverview`
+  - `src/lib/services/dashboard.service.ts`: `DashboardStats`, `ActivityItem`, `DashboardResult`
+  - `src/lib/services/marketplace.service.ts`: `MarketplaceFilters`, `MarketplaceStats`, `MarketplaceProductItem`
+  - `src/lib/services/user.service.ts`: `UserFilters`
+  - `src/lib/api-helpers.ts`: `CacheDuration`, `AuthenticatedRequestResult`
+  - `src/lib/spatial-store.tsx`: `SectionConfig` (kept `SECTIONS` + `SectionId` — still consumed)
+  - `src/lib/ttl-cache.ts`: `TtlCache` (kept `createTtlCache` — consumed by 6 services)
+- Verified structured error handling: all **17** API routes use try/catch + `console.error` + standardized helpers from `@/lib/api-helpers` (auth routes intentionally return client-friendly `{ errors: { _form } }` shapes — no raw 500s leak internal details)
+- Verified no secrets in tracked files: `.env` NOT in git (only `.env.example` with placeholders); no `console.log`/`console.debug` in `src/`; no TODO/FIXME markers
+- Verified bundle/config consistency: `next.config.ts` optimal (`removeConsole` prod-only, `productionBrowserSourceMaps: false`, AVIF/WebP, `poweredByHeader: false`, no-store on `/api/*`); no unreferenced component/lib/data modules; lucide-react named imports tree-shake cleanly
+- Verified `npm run lint` → 0 errors, 0 warnings; `npm run build` → clean production build, all 31 routes + Proxy (middleware) intact
+
 ### Performance & Maintenance (2026-08-12)
 - **Fixed lint error — `react-hooks/set-state-in-effect`** (`src/lib/spatial-store.tsx`): the hash-anchor deep-link effect (added 2026-08-12 in the e2e PR) called `setActiveSection` synchronously in the effect body, which cascades an extra render. Split into two effects: the initial hash resolution now defers via `setTimeout(..., 0)` (state update happens after the commit phase) and the `hashchange` listener stays in its own effect. Behavior unchanged — deep links from header nav (`/#features`, `/#pricing`) still mount the correct section. `npm run lint` → 0 errors, 0 warnings.
 - **Performance — memoized `cameraTransform`** (`src/lib/spatial-store.tsx`): the desktop camera CSS-transform string is derived purely from `activeSection` but was rebuilt on every provider render; now wrapped in `useMemo([activeSection])` so it only recomputes on section change.

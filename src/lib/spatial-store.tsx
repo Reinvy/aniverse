@@ -14,7 +14,7 @@ import React, {
 
 export type SectionId = "hero" | "features" | "showcase" | "pricing" | "faq";
 
-export interface SectionConfig {
+interface SectionConfig {
   id: SectionId;
   label: string;
   labelJa: string;

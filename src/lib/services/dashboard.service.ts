@@ -12,7 +12,7 @@ import { countUserArtworks, findUserArtworkIds } from "@/lib/services/artwork.se
 
 // ─── Types ────────────────────────────────────────────────────────
 
-export interface DashboardStats {
+interface DashboardStats {
   generationsUsed: number;
   generationLimit: number | string;
   generationsLeft: number;
@@ -29,14 +29,14 @@ export interface DashboardStats {
   isUnlimited: boolean;
 }
 
-export interface ActivityItem {
+interface ActivityItem {
   type: string;
   action: string;
   detail: string;
   time: string;
 }
 
-export interface DashboardResult {
+interface DashboardResult {
   stats: DashboardStats;
   activity: ActivityItem[];
   user: { name: string | null; email: string | null; role: string };

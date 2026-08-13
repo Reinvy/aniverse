@@ -16,17 +16,17 @@ import { BLOG_ARTICLE_SORT_FIELDS } from "@/lib/services/sort-config";
 
 // ─── Types ────────────────────────────────────────────────────────
 
-export interface BlogArticleFilters {
+interface BlogArticleFilters {
   search?: string;
   tag?: string;
   featured?: boolean;
 }
 
-export type BlogArticleListItem = Prisma.BlogArticleGetPayload<{
+type BlogArticleListItem = Prisma.BlogArticleGetPayload<{
   select: typeof blogListSelect;
 }>;
 
-export type BlogArticleDetail = Prisma.BlogArticleGetPayload<{
+type BlogArticleDetail = Prisma.BlogArticleGetPayload<{
   select: typeof blogDetailSelect;
 }>;
 

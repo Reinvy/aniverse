@@ -13,7 +13,7 @@ import { USER_SORT_FIELDS } from "@/lib/services/sort-config";
 
 // ─── Types ────────────────────────────────────────────────────────
 
-export interface UserFilters {
+interface UserFilters {
   search?: string;
   role?: Role;
   premiumTier?: PremiumTier;
