@@ -18,11 +18,8 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SectionHeading } from "@/components/ui/section-heading";
-import { ErrorBoundary } from "@/components/ui/error-boundary";
-import { ScrollToTop } from "@/components/ui/scroll-to-top";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
-import { PageBackground } from "@/components/ui/page-background";
+import { PublicPageShell } from "@/components/layout/public-page-shell";
+import { CtaCard } from "@/components/ui/cta-card";
 
 // ─── Types ────────────────────────────────────────────────────────
 
@@ -145,15 +142,12 @@ export default function CharacterDetailPage() {
   const image = character ? getFirstImage(character.referenceImages) : null;
 
   return (
-    <>
-      <Header />
-      <main id="main-content" tabIndex={-1} className="relative min-h-screen pt-24 pb-16">
-        {/* Background layers */}
-        <PageBackground starfieldOpacity={0.3} gridOpacity={0.1} />
-
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <ErrorBoundary compact message="Failed to load character">
-          {loading ? (
+    <PublicPageShell
+      errorMessage="Failed to load character"
+      starfieldOpacity={0.3}
+      gridOpacity={0.1}
+    >
+      {loading ? (
             <CharacterDetailSkeleton />
           ) : error || !character ? (
             <motion.div
@@ -316,28 +310,14 @@ export default function CharacterDetailPage() {
               )}
 
               {/* Bottom CTA */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.55 }}
-                className="mt-10 text-center"
-              >
-                <div className="glass rounded-xl p-8 cut-corner max-w-lg mx-auto">
-                  <Sparkles className="mx-auto h-8 w-8 text-gold-400 mb-3" />
-                  <h3 className="text-lg font-bold text-white mb-2">
-                    Create your own character
-                  </h3>
-                  <p className="text-sm text-white/40 mb-4">
-                    Design original anime characters with AI. Save, share, and
-                    use them in your generations.
-                  </p>
-                  <Link href="/register">
-                    <Button variant="primary" className="gap-2">
-                      Get Started Free
-                    </Button>
-                  </Link>
-                </div>
-              </motion.div>
+              <CtaCard
+                className="mt-10"
+                icon={Sparkles}
+                title="Create your own character"
+                description="Design original anime characters with AI. Save, share, and use them in your generations."
+                ctaLabel="Get Started Free"
+                ctaHref="/register"
+              />
 
               {/* Back to directory */}
               <motion.div
@@ -359,11 +339,6 @@ export default function CharacterDetailPage() {
               </motion.div>
             </article>
           )}
-          </ErrorBoundary>
-        </div>
-      </main>
-      <Footer />
-      <ScrollToTop />
-    </>
+    </PublicPageShell>
   );
 }

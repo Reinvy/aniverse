@@ -24,11 +24,8 @@ import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Modal } from "@/components/ui/modal";
 import { SectionHeading } from "@/components/ui/section-heading";
-import { ErrorBoundary } from "@/components/ui/error-boundary";
-import { ScrollToTop } from "@/components/ui/scroll-to-top";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
-import { PageBackground } from "@/components/ui/page-background";
+import { PublicPageShell } from "@/components/layout/public-page-shell";
+import { CtaCard } from "@/components/ui/cta-card";
 import { APP_NAME, APP_URL } from "@/lib/constants";
 import { toast } from "@/hooks/use-toast";
 
@@ -251,15 +248,12 @@ export default function BlogArticlePage() {
   };
 
   return (
-    <>
-      <Header />
-      <main id="main-content" tabIndex={-1} className="relative min-h-screen pt-24 pb-16">
-        {/* Background layers */}
-        <PageBackground starfieldOpacity={0.3} gridOpacity={0.1} />
-
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <ErrorBoundary compact message="Failed to load article">
-          {loading ? (
+    <PublicPageShell
+      errorMessage="Failed to load article"
+      starfieldOpacity={0.3}
+      gridOpacity={0.1}
+    >
+      {loading ? (
             <ArticleSkeleton />
           ) : error || !article ? (
             <motion.div
@@ -442,28 +436,14 @@ export default function BlogArticlePage() {
               )}
 
               {/* Bottom CTA */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.6 }}
-                className="mt-10 text-center"
-              >
-                <div className="glass rounded-xl p-8 cut-corner max-w-lg mx-auto">
-                  <Sparkles className="mx-auto h-8 w-8 text-gold-400 mb-3" />
-                  <h3 className="text-lg font-bold text-white mb-2">
-                    Start creating with {APP_NAME}
-                  </h3>
-                  <p className="text-sm text-white/40 mb-4">
-                    Generate stunning AI anime artwork today. Free plan
-                    available — no credit card required.
-                  </p>
-                  <Link href="/register">
-                    <Button variant="primary" className="gap-2">
-                      Get Started Free
-                    </Button>
-                  </Link>
-                </div>
-              </motion.div>
+              <CtaCard
+                className="mt-10"
+                icon={Sparkles}
+                title={`Start creating with ${APP_NAME}`}
+                description="Generate stunning AI anime artwork today. Free plan available — no credit card required."
+                ctaLabel="Get Started Free"
+                ctaHref="/register"
+              />
 
               {/* Related Articles */}
               <RelatedArticles articles={related} />
@@ -511,11 +491,6 @@ export default function BlogArticlePage() {
               </Modal>
             </article>
           )}
-          </ErrorBoundary>
-        </div>
-      </main>
-      <Footer />
-      <ScrollToTop />
-    </>
+    </PublicPageShell>
   );
 }
