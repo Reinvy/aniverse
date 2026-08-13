@@ -20,11 +20,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { EmptyState } from "@/components/ui/empty-state";
 import { FetchErrorState } from "@/components/ui/fetch-error";
 import { FilterChips } from "@/components/ui/filter-chips";
-import { ScrollToTop } from "@/components/ui/scroll-to-top";
-import { ErrorBoundary } from "@/components/ui/error-boundary";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
-import { PageBackground } from "@/components/ui/page-background";
+import { PublicPageShell } from "@/components/layout/public-page-shell";
+import { CtaCard } from "@/components/ui/cta-card";
 
 // ─── Types ────────────────────────────────────────────────────────
 
@@ -263,15 +260,8 @@ export default function ChallengesPage() {
   }, [scope, retryKey]);
 
   return (
-    <>
-      <Header />
-      <main id="main-content" tabIndex={-1} className="relative min-h-screen pt-24 pb-16">
-        {/* Background layers */}
-        <PageBackground />
-
-        <div className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <ErrorBoundary compact message="Failed to load challenges section">
-          {/* Page Header */}
+    <PublicPageShell errorMessage="Failed to load challenges section" maxWidth="max-w-5xl">
+      {/* Page Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -441,34 +431,13 @@ export default function ChallengesPage() {
           )}
 
           {/* Bottom CTA */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
-            className="mt-16 text-center"
-          >
-            <div className="glass rounded-xl p-8 cut-corner max-w-lg mx-auto">
-              <Sparkles className="mx-auto h-8 w-8 text-gold-400 mb-3" />
-              <h3 className="text-lg font-bold text-white mb-2">
-                Ready to join the challenge?
-              </h3>
-              <p className="text-sm text-white/40 mb-4">
-                Sign up for free and start participating in weekly challenges
-                to earn coins and showcase your art.
-              </p>
-              <Link href="/register">
-                <Button variant="primary" className="gap-2">
-                  Sign Up Free
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
-              </Link>
-            </div>
-          </motion.div>
-          </ErrorBoundary>
-        </div>
-      </main>
-      <Footer />
-      <ScrollToTop />
-    </>
+          <CtaCard
+            icon={Sparkles}
+            title="Ready to join the challenge?"
+            description="Sign up for free and start participating in weekly challenges to earn coins and showcase your art."
+            ctaLabel="Sign Up Free"
+            ctaHref="/register"
+          />
+    </PublicPageShell>
   );
 }

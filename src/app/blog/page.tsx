@@ -7,24 +7,19 @@ import { motion } from "framer-motion";
 import {
   BookOpen,
   Calendar,
-  ArrowRight,
   Sparkles,
   Rss,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SearchBar } from "@/components/ui/search-bar";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Pagination } from "@/components/ui/pagination";
-import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import { FetchErrorState } from "@/components/ui/fetch-error";
-import { ErrorBoundary } from "@/components/ui/error-boundary";
+import { PublicPageShell } from "@/components/layout/public-page-shell";
+import { CtaCard } from "@/components/ui/cta-card";
 import { FeaturedArticleHero, type FeaturedArticle } from "@/components/blog/featured-article-hero";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
-import { PageBackground } from "@/components/ui/page-background";
 import { cn, timeAgo } from "@/lib/utils";
 
 // ─── Types ────────────────────────────────────────────────────────
@@ -126,15 +121,8 @@ export default function BlogPage() {
   };
 
   return (
-    <>
-      <Header />
-      <main id="main-content" tabIndex={-1} className="relative min-h-screen pt-24 pb-16">
-        {/* Starfield + grid background */}
-        <PageBackground />
-
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <ErrorBoundary compact message="Failed to load blog section">
-          {/* Page Header */}
+    <PublicPageShell errorMessage="Failed to load blog section">
+      {/* Page Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -338,34 +326,13 @@ export default function BlogPage() {
           )}
 
           {/* Bottom CTA */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
-            className="mt-16 text-center"
-          >
-            <div className="glass rounded-xl p-8 cut-corner max-w-lg mx-auto">
-              <Sparkles className="mx-auto h-8 w-8 text-gold-400 mb-3" />
-              <h3 className="text-lg font-bold text-white mb-2">
-                Want to create your own anime art?
-              </h3>
-              <p className="text-sm text-white/40 mb-4">
-                Generate stunning AI anime artwork with AniVerse. Free plan
-                available.
-              </p>
-              <Link href="/register">
-                <Button variant="primary" className="gap-2">
-                  Start Creating Free
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
-              </Link>
-            </div>
-          </motion.div>
-          </ErrorBoundary>
-        </div>
-      </main>
-      <Footer />
-      <ScrollToTop />
-    </>
+          <CtaCard
+            icon={Sparkles}
+            title="Want to create your own anime art?"
+            description="Generate stunning AI anime artwork with AniVerse. Free plan available."
+            ctaLabel="Start Creating Free"
+            ctaHref="/register"
+          />
+    </PublicPageShell>
   );
 }
