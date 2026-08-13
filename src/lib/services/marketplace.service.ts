@@ -18,20 +18,20 @@ import { createTtlCache } from "@/lib/ttl-cache";
 
 // ─── Types ────────────────────────────────────────────────────────
 
-export interface MarketplaceFilters {
+interface MarketplaceFilters {
   search?: string;
   /** "newest" | "price-asc" | "price-desc" */
   sort?: string;
 }
 
-export interface MarketplaceStats {
+interface MarketplaceStats {
   totalListings: number;
   activeCreators: number;
   avgPrice: number;
   totalSales: number;
 }
 
-export type MarketplaceProductItem = Prisma.ProductGetPayload<{
+type MarketplaceProductItem = Prisma.ProductGetPayload<{
   select: typeof productListSelect;
 }>;
 

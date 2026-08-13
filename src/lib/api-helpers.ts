@@ -323,7 +323,7 @@ export function buildPaginationMeta(
 
 // ─── Cache-Control Helpers ───────────────────────────────────────
 
-export type CacheDuration =
+type CacheDuration =
   | "no-store"
   | "short"    // 1 minute
   | "medium"   // 5 minutes
@@ -521,7 +521,7 @@ export function projectFields(
 
 // ─── Authenticated Request Helper (DRY) ───────────────────────────
 
-export type AuthenticatedRequestResult =
+type AuthenticatedRequestResult =
   | { ok: true; userId: string; payload: TokenPayload }
   | { ok: false; response: NextResponse };
 

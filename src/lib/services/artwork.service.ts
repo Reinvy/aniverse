@@ -26,7 +26,7 @@ export const ARTWORK_STYLES: ArtworkStyle[] = Object.values(ArtworkStyle);
 
 // ─── Types ────────────────────────────────────────────────────────
 
-export interface ArtworkFilters {
+interface ArtworkFilters {
   style?: ArtworkStyle;
   isPublic?: boolean;
   search?: string;
@@ -34,7 +34,7 @@ export interface ArtworkFilters {
   characterId?: string;
 }
 
-export interface CreateArtworkInput {
+interface CreateArtworkInput {
   title: string;
   prompt?: string;
   style?: string;
@@ -45,7 +45,7 @@ export interface CreateArtworkInput {
   isPublic?: boolean;
 }
 
-export type ArtworkDetailItem = Prisma.ArtworkGetPayload<{
+type ArtworkDetailItem = Prisma.ArtworkGetPayload<{
   select: typeof artworkDetailSelect;
 }>;
 
@@ -352,7 +352,7 @@ export async function findPublicArtworksCursor(
 
 // ─── Update / Delete (ownership-scoped) ───────────────────────────
 
-export interface UpdateArtworkInput {
+interface UpdateArtworkInput {
   title?: string;
   prompt?: string | null;
   style?: ArtworkStyle;

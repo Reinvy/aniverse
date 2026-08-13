@@ -1,11 +1,26 @@
 import { SignJWT, jwtVerify, type JWTPayload } from "jose";
 
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "aniverse-dev-secret-key",
-);
-
 const ISSUER = "aniverse";
 const EXPIRATION = "7d";
+
+/**
+ * Resolve the JWT signing secret lazily.
+ *
+ * Fails CLOSED: a hardcoded fallback was previously used, which meant any
+ * deployment without `JWT_SECRET` silently accepted tokens signed with a
+ * publicly-known key. `JWT_SECRET` is now REQUIRED — if it is missing at
+ * runtime, signing/verifying throws instead of falling back to a known
+ * default. This is a deliberate security hardening (no known-default keys).
+ */
+function getJwtSecret(): Uint8Array {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    throw new Error(
+      "JWT_SECRET environment variable is not set — refusing to sign/verify tokens with a known default. Set JWT_SECRET (openssl rand -base64 48) and redeploy.",
+    );
+  }
+  return new TextEncoder().encode(secret);
+}
 
 export interface TokenPayload extends JWTPayload {
   userId: string;
@@ -21,7 +36,7 @@ export async function signToken(userId: string, email: string): Promise<string> 
     .setIssuedAt()
     .setIssuer(ISSUER)
     .setExpirationTime(EXPIRATION)
-    .sign(JWT_SECRET);
+    .sign(getJwtSecret());
 }
 
 /**
@@ -29,7 +44,7 @@ export async function signToken(userId: string, email: string): Promise<string> 
  */
 export async function verifyToken(token: string): Promise<TokenPayload | null> {
   try {
-    const { payload } = await jwtVerify(token, JWT_SECRET, {
+    const { payload } = await jwtVerify(token, getJwtSecret(), {
       issuer: ISSUER,
     });
     return payload as TokenPayload;

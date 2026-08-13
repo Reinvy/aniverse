@@ -15,11 +15,11 @@ import { CHARACTER_SORT_FIELDS } from "@/lib/services/sort-config";
 
 // ─── Types ────────────────────────────────────────────────────────
 
-export interface CharacterFilters {
+interface CharacterFilters {
   search?: string;
 }
 
-export type CharacterDetail = Prisma.CharacterGetPayload<{
+type CharacterDetail = Prisma.CharacterGetPayload<{
   select: typeof characterDetailSelect;
 }>;
 

@@ -27,19 +27,19 @@ import { findRecentPublicCharacters } from "@/lib/services/character.service";
 
 // ─── Types ────────────────────────────────────────────────────────
 
-export interface ContentCounts {
+interface ContentCounts {
   articles: number;
   challenges: number;
   characters: number;
 }
 
-export interface ContentOverviewAggregates {
+interface ContentOverviewAggregates {
   counts: ContentCounts;
   featuredArticle: Awaited<ReturnType<typeof findFeaturedArticle>>;
   currentChallenge: Awaited<ReturnType<typeof findCurrentChallenge>>;
 }
 
-export interface ContentOverview extends ContentOverviewAggregates {
+interface ContentOverview extends ContentOverviewAggregates {
   recentCharacters: Awaited<ReturnType<typeof findRecentPublicCharacters>>;
 }
 
