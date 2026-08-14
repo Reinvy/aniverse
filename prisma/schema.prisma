@@ -452,6 +452,14 @@ model Comment {
   @@index([authorId])
   @@index([parentId])
   @@index([createdAt])
+  // Composite indexes for comment-thread and activity-feed query paths
+  // (`WHERE targetType = ? AND targetId = ? ORDER BY createdAt DESC` and
+  // `WHERE authorId = ? ORDER BY createdAt DESC`): the single-column
+  // targetType/targetId and authorId indexes cannot serve the createdAt
+  // sort, so Postgres would sort all matching rows. These keep comment
+  // threads and the dashboard activity feed O(log n).
+  @@index([targetType, targetId, createdAt])
+  @@index([authorId, createdAt])
 }
 
 // ============================================================
@@ -473,6 +481,12 @@ model Like {
   @@unique([userId, targetType, targetId])
   @@index([targetType, targetId])
   @@index([userId])
+  // Composite index for like lists sorted newest-first
+  // (`WHERE targetType = ? AND targetId IN (...) ORDER BY createdAt DESC`):
+  // the single-column [targetType, targetId] index cannot serve the
+  // createdAt sort, so Postgres would sort all matching rows. Keeps the
+  // dashboard activity feed's like lookup O(log n).
+  @@index([targetType, targetId, createdAt])
 }
 
 // ============================================================
@@ -579,6 +593,13 @@ model Order {
   @@index([buyerId])
   @@index([status])
   @@index([createdAt])
+  // Composite indexes for order-history and status-queue query paths
+  // (`WHERE buyerId = ? ORDER BY createdAt DESC`, `WHERE status = ? ORDER BY
+  // createdAt DESC`): the single-column buyerId/status indexes cannot serve
+  // the createdAt sort, so Postgres would sort all matching rows. Keeps the
+  // order history and admin status queues O(log n).
+  @@index([buyerId, createdAt])
+  @@index([status, createdAt])
 }
 
 model OrderItem {
@@ -621,6 +642,13 @@ model Transaction {
   @@index([type])
   @@index([createdAt])
   @@index([reference])
+  // Composite indexes for wallet-history and type-rollup query paths
+  // (`WHERE userId = ? ORDER BY createdAt DESC`, `WHERE type = ? ORDER BY
+  // createdAt DESC`): the single-column userId/type indexes cannot serve the
+  // createdAt sort, so Postgres would sort all matching rows. Keeps the
+  // transaction history and per-type rollups O(log n).
+  @@index([userId, createdAt])
+  @@index([type, createdAt])
 }
 
 // ============================================================
@@ -673,6 +701,12 @@ model SocialMediaPost {
   @@index([status])
   @@index([platform])
   @@index([scheduledAt])
+  // Composite index for the scheduler due-queue
+  // (`WHERE status = 'SCHEDULED' AND scheduledAt <= ? ORDER BY scheduledAt`):
+  // the single-column status/scheduledAt indexes cannot serve the combined
+  // filter + sort, so Postgres would scan all rows of one status. Keeps the
+  // social-posting scheduler's due-lookup O(log n).
+  @@index([status, scheduledAt])
 }
 
 // ============================================================
@@ -778,6 +812,12 @@ model ChallengeSubmission {
   @@index([challengeId])
   @@index([userId])
   @@index([status])
+  // Composite index for per-challenge review queues
+  // (`WHERE challengeId = ? AND status = ?`): the single-column
+  // challengeId/status indexes cannot serve the combined filter, so Postgres
+  // would filter all rows of one column. Keeps challenge-submission review
+  // (approve/reject) lookups O(log n).
+  @@index([challengeId, status])
 }
 
 // ============================================================
@@ -807,4 +847,11 @@ model AnalyticsEvent {
   @@index([category])
   @@index([createdAt])
   @@index([sessionId])
+  // Composite indexes for event/category time-series rollups
+  // (`WHERE event = ? AND createdAt >= ?`, `WHERE category = ? AND createdAt
+  // >= ?`): the single-column event/category indexes cannot serve the
+  // createdAt range filter, so Postgres would scan all rows of that
+  // event/category. Keeps analytics rollups O(log n) on the time window.
+  @@index([event, createdAt])
+  @@index([category, createdAt])
 }

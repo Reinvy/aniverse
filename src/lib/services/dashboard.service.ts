@@ -8,7 +8,7 @@
 import { prisma } from "@/lib/prisma";
 import { TIERS } from "@/lib/constants";
 import { createTtlCache } from "@/lib/ttl-cache";
-import { countUserArtworks, findUserArtworkIds } from "@/lib/services/artwork.service";
+import { countUserArtworks } from "@/lib/services/artwork.service";
 
 // ─── Types ────────────────────────────────────────────────────────
 
@@ -131,23 +131,27 @@ async function computeDashboardStats(userId: string): Promise<DashboardResult> {
   const now = new Date();
   const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
-  // ── Parallel batch #1: independent aggregations ──
-  // These queries only depend on `userId`, so they can run concurrently
-  // instead of serially (3 round trips → 1).
-  const [generationsThisMonth, earningsAgg, artworkIds] = await Promise.all([
-    countUserArtworks(userId, {
-      gte: firstOfMonth,
-    }),
-    prisma.transaction.aggregate({
-      where: {
-        userId,
-        status: "COMPLETED",
-        type: { in: ["PURCHASE", "DEPOSIT", "COMMISSION"] },
-      },
-      _sum: { amount: true },
-    }),
-    findUserArtworkIds(userId),
-  ]);
+  // ── Parallel batch: independent aggregations ──
+  // All queries only depend on `userId`, so they run concurrently instead
+  // of serially (5 round trips → 1). Likes received is computed via a SQL
+  // JOIN (see countLikesReceived) so the user's artwork id list is never
+  // materialized in memory — O(log n) regardless of artwork count.
+  const [generationsThisMonth, earningsAgg, likesReceived, activity] =
+    await Promise.all([
+      countUserArtworks(userId, {
+        gte: firstOfMonth,
+      }),
+      prisma.transaction.aggregate({
+        where: {
+          userId,
+          status: "COMPLETED",
+          type: { in: ["PURCHASE", "DEPOSIT", "COMMISSION"] },
+        },
+        _sum: { amount: true },
+      }),
+      countLikesReceived(userId),
+      buildActivityFeed(userId),
+    ]);
 
   const generationsUsed = generationsThisMonth;
   const generationsLeft = Math.max(0, generationLimit - generationsUsed);
@@ -158,21 +162,6 @@ async function computeDashboardStats(userId: string): Promise<DashboardResult> {
 
   // ── Earnings ──
   const totalEarnings = Number(earningsAgg._sum.amount ?? 0);
-
-  // ── Likes received + activity feed (parallel batch #2) ──
-  // Both depend only on `artworkIds` from batch #1 — running them
-  // concurrently instead of serially saves a round trip per request.
-  const [likesReceived, activity] = await Promise.all([
-    artworkIds.length > 0
-      ? prisma.like.count({
-          where: {
-            targetType: "Artwork",
-            targetId: { in: artworkIds },
-          },
-        })
-      : Promise.resolve(0),
-    buildActivityFeed(userId, artworkIds),
-  ]);
 
   // ── Days until reset ──
   const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
@@ -210,17 +199,41 @@ async function computeDashboardStats(userId: string): Promise<DashboardResult> {
 }
 
 /**
+ * Count likes received on a user's artworks.
+ *
+ * Uses an aggregate SQL JOIN (`Like ⋈ Artwork ON targetId = id`) instead of
+ * the naive `targetId IN (SELECT id FROM Artwork WHERE creatorId = ?)`
+ * pattern, which materializes the user's ENTIRE artwork id list in memory
+ * before filtering likes. The JOIN keeps the query O(log n) no matter how
+ * many artworks the user owns, and needs no special-casing for the
+ * zero-artworks case (the JOIN simply yields 0 rows).
+ *
+ * `Like.targetType` is a plain string column ("Artwork" | "Chapter" |
+ * "Comment") so the text equality is exact.
+ */
+async function countLikesReceived(userId: string): Promise<number> {
+  const rows = await prisma.$queryRaw<Array<{ count: number }>>`
+    SELECT COUNT(*)::int AS count
+    FROM "Like" l
+    INNER JOIN "Artwork" a ON a.id = l."targetId"
+    WHERE l."targetType" = 'Artwork' AND a."creatorId" = ${userId}
+  `;
+  return rows[0]?.count ?? 0;
+}
+
+/**
  * Build the activity feed from recent artworks, likes, and comments.
  */
-async function buildActivityFeed(
-  userId: string,
-  artworkIds: string[],
-): Promise<ActivityItem[]> {
+async function buildActivityFeed(userId: string): Promise<ActivityItem[]> {
   const feed: ActivityItem[] = [];
 
   // ── Parallel: recent artworks, likes, and comments ──
-  // All three only depend on (userId, artworkIds) and are independent,
-  // so they run concurrently (3 sequential round trips → 1).
+  // All three only depend on `userId` and are independent, so they run
+  // concurrently (3 sequential round trips → 1). The likes lookup uses a
+  // JOIN (see countLikesReceived) so it never materializes the user's
+  // artwork id list; the new composite index
+  // `Like_targetType_targetId_createdAt_idx` serves the
+  // `targetType = 'Artwork' AND targetId = ? ORDER BY createdAt DESC` shape.
   const [recentArtworks, recentLikes, recentComments] = await Promise.all([
     prisma.artwork.findMany({
       where: { creatorId: userId },
@@ -232,21 +245,15 @@ async function buildActivityFeed(
         createdAt: true,
       },
     }),
-    artworkIds.length > 0
-      ? prisma.like.findMany({
-          where: {
-            targetType: "Artwork",
-            targetId: { in: artworkIds },
-          },
-          orderBy: { createdAt: "desc" },
-          take: 5,
-          select: {
-            createdAt: true,
-            user: { select: { name: true } },
-            targetId: true,
-          },
-        })
-      : Promise.resolve([]),
+    prisma.$queryRaw<Array<{ createdAt: Date; targetId: string; userName: string | null }>>`
+      SELECT l."createdAt", l."targetId", u."name" AS "userName"
+      FROM "Like" l
+      INNER JOIN "Artwork" a ON a.id = l."targetId"
+      LEFT JOIN "User" u ON u.id = l."userId"
+      WHERE l."targetType" = 'Artwork' AND a."creatorId" = ${userId}
+      ORDER BY l."createdAt" DESC
+      LIMIT 5
+    `,
     prisma.comment.findMany({
       where: { authorId: userId },
       orderBy: { createdAt: "desc" },
@@ -274,7 +281,7 @@ async function buildActivityFeed(
     feed.push({
       type: "like",
       action: "Liked your artwork",
-      detail: `by ${like.user?.name ?? "someone"}`,
+      detail: `by ${like.userName ?? "someone"}`,
       time: like.createdAt.toISOString(),
     });
   }
