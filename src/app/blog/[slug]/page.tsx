@@ -359,6 +359,7 @@ export default function BlogArticlePage() {
                       alt={article.title}
                       width={1200}
                       height={675}
+                      priority
                       className="w-full h-auto max-h-[400px] object-cover"
                     />
                   </div>

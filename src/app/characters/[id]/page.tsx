@@ -242,6 +242,7 @@ export default function CharacterDetailPage() {
                         src={image}
                         alt={character.name}
                         fill
+                        priority
                         sizes="(max-width: 768px) 100vw, 768px"
                         className="object-cover"
                       />
