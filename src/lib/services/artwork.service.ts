@@ -206,6 +206,67 @@ export async function findUserArtworks(
 }
 
 /**
+ * Keyset (cursor) pagination over a user's OWN artworks — the scalable
+ * deep-page alternative to OFFSET for `/api/artworks`.
+ *
+ * Identical semantics to {@link findPublicArtworksCursor}, but scoped to the
+ * authenticated user via `buildWhereClause`. With the existing
+ * `@@index([creatorId, createdAt])` composite this is O(log n) per page at
+ * any depth. The extra `+1` row is fetched solely to compute `hasNextPage` /
+ * `nextCursor` without a separate count query for the page boundary.
+ *
+ * @param cursor    Decoded cursor from `decodeCursor()` (or null for page 1)
+ * @param sortField Whitelisted sort field (must be keyset-safe — callers
+ *                  fall back to offset for enum sorts like `style`)
+ */
+export async function findUserArtworksCursor(
+  userId: string,
+  pagination: PaginationParams,
+  filters?: ArtworkFilters,
+  cursor?: { sortValue: string; id: string } | null,
+) {
+  const where = buildWhereClause(userId, filters);
+
+  // The sort field was already whitelisted by the route (keyset-safe check);
+  // default to createdAt so the keyset predicate below is always well-formed.
+  const sortField = ARTWORK_SORT_FIELDS.includes(
+    pagination.sort as (typeof ARTWORK_SORT_FIELDS)[number],
+  )
+    ? pagination.sort
+    : "createdAt";
+
+  // Count against the base filters only (no keyset predicate).
+  const baseWhere: Prisma.ArtworkWhereInput = { ...where };
+
+  // Keyset predicate: strictly after the cursor in sort order, using the
+  // row id as a unique tiebreaker (cuids are lexicographically ordered).
+  applyKeysetWhere(where, cursor, sortField, pagination.order);
+
+  // Prisma 7 requires ARRAY form for multi-field orderBy (a two-key object
+  // passes typecheck but fails runtime validation — see query-builder).
+  const orderBy = buildKeysetOrderBy<Prisma.ArtworkOrderByWithRelationInput>(
+    sortField,
+    pagination.order,
+  );
+
+  // Fetch one extra row to detect whether another page exists.
+  const [rows, total] = await Promise.all([
+    prisma.artwork.findMany({
+      where,
+      orderBy,
+      take: pagination.limit + 1,
+      select: artworkListSelect,
+    }),
+    prisma.artwork.count({ where: baseWhere }),
+  ]);
+
+  const hasNextPage = rows.length > pagination.limit;
+  const artworks = hasNextPage ? rows.slice(0, pagination.limit) : rows;
+
+  return { artworks, total, hasNextPage };
+}
+
+/**
  * Create a new artwork.
  */
 export async function createArtwork(
@@ -241,17 +302,6 @@ export async function countUserArtworks(
       ...(createdAt ? { createdAt } : {}),
     },
   });
-}
-
-/**
- * Get all artwork IDs for a user (lightweight).
- */
-export async function findUserArtworkIds(userId: string): Promise<string[]> {
-  const artworks = await prisma.artwork.findMany({
-    where: { creatorId: userId },
-    select: { id: true },
-  });
-  return artworks.map((a) => a.id);
 }
 
 /**
