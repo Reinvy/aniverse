@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Sparkles, Code2, AtSign, Heart } from "lucide-react";
+import { Sparkles, Code2, Heart } from "lucide-react";
 import {
   APP_NAME,
   FOOTER_PRODUCT_LINKS,
@@ -92,22 +92,13 @@ export function Footer() {
           </p>
           <div className="flex items-center gap-4">
             <Link
-              href="https://github.com"
+              href="https://github.com/Reinvy/aniverse"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="AniVerse on GitHub"
               className="text-white/30 hover:text-gold-400 transition-colors"
             >
               <Code2 className="h-4 w-4" />
-            </Link>
-            <Link
-              href="https://twitter.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="AniVerse on Twitter"
-              className="text-white/30 hover:text-gold-400 transition-colors"
-            >
-              <AtSign className="h-4 w-4" />
             </Link>
             <span className="flex items-center gap-1 sys-label">
               MADE WITH <Heart className="h-3 w-3 text-gold-400" /> BY ANIVERSE TEAM

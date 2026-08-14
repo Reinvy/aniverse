@@ -4,6 +4,20 @@ All notable changes to AniVerse are documented here.
 
 ## [Unreleased]
 
+### Performance & Maintenance (2026-08-14)
+- **Dead-link cleanup — footer social icons** (`src/components/layout/footer.tsx`): the GitHub icon linked to the generic `https://github.com` homepage and the Twitter icon linked to a placeholder `https://twitter.com` with no real AniVerse account (decorative dead links per the discoverability policy). The GitHub icon now points to the real project repo (`https://github.com/Reinvy/aniverse`); the placeholder Twitter link was removed (no real account exists) along with its now-unused `AtSign` import.
+- **LCP optimization — `priority` on hero images** (skips lazy-loading the largest contentful paint image on 3 public routes):
+  - `src/components/blog/featured-article-hero.tsx` — featured hero cover on `/blog`
+  - `src/app/blog/[slug]/page.tsx` — article cover on `/blog/[slug]`
+  - `src/app/characters/[id]/page.tsx` — character reference image on `/characters/[id]`
+- Security audit: `npm audit --audit-level=high` → **0 vulnerabilities** (verified; no new advisories)
+- Verified structured error handling: all **17** API routes use try/catch + `console.error` + standardized helpers from `@/lib/api-helpers` (no raw 500s leak internal details)
+- Verified no secrets in tracked files: `.env` NOT in git (only `.env.example` with placeholders); no `console.log`/`console.debug` in `src/`; no TODO/FIXME markers; no `any` escape hatches outside `src/generated/` (Prisma client output)
+- Verified dead-code status: 0 unreferenced modules across `src/components`, `src/lib`, `src/data`, `src/hooks` (all have ≥1 consumer); the new `PublicPageShell` + `CtaCard` from PR #122 are consumed by all 5 public pages
+- Verified SEO consistency: `sitemap.ts` lists only publicly indexable pages (no `/dashboard/*`, `/login`, `/register` — matches `robots.ts` disallow rules); `robots.ts` sitemap URL uses `APP_URL`
+- Verified design-system consistency: `CtaCard`/`PublicPageShell` (PR #122) use the canonical game-style classes (`glass`, `cut-corner`, `bracket-corner`, `diamond-indicator`, `energy-sweep`, `sys-label`, `btn-glow-sweep` primary button); landing EXPLORE // QUICK LINKS + footer strip all use real hrefs
+- Verified `npm run lint` → 0 errors, 0 warnings; `npm run build` → clean production build, all 33 routes + Proxy (middleware) intact
+
 ### Performance & Maintenance (2026-08-13)
 - **🔐 SECURITY (critical) — removed hardcoded JWT fallback secret** (`src/lib/auth.ts`): the module previously fell back to `"aniverse-dev-secret-key"` when `JWT_SECRET` was unset, meaning any deployment without the env var silently accepted tokens signed with a publicly-known key (anyone who read the repo could forge JWTs for any user). `JWT_SECRET` is now resolved lazily via `getJwtSecret()` and **fails closed** — signing/verifying throws with a clear message when the env var is missing. Deployments MUST set `JWT_SECRET`:
   - Set on Vercel project `prj_nCzg89eX82InxCfAz3bKKW6D5ZoR` for `production` + `preview` + `development` (generated via `openssl rand -base64 48`)
