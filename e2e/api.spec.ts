@@ -382,6 +382,78 @@ test.describe("API Endpoints", () => {
     expect([401, 403]).toContain(response.status());
   });
 
+  test("GET /api/artworks authenticated cursor pagination: page1 emits nextCursor, page2 has no overlap", async ({
+    request,
+  }) => {
+    // Regression for PR #124 — keyset (cursor) pagination on the user's OWN
+    // artworks (findUserArtworksCursor). The deterministic e2e account may
+    // own 0..N artworks, so to guarantee >=3 rows we create 3 fixtures,
+    // flip them private (POST defaults isPublic:true — avoid public gallery
+    // pollution), paginate, then DELETE them as cleanup in the finally block.
+    const login = await request.post("/api/auth/login", {
+      data: { email: "e2e.cron4@aniverse.test", password: "E2eCron4!Passw0rd" },
+    });
+    expect(login.ok()).toBe(true);
+    const { token } = await login.json();
+    expect(token).toBeTruthy();
+    const auth = { Authorization: `Bearer ${token}` };
+
+    const createdIds: string[] = [];
+    try {
+      for (let i = 0; i < 3; i++) {
+        const create = await request.post("/api/artworks", {
+          headers: auth,
+          data: {
+            title: `E2E Cursor Artwork ${Date.now()}-${i}`,
+            prompt: "e2e pagination test fixture",
+            style: "ANIME",
+            imageUrl: "https://picsum.photos/seed/aniverse-e2e-cursor/512/512",
+          },
+        });
+        expect(create.status()).toBe(201);
+        const created = await create.json();
+        expect(created.artwork?.id).toBeTruthy();
+        createdIds.push(created.artwork.id);
+        // Keep the fixture out of the public community gallery.
+        await request.patch(`/api/artworks/${created.artwork.id}`, {
+          headers: auth,
+          data: { isPublic: false },
+        });
+      }
+
+      // Page 1 (offset mode, default sort=createdAt is keyset-safe) — must
+      // emit nextCursor because 3 fixtures + any pre-existing rows > limit 2.
+      const page1 = await request.get("/api/artworks?limit=2", {
+        headers: auth,
+      });
+      expect(page1.ok()).toBe(true);
+      const body1 = await page1.json();
+      const ids1 = body1.artworks.map((a: { id: string }) => a.id);
+      expect(ids1.length).toBeGreaterThan(0);
+      const nextCursor = body1.pagination?.nextCursor;
+      expect(nextCursor).toBeTruthy();
+
+      // Follow the cursor — keyset mode must return 200, items, and NO
+      // overlap with page 1 (same contract as gallery/blog/marketplace).
+      const page2 = await request.get(
+        `/api/artworks?limit=2&cursor=${encodeURIComponent(nextCursor)}`,
+        { headers: auth },
+      );
+      expect(page2.ok()).toBe(true);
+      const body2 = await page2.json();
+      const ids2 = body2.artworks.map((a: { id: string }) => a.id);
+      expect(ids2.length).toBeGreaterThan(0);
+      const overlap = ids1.filter((id: string) => ids2.includes(id));
+      expect(overlap).toEqual([]);
+    } finally {
+      // Cleanup — ownership-scoped DELETE removes the fixtures so the test
+      // leaves zero lasting rows in the database.
+      for (const id of createdIds) {
+        await request.delete(`/api/artworks/${id}`, { headers: auth });
+      }
+    }
+  });
+
   test("GET /api/marketplace?search= should gracefully return 200 with an array", async ({
     request,
   }) => {
