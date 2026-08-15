@@ -4,6 +4,16 @@ All notable changes to AniVerse are documented here.
 
 ## [Unreleased]
 
+### Performance & Maintenance (2026-08-15)
+- **🔧 DRY + consistency fix — pricing tiers single source of truth** (`src/lib/pricing.ts`): the module previously re-declared its own copy of the subscription tiers, which had silently diverged from the canonical `TIERS` in `@/lib/constants` (used by the landing page and `dashboard.service.ts` generation limits): Studio was priced **$19.99** here vs **$24.99** in `TIERS`, and Pro's feature list had drifted (e.g. `API access (100 req/day)` existed only in the duplicate). The landing page, dashboard generation limits, and the monetization dashboard were therefore showing **different prices for the same tier**. `pricingTiers` is now **derived** from `TIERS` (import + spread) with only display-only metadata (`description`, `cta`) added locally — price/credits/features can never drift again. Studio now correctly shows $24.99/mo everywhere.
+- **Fix — hardcoded annual-price ternary** (`src/app/dashboard/monetization/page.tsx`): the "Annual: …" line used `tier.price === 9.99 ? 7.99 : 19.99` — a brittle hardcode that produced the wrong annual figure for any tier other than Pro (and would have been wrong for Studio after the pricing fix). Replaced with the shared `annualMonthlyPrice()` helper (20% discount, rounded to cents) so it always matches the landing page's annual toggle math.
+- Security audit: `npm audit --audit-level=high` → **0 vulnerabilities** (verified; no new advisories)
+- Verified structured error handling: all **17** API routes use try/catch + `console.error` + standardized helpers from `@/lib/api-helpers` (no raw 500s leak internal details)
+- Verified no secrets in tracked files: `.env` NOT in git (only `.env.example` with placeholders); no `console.log`/`console.debug` in `src/`; no TODO/FIXME markers; no `any` escape hatches outside `src/generated/` (Prisma client output)
+- Verified dead-code status: 0 unreferenced modules across `src/components`, `src/lib`, `src/hooks`, `src/data` (all have ≥1 consumer; spatial components are consumed via relative imports from `SpatialViewport`)
+- Verified design-system consistency: all 5 public pages consume `PublicPageShell` (which renders the `PageBackground` eclipse/starfield/grid/scanline stack); landing EXPLORE // QUICK LINKS + footer strip all use real hrefs; monetization page uses canonical game-style classes (`glass`, `cut-corner`, `card-supply-gold`, `micro-lang`, `bracket-corner`, `diamond-indicator`)
+- Verified `npm run lint` → 0 errors, 0 warnings; `npm run build` → clean production build, all 33 routes + Proxy (middleware) intact
+
 ### Performance & Maintenance (2026-08-14)
 - **Dead-link cleanup — footer social icons** (`src/components/layout/footer.tsx`): the GitHub icon linked to the generic `https://github.com` homepage and the Twitter icon linked to a placeholder `https://twitter.com` with no real AniVerse account (decorative dead links per the discoverability policy). The GitHub icon now points to the real project repo (`https://github.com/Reinvy/aniverse`); the placeholder Twitter link was removed (no real account exists) along with its now-unused `AtSign` import.
 - **LCP optimization — `priority` on hero images** (skips lazy-loading the largest contentful paint image on 3 public routes):
