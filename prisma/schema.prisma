@@ -13,6 +13,26 @@ datasource db {
 }
 
 // ============================================================
+// RAW-SQL INDEXES (beyond Prisma @@index)
+// ============================================================
+// Prisma's @@index only emits B-tree indexes. Substring search
+// (`ILIKE '%term%'` from `contains` + `mode: "insensitive"`) cannot
+// use a B-tree, so the searchable text columns below are indexed with
+// pg_trgm GIN indexes created in raw SQL:
+//
+//   prisma/migrations/20260816020000_add_search_trgm_indexes/migration.sql
+//
+//   Artwork.title, Artwork.prompt            (gallery search)
+//   Character.name, Character.personality    (character search)
+//   BlogArticle.title, BlogArticle.excerpt   (blog search)
+//   User.name, User.username, User.email     (user discovery search)
+//   Product.name, Product.description        (marketplace search)
+//
+// Any NEW searchable text column added to a service's
+// `buildSearchClause(...)` list should get a matching trigram index
+// here, or search on that column will seq-scan as the table grows.
+
+// ============================================================
 // ENUMS
 // ============================================================
 
