@@ -568,6 +568,12 @@ export async function requireAuthenticatedRequest(
 
 /**
  * Standardized error response.
+ *
+ * Explicitly marked `no-store` so error responses are never cached by a
+ * browser or intermediary — a stale 4xx/5xx must never be replayed for a
+ * later, possibly-successful request. (The next.config `/api/(.*)` no-store
+ * fallback also covers this, but the contract belongs on the response
+ * itself so it holds even if that config block is ever removed.)
  */
 export function errorResponse(
   error: string,
@@ -576,7 +582,10 @@ export function errorResponse(
 ): NextResponse {
   return NextResponse.json(
     { error, ...extras },
-    { status },
+    {
+      status,
+      headers: { "Cache-Control": "no-store, no-cache, must-revalidate" },
+    },
   );
 }
 
@@ -586,7 +595,13 @@ export function errorResponse(
 export function validationErrorResponse(
   errors: Record<string, string>,
 ): NextResponse {
-  return NextResponse.json({ errors }, { status: 400 });
+  return NextResponse.json(
+    { errors },
+    {
+      status: 400,
+      headers: { "Cache-Control": "no-store, no-cache, must-revalidate" },
+    },
+  );
 }
 
 /**
@@ -595,5 +610,11 @@ export function validationErrorResponse(
 export function notFoundResponse(
   message: string = "Resource not found",
 ): NextResponse {
-  return NextResponse.json({ error: message }, { status: 404 });
+  return NextResponse.json(
+    { error: message },
+    {
+      status: 404,
+      headers: { "Cache-Control": "no-store, no-cache, must-revalidate" },
+    },
+  );
 }

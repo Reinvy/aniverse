@@ -33,6 +33,18 @@ interface RateLimitEntry {
 
 const store = new Map<string, RateLimitEntry>();
 
+/**
+ * Hard cap on concurrent keys in the in-memory store.
+ *
+ * Without a bound, a distributed flood of unique IPs (or a misbehaving
+ * client rotating `x-forwarded-for` values) grows the Map without limit —
+ * each key holds a timestamp array for up to `windowMs`. 10k keys is
+ * generous for a single instance (≈ a few MB worst case) and the cleanup
+ * pass below evicts oldest-first, so memory stays bounded regardless of
+ * traffic shape.
+ */
+const MAX_ENTRIES = 10_000;
+
 // Periodic cleanup every 60 seconds to prevent memory leaks
 const CLEANUP_INTERVAL = 60_000;
 let cleanupTimer: ReturnType<typeof setInterval> | null = null;
@@ -48,6 +60,13 @@ function startCleanup(): void {
       if (oldest && now - oldest > 120_000) {
         store.delete(key);
       }
+    }
+    // Bound memory under floods of unique keys: evict oldest-inserted
+    // entries first (Map preserves insertion order).
+    while (store.size > MAX_ENTRIES) {
+      const oldestKey = store.keys().next().value;
+      if (oldestKey === undefined) break;
+      store.delete(oldestKey);
     }
     // If store is empty, stop the timer
     if (store.size === 0 && cleanupTimer) {
@@ -151,6 +170,7 @@ function rateLimitResponse(
     {
       status: 429,
       headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate",
         "Retry-After": String(Math.ceil(result.resetInMs / 1000)),
         "X-RateLimit-Limit": String(result.total + result.remaining),
         "X-RateLimit-Remaining": String(result.remaining),
