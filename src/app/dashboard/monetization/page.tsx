@@ -17,7 +17,7 @@ import { StatCard } from "@/components/ui/stat-card";
 import { PageHeader } from "@/components/ui/page-header";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
-import { pricingTiers, coinPacks } from "@/lib/pricing";
+import { pricingTiers, coinPacks, annualMonthlyPrice } from "@/lib/pricing";
 import Link from "next/link";
 
 const revenueStreams = [
@@ -169,7 +169,7 @@ export default function MonetizationPage() {
                     )}
                   </ul>
                   <p className="relative mt-2 sm:mt-3 text-xs text-white/25">
-                    Annual: {tier.price === 0 ? "Free" : `$${tier.price === 9.99 ? 7.99 : 19.99}/mo`}
+                    Annual: {tier.price === 0 ? "Free" : `$${annualMonthlyPrice(tier.price)}/mo`}
                     {tier.price > 0 && " (Save 20%)"}
                   </p>
                 </div>
