@@ -12,6 +12,7 @@ import {
   readLimiter,
   type RateLimiterInstance,
 } from "@/lib/rate-limiter";
+import { generateRequestId } from "@/lib/request-id";
 
 // ─── Auth ─────────────────────────────────────────────────────────
 
@@ -574,17 +575,32 @@ export async function requireAuthenticatedRequest(
  * later, possibly-successful request. (The next.config `/api/(.*)` no-store
  * fallback also covers this, but the contract belongs on the response
  * itself so it holds even if that config block is ever removed.)
+ *
+ * Every response carries an `X-Request-Id` header + `requestId` body field
+ * (see `generateRequestId`) so failures are traceable at scale — a client
+ * can report the id and ops can correlate it with server logs. Server
+ * errors (status >= 500) also log the id so it greps straight to the
+ * error's timestamp in the log stream.
  */
 export function errorResponse(
   error: string,
   status: number = 500,
   extras?: Record<string, unknown>,
 ): NextResponse {
+  const requestId = generateRequestId();
+
+  if (status >= 500) {
+    console.error(`[${requestId}] ${error}`);
+  }
+
   return NextResponse.json(
-    { error, ...extras },
+    { error, requestId, ...extras },
     {
       status,
-      headers: { "Cache-Control": "no-store, no-cache, must-revalidate" },
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate",
+        "X-Request-Id": requestId,
+      },
     },
   );
 }
@@ -595,11 +611,15 @@ export function errorResponse(
 export function validationErrorResponse(
   errors: Record<string, string>,
 ): NextResponse {
+  const requestId = generateRequestId();
   return NextResponse.json(
-    { errors },
+    { errors, requestId },
     {
       status: 400,
-      headers: { "Cache-Control": "no-store, no-cache, must-revalidate" },
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate",
+        "X-Request-Id": requestId,
+      },
     },
   );
 }
@@ -610,11 +630,15 @@ export function validationErrorResponse(
 export function notFoundResponse(
   message: string = "Resource not found",
 ): NextResponse {
+  const requestId = generateRequestId();
   return NextResponse.json(
-    { error: message },
+    { error: message, requestId },
     {
       status: 404,
-      headers: { "Cache-Control": "no-store, no-cache, must-revalidate" },
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate",
+        "X-Request-Id": requestId,
+      },
     },
   );
 }
