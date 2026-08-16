@@ -35,6 +35,7 @@ type AuthResult =
 async function authenticateRequest(
   request: NextRequest,
 ): Promise<AuthResult> {
+  const requestId = generateRequestId();
   const authHeader = request.headers.get("authorization");
   const token = extractBearerToken(authHeader);
 
@@ -42,8 +43,11 @@ async function authenticateRequest(
     return {
       authenticated: false,
       response: NextResponse.json(
-        { error: "Authentication required" },
-        { status: 401 },
+        { error: "Authentication required", requestId },
+        {
+          status: 401,
+          headers: { "X-Request-Id": requestId },
+        },
       ),
     };
   }
@@ -53,8 +57,11 @@ async function authenticateRequest(
     return {
       authenticated: false,
       response: NextResponse.json(
-        { error: "Invalid or expired token" },
-        { status: 401 },
+        { error: "Invalid or expired token", requestId },
+        {
+          status: 401,
+          headers: { "X-Request-Id": requestId },
+        },
       ),
     };
   }
