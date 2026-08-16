@@ -155,6 +155,7 @@ export const readLimiter = rateLimiter({ windowMs: 60_000, max: 100 });
 // ─── Response Helpers ─────────────────────────────────────────────
 
 import { NextResponse } from "next/server";
+import { generateRequestId } from "@/lib/request-id";
 
 /**
  * Create a 429 Too Many Requests response with Retry-After header.
@@ -162,9 +163,11 @@ import { NextResponse } from "next/server";
 function rateLimitResponse(
   result: RateLimitResult,
 ): NextResponse {
+  const requestId = generateRequestId();
   return NextResponse.json(
     {
       error: "Too many requests. Please wait before retrying.",
+      requestId,
       retryAfterMs: result.resetInMs,
     },
     {
@@ -175,6 +178,7 @@ function rateLimitResponse(
         "X-RateLimit-Limit": String(result.total + result.remaining),
         "X-RateLimit-Remaining": String(result.remaining),
         "X-RateLimit-Reset": String(Math.ceil((Date.now() + result.resetInMs) / 1000)),
+        "X-Request-Id": requestId,
       },
     },
   );
