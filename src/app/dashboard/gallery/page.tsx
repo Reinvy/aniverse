@@ -17,7 +17,8 @@ import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/ui/page-header";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
-import { Skeleton } from "@/components/ui/skeleton";
+import { MediaGridSkeleton } from "@/components/ui/skeleton";
+import { StaggerGroup, StaggerItem } from "@/components/ui/reveal";
 import { ArtworkImage } from "@/components/ui/artwork-image";
 import { SearchBar } from "@/components/ui/search-bar";
 import { Pagination } from "@/components/ui/pagination";
@@ -63,24 +64,6 @@ const STYLE_BY_CATEGORY: Record<string, string | undefined> = {
   chibi: "CHIBI",
   cyberpunk: "OTHER",
 };
-
-// ─── Skeleton ─────────────────────────────────────────────────────
-
-function GallerySkeleton() {
-  return (
-    <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-        <div key={i} className="glass rounded-[4px] cut-corner overflow-hidden">
-          <Skeleton className="aspect-[4/3] w-full rounded-none" />
-          <div className="p-4 space-y-2">
-            <Skeleton className="h-5 w-3/4" />
-            <Skeleton className="h-4 w-1/2" />
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
 
 // ─── Main Page ────────────────────────────────────────────────────
 
@@ -195,9 +178,7 @@ export default function GalleryPage() {
               }}
             />
           ) : loading ? (
-            <div role="status" aria-label="Loading gallery">
-              <GallerySkeleton />
-            </div>
+            <MediaGridSkeleton count={8} />
           ) : artworks.length === 0 ? (
             <EmptyState
               icon={ImageIcon}
@@ -207,25 +188,18 @@ export default function GalleryPage() {
             />
           ) : (
             <>
-              <motion.div
+              <StaggerGroup
                 id="results-top"
+                stagger={0.05}
                 className={cn(
                   "scroll-mt-28",
                   viewMode === "grid"
                     ? "grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
                     : "space-y-3 sm:space-y-4",
                 )}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.2, duration: 0.4 }}
               >
-                {artworks.map((art, i) => (
-                  <motion.div
-                    key={art.id}
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.05, duration: 0.3 }}
-                  >
+                {artworks.map((art) => (
+                  <StaggerItem key={art.id}>
                     <Card
                       className={cn(
                         "group cursor-pointer diamond-indicator overflow-hidden",
@@ -295,9 +269,9 @@ export default function GalleryPage() {
                         </div>
                       </CardContent>
                     </Card>
-                  </motion.div>
+                  </StaggerItem>
                 ))}
-              </motion.div>
+              </StaggerGroup>
 
               {/* Pagination */}
               {pagination && pagination.totalPages > 1 && (

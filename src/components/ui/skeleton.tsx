@@ -87,4 +87,77 @@ function ListItemSkeleton() {
   );
 }
 
-export { Skeleton, CardSkeleton, StatCardSkeleton, ListItemSkeleton };
+/**
+ * Media card skeleton — shared placeholder for image-first cards
+ * (gallery artworks / marketplace listings).
+ *
+ * - `variant="artwork"`: image + title + subtitle (gallery grid)
+ * - `variant="listing"`: image + title + subtitle + price row (marketplace)
+ */
+function MediaCardSkeleton({
+  variant = "artwork",
+}: {
+  variant?: "artwork" | "listing";
+}) {
+  return (
+    <div
+      aria-hidden="true"
+      className="glass rounded-[4px] cut-corner overflow-hidden relative
+        before:absolute before:inset-0 before:-translate-x-full
+        before:bg-gradient-to-r before:from-transparent before:via-[rgba(230,194,128,0.06)] before:to-transparent
+        before:animate-[shimmer_1.8s_infinite]"
+    >
+      <Skeleton className="aspect-[4/3] w-full rounded-none" />
+      <div className={variant === "listing" ? "p-4 space-y-2.5" : "p-4 space-y-2"}>
+        <Skeleton className="h-5 w-3/4" />
+        <Skeleton
+          className={variant === "listing" ? "h-3.5 w-1/2" : "h-4 w-1/2"}
+        />
+        {variant === "listing" && (
+          <div className="flex items-center justify-between pt-1">
+            <Skeleton className="h-5 w-14" />
+            <Skeleton className="h-8 w-24 rounded-[4px]" />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Media grid skeleton — responsive grid of MediaCardSkeleton placeholders.
+ * Use for gallery/marketplace/collection loading states.
+ */
+function MediaGridSkeleton({
+  count = 8,
+  variant = "artwork",
+  className,
+}: {
+  count?: number;
+  variant?: "artwork" | "listing";
+  className?: string;
+}) {
+  return (
+    <div
+      role="status"
+      aria-label="Loading"
+      className={cn(
+        "grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4",
+        className,
+      )}
+    >
+      {Array.from({ length: count }).map((_, i) => (
+        <MediaCardSkeleton key={i} variant={variant} />
+      ))}
+    </div>
+  );
+}
+
+export {
+  Skeleton,
+  CardSkeleton,
+  StatCardSkeleton,
+  ListItemSkeleton,
+  MediaCardSkeleton,
+  MediaGridSkeleton,
+};
