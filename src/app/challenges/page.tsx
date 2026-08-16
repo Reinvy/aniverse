@@ -22,6 +22,7 @@ import { FetchErrorState } from "@/components/ui/fetch-error";
 import { FilterChips } from "@/components/ui/filter-chips";
 import { PublicPageShell } from "@/components/layout/public-page-shell";
 import { CtaCard } from "@/components/ui/cta-card";
+import { Reveal, StaggerGroup, StaggerItem } from "@/components/ui/reveal";
 
 // ─── Types ────────────────────────────────────────────────────────
 
@@ -262,12 +263,7 @@ export default function ChallengesPage() {
   return (
     <PublicPageShell errorMessage="Failed to load challenges section" maxWidth="max-w-5xl">
       {/* Page Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="mb-10 text-center"
-          >
+          <Reveal className="mb-10 text-center">
             <Badge variant="secondary" className="mb-4 px-3 py-1">
               <Trophy className="mr-1.5 h-3.5 w-3.5" />
               CHALLENGES // GAMIFICATION
@@ -279,7 +275,7 @@ export default function ChallengesPage() {
               Compete with the community, showcase your creativity, and earn
               rewards. New challenges every week!
             </p>
-          </motion.div>
+          </Reveal>
 
           {/* Today's Challenge Hero */}
           {currentChallenge && (
@@ -287,12 +283,7 @@ export default function ChallengesPage() {
           )}
 
           {/* Scope Toggle */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.1 }}
-            className="flex justify-center mb-8"
-          >
+          <Reveal delay={0.1} className="flex justify-center mb-8">
             <FilterChips
               options={[
                 { id: "active", label: "Active" },
@@ -301,7 +292,7 @@ export default function ChallengesPage() {
               value={scope}
               onChange={(v) => setScope(v)}
             />
-          </motion.div>
+          </Reveal>
 
           {/* Challenges List */}
           {loading ? (
@@ -339,19 +330,12 @@ export default function ChallengesPage() {
               />
             </motion.div>
           ) : (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.15 }}
+            <StaggerGroup
+              stagger={0.08}
               className="space-y-6"
             >
-              {challenges.map((challenge, i) => (
-                <motion.div
-                  key={challenge.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.08, duration: 0.4 }}
-                >
+              {challenges.map((challenge) => (
+                <StaggerItem key={challenge.id}>
                   <Card className="group cut-corner energy-sweep relative overflow-hidden">
                     <CardContent className="p-6 sm:p-8">
                       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
@@ -425,9 +409,9 @@ export default function ChallengesPage() {
                       </div>
                     </CardContent>
                   </Card>
-                </motion.div>
+                </StaggerItem>
               ))}
-            </motion.div>
+            </StaggerGroup>
           )}
 
           {/* Bottom CTA */}

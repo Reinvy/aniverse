@@ -16,7 +16,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton, MediaCardSkeleton } from "@/components/ui/skeleton";
 import { ArtworkImage } from "@/components/ui/artwork-image";
 import { EmptyState } from "@/components/ui/empty-state";
 import { FetchErrorState } from "@/components/ui/fetch-error";
@@ -88,25 +88,6 @@ function StatBarSkeleton() {
           <Skeleton className="mt-2 h-6 w-16" />
         </div>
       ))}
-    </div>
-  );
-}
-
-function ListingCardSkeleton() {
-  return (
-    <div className="glass rounded-[4px] cut-corner overflow-hidden relative
-      before:absolute before:inset-0 before:-translate-x-full
-      before:bg-gradient-to-r before:from-transparent before:via-[rgba(230,194,128,0.06)] before:to-transparent
-      before:animate-[shimmer_1.8s_infinite]">
-      <Skeleton className="aspect-[4/3] w-full rounded-none" />
-      <div className="p-4 space-y-2.5">
-        <Skeleton className="h-5 w-3/4" />
-        <Skeleton className="h-3.5 w-1/2" />
-        <div className="flex items-center justify-between pt-1">
-          <Skeleton className="h-5 w-14" />
-          <Skeleton className="h-8 w-24 rounded-[4px]" />
-        </div>
-      </div>
     </div>
   );
 }
@@ -303,7 +284,7 @@ export default function MarketplacePage() {
             <div role="status" aria-label="Loading marketplace">
               <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {Array.from({ length: 8 }).map((_, i) => (
-                  <ListingCardSkeleton key={i} />
+                  <MediaCardSkeleton key={i} variant="listing" />
                 ))}
               </div>
             </div>

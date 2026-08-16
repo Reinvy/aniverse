@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { motion } from "framer-motion";
 import {
   Image as ImageIcon,
   Wand2,
@@ -24,6 +23,7 @@ import { PageHeader } from "@/components/ui/page-header";
 import { timeAgo } from "@/lib/utils";
 import Link from "next/link";
 import { useAuth } from "@/components/auth/AuthProvider";
+import { Reveal, StaggerGroup, StaggerItem } from "@/components/ui/reveal";
 
 interface DashboardStats {
   generationsUsed: number;
@@ -241,18 +241,13 @@ export default function DashboardPage() {
       {/* Stats Grid */}
       {loadState === "loaded" && stats && (
         <ErrorBoundary compact message="Failed to load stats">
-        <motion.div
+        <StaggerGroup
+          stagger={0.1}
           className="mt-6 grid gap-3 sm:mt-8 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, staggerChildren: 0.1 }}
         >
-          {statsCards.map((stat, i) => {
+          {statsCards.map((stat) => {
             return (
-              <div
-                key={stat.title}
-                className={`animate-stagger animate-stagger-${i + 1}`}
-              >
+              <StaggerItem key={stat.title}>
                 <StatCard
                   title={stat.title}
                   value={stat.value}
@@ -264,10 +259,10 @@ export default function DashboardPage() {
                   microLabel={stat.microLabel}
                   sysNode={stat.sysNode}
                 />
-              </div>
+              </StaggerItem>
             );
           })}
-        </motion.div>
+        </StaggerGroup>
         </ErrorBoundary>
       )}
 
@@ -276,11 +271,9 @@ export default function DashboardPage() {
         <ErrorBoundary compact message="Failed to load activity">
         <div className="mt-6 sm:mt-8 grid gap-4 sm:gap-6 lg:grid-cols-3">
           {/* Recent Activity */}
-          <motion.div
+          <Reveal
+            delay={0.3}
             className="lg:col-span-2"
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.4 }}
           >
             <Card className="diamond-indicator glow-ambient bracket-corner watermark-crest">
               <CardHeader className="flex flex-row items-center justify-between p-4 sm:p-6">
@@ -348,13 +341,11 @@ export default function DashboardPage() {
                 )}
               </CardContent>
             </Card>
-          </motion.div>
+          </Reveal>
 
           {/* Quick Actions */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.4 }}
+          <Reveal
+            delay={0.4}
           >
             <Card className="crosshair-mark glow-ambient bracket-corner watermark-crest">
               <CardHeader className="p-4 sm:p-6">
@@ -423,7 +414,7 @@ export default function DashboardPage() {
                 </div>
               </CardContent>
             </Card>
-          </motion.div>
+          </Reveal>
         </div>
         </ErrorBoundary>
       )}
