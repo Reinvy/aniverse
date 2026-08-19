@@ -27,7 +27,7 @@ import { FetchErrorState } from "@/components/ui/fetch-error";
 import { FilterChips } from "@/components/ui/filter-chips";
 import { formatNumber, timeAgo, cn } from "@/lib/utils";
 import { GALLERY_CATEGORIES } from "@/lib/constants";
-import { dailyArt } from "@/data/daily-art-20260725";
+import { dailyArt } from "@/data/daily-art-20260726";
 
 // ─── Types ────────────────────────────────────────────────────────
 
@@ -113,7 +113,7 @@ export default function GalleryPage() {
                 Today&apos;s Daily Art
               </h2>
               <p className="text-xs text-zinc-500">
-                Curated artwork descriptions — July 25, 2026
+                Curated artwork descriptions — July 26, 2026
               </p>
             </div>
             <button
