@@ -37,16 +37,16 @@ const socialPlatforms = [
     posts: 1,
     status: "scheduled",
     time: "10:00 WIB",
-    type: "Carousel (8 slides)",
+    type: "Carousel (7 slides)",
   },
   {
     name: "Pinterest",
     icon: Bookmark,
     gradient: "from-red-600 to-orange-600",
-    posts: 8,
+    posts: 7,
     status: "scheduled",
     time: "10:00 WIB",
-    type: "8 pins across 2 boards",
+    type: "7 pins across 2 boards",
   },
   {
     name: "TikTok",
@@ -62,21 +62,21 @@ const socialPlatforms = [
 const todaysStats = [
   {
     label: "Total Posts Scheduled",
-    value: "17",
+    value: "16",
     subtext: "Across 4 platforms",
     icon: Share2,
     color: "text-violet-400",
   },
   {
     label: "Artworks Featured",
-    value: "8",
+    value: "7",
     subtext: "From today's A3 generation",
     icon: Image,
     color: "text-fuchsia-400",
   },
   {
     label: "Est. Reach",
-    value: "12.5K+",
+    value: "14.2K+",
     subtext: "Combined platform reach",
     icon: TrendingUp,
     color: "text-emerald-400",
@@ -94,61 +94,61 @@ const scheduledPosts = [
   {
     platform: "Instagram",
     time: "10:00 WIB",
-    content: "8-Artwork Carousel — Daily Art Drop",
+    content: "7-Artwork Carousel — Daily Art Drop (VHS Memories lead)",
     status: "ready",
   },
   {
     platform: "Twitter / X",
     time: "10:05 WIB",
-    content: "Tweet 1/5: Neon Ronin showcase",
+    content: "Tweet 1/5: VHS Memories showcase",
     status: "ready",
   },
   {
     platform: "Twitter / X",
     time: "10:15 WIB",
-    content: "Tweet 2/5: Spirit Tree & tips",
+    content: "Tweet 2/5: Vaporwave revival & tips",
     status: "ready",
   },
   {
     platform: "Twitter / X",
     time: "10:25 WIB",
-    content: "Tweet 3/5: Pixel Blade retro gaming",
+    content: "Tweet 3/5: Art Nouveau x Anime fusion",
     status: "ready",
   },
   {
     platform: "Twitter / X",
     time: "10:35 WIB",
-    content: "Tweet 4/5: Frieren trends deep-dive",
+    content: "Tweet 4/5: Sepia Nostalgia + Pastel Goth",
     status: "ready",
   },
   {
     platform: "Twitter / X",
     time: "10:45 WIB",
-    content: "Tweet 5/5: CTA + poll",
+    content: "Tweet 5/5: Story teaser + CTA + poll",
     status: "ready",
   },
   {
     platform: "Pinterest",
     time: "10:00 WIB",
-    content: "8 pins — AI Anime Art Inspiration board",
+    content: "7 pins — AI Anime Art Inspiration + Style Guide boards",
     status: "ready",
   },
   {
     platform: "TikTok",
     time: "11:00 WIB",
-    content: "Variant A: 8 Artworks in 60s",
+    content: "Variant A: 7 Artworks in 60s",
     status: "ready",
   },
   {
     platform: "TikTok",
     time: "14:00 WIB",
-    content: "Variant B: Prompt to Artwork",
+    content: "Variant B: Prompt to Vaporwave Artwork",
     status: "ready",
   },
   {
     platform: "TikTok",
     time: "17:00 WIB",
-    content: "Variant C: Style Challenge",
+    content: "Variant C: 90s vs AI Anime Challenge",
     status: "ready",
   },
 ];
@@ -328,7 +328,7 @@ export default function SocialDashboardPage() {
         <Card className="border-zinc-800/60">
           <CardContent className="p-5">
             <p className="text-xs text-zinc-500">
-              📁 Data files: src/data/social/twitter-20260724.ts • instagram-20260724.ts • pinterest-20260724.ts • tiktok-20260724.ts
+              📁 Data files: src/data/social/twitter-20260725.ts • instagram-20260725.ts • pinterest-20260725.ts • tiktok-20260725.ts
             </p>
             <p className="mt-1 text-xs text-zinc-600">
               Note: API publishing requires platform API keys. Posts are saved as data files ready for publishing.
