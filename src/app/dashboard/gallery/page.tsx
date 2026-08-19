@@ -27,6 +27,7 @@ import { FetchErrorState } from "@/components/ui/fetch-error";
 import { FilterChips } from "@/components/ui/filter-chips";
 import { formatNumber, timeAgo, cn } from "@/lib/utils";
 import { GALLERY_CATEGORIES } from "@/lib/constants";
+import { dailyArt } from "@/data/daily-art-20260725";
 
 // ─── Types ────────────────────────────────────────────────────────
 
@@ -95,20 +96,41 @@ export default function GalleryPage() {
   });
 
   return (
-    <ErrorBoundary compact message="Failed to load gallery">
-      <div className="p-4 sm:p-6 lg:p-8">
-        {/* Header */}
-        <PageHeader
-          title="Gallery"
-          description="COLLECTION // Browse and discover community creations"
-          actions={
-            <div className="flex items-center gap-2">
-              <Button
-                variant={viewMode === "grid" ? "default" : "ghost"}
-                size="icon"
-                className="sm:h-8 sm:w-8"
-                onClick={() => setViewMode("grid")}
-                aria-label="Grid view"
+    <div className="p-6 lg:p-8">
+      {/* ─── Daily Art Section ─── */}
+      {showDailyArt && (
+        <motion.section
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-10"
+        >
+          <div className="mb-6 flex items-center gap-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-amber-400 to-orange-600 shadow-lg">
+              <Sun className="h-5 w-5 text-white" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-white">
+                Today&apos;s Daily Art
+              </h2>
+              <p className="text-xs text-zinc-500">
+                Curated artwork descriptions — July 25, 2026
+              </p>
+            </div>
+            <button
+              onClick={() => setShowDailyArt(false)}
+              className="ml-auto text-xs text-zinc-600 hover:text-zinc-400 transition-colors"
+            >
+              Dismiss
+            </button>
+          </div>
+
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {dailyArt.map((art, i) => (
+              <motion.div
+                key={art.id}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.05, duration: 0.3 }}
               >
                 <Grid3X3 className="h-4 w-4" />
               </Button>
