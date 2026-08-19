@@ -1,0 +1,2253 @@
+{
+  "config": {
+    "argv": [
+      "/usr/bin/node",
+      "/opt/data/workspace/aniverse/node_modules/.bin/playwright",
+      "test"
+    ],
+    "configFile": "/opt/data/workspace/aniverse/playwright.config.ts",
+    "rootDir": "/opt/data/workspace/aniverse/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/opt/data/workspace/aniverse/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/opt/data/workspace/aniverse/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": ".cron/reports/e2e-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.61.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "challenges.spec.ts",
+      "file": "challenges.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Challenges",
+          "file": "challenges.spec.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "challenges page should load",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 174,
+                      "error": {
+                        "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard/challenges\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard/challenges\", waiting until \"load\"\u001b[22m\n\n    at /opt/data/workspace/aniverse/e2e/challenges.spec.ts:5:33",
+                        "location": {
+                          "file": "/opt/data/workspace/aniverse/e2e/challenges.spec.ts",
+                          "column": 33,
+                          "line": 5
+                        },
+                        "snippet": "  3 | test.describe('Challenges', () => {\n  4 |   test('challenges page should load', async ({ page }) => {\n> 5 |     const response = await page.goto('/dashboard/challenges');\n    |                                 ^\n  6 |     expect(response?.status()).toBeLessThan(500);\n  7 |   });\n  8 | });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/opt/data/workspace/aniverse/e2e/challenges.spec.ts",
+                            "column": 33,
+                            "line": 5
+                          },
+                          "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard/challenges\", waiting until \"load\"\u001b[22m\n\n\n  3 | test.describe('Challenges', () => {\n  4 |   test('challenges page should load', async ({ page }) => {\n> 5 |     const response = await page.goto('/dashboard/challenges');\n    |                                 ^\n  6 |     expect(response?.status()).toBeLessThan(500);\n  7 |   });\n  8 | });\n    at /opt/data/workspace/aniverse/e2e/challenges.spec.ts:5:33"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-26T07:04:26.939Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/opt/data/workspace/aniverse/test-results/challenges-Challenges-challenges-page-should-load/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/opt/data/workspace/aniverse/test-results/challenges-Challenges-challenges-page-should-load/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/opt/data/workspace/aniverse/e2e/challenges.spec.ts",
+                        "column": 33,
+                        "line": 5
+                      }
+                    },
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 232,
+                      "error": {
+                        "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard/challenges\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard/challenges\", waiting until \"load\"\u001b[22m\n\n    at /opt/data/workspace/aniverse/e2e/challenges.spec.ts:5:33",
+                        "location": {
+                          "file": "/opt/data/workspace/aniverse/e2e/challenges.spec.ts",
+                          "column": 33,
+                          "line": 5
+                        },
+                        "snippet": "  3 | test.describe('Challenges', () => {\n  4 |   test('challenges page should load', async ({ page }) => {\n> 5 |     const response = await page.goto('/dashboard/challenges');\n    |                                 ^\n  6 |     expect(response?.status()).toBeLessThan(500);\n  7 |   });\n  8 | });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/opt/data/workspace/aniverse/e2e/challenges.spec.ts",
+                            "column": 33,
+                            "line": 5
+                          },
+                          "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard/challenges\", waiting until \"load\"\u001b[22m\n\n\n  3 | test.describe('Challenges', () => {\n  4 |   test('challenges page should load', async ({ page }) => {\n> 5 |     const response = await page.goto('/dashboard/challenges');\n    |                                 ^\n  6 |     expect(response?.status()).toBeLessThan(500);\n  7 |   });\n  8 | });\n    at /opt/data/workspace/aniverse/e2e/challenges.spec.ts:5:33"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-07-26T07:04:28.079Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/opt/data/workspace/aniverse/test-results/challenges-Challenges-challenges-page-should-load-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/opt/data/workspace/aniverse/test-results/challenges-Challenges-challenges-page-should-load-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/opt/data/workspace/aniverse/test-results/challenges-Challenges-challenges-page-should-load-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/opt/data/workspace/aniverse/e2e/challenges.spec.ts",
+                        "column": 33,
+                        "line": 5
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b7e3fbccb1bf83d80bba-b870986e947f71c7cef2",
+              "file": "challenges.spec.ts",
+              "line": 4,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "console.spec.ts",
+      "file": "console.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Console & Performance",
+          "file": "console.spec.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should have no console errors on landing page",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 174,
+                      "error": {
+                        "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n    at /opt/data/workspace/aniverse/e2e/console.spec.ts:9:16",
+                        "location": {
+                          "file": "/opt/data/workspace/aniverse/e2e/console.spec.ts",
+                          "column": 16,
+                          "line": 9
+                        },
+                        "snippet": "   7 |       if (msg.type() === 'error') errors.push(msg.text());\n   8 |     });\n>  9 |     await page.goto('/');\n     |                ^\n  10 |     expect(errors.length).toBe(0);\n  11 |   });\n  12 |"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/opt/data/workspace/aniverse/e2e/console.spec.ts",
+                            "column": 16,
+                            "line": 9
+                          },
+                          "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n\n   7 |       if (msg.type() === 'error') errors.push(msg.text());\n   8 |     });\n>  9 |     await page.goto('/');\n     |                ^\n  10 |     expect(errors.length).toBe(0);\n  11 |   });\n  12 |\n    at /opt/data/workspace/aniverse/e2e/console.spec.ts:9:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-26T07:04:29.290Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/opt/data/workspace/aniverse/test-results/console-Console-Performanc-02a2d-sole-errors-on-landing-page/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/opt/data/workspace/aniverse/test-results/console-Console-Performanc-02a2d-sole-errors-on-landing-page/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/opt/data/workspace/aniverse/e2e/console.spec.ts",
+                        "column": 16,
+                        "line": 9
+                      }
+                    },
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 238,
+                      "error": {
+                        "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n    at /opt/data/workspace/aniverse/e2e/console.spec.ts:9:16",
+                        "location": {
+                          "file": "/opt/data/workspace/aniverse/e2e/console.spec.ts",
+                          "column": 16,
+                          "line": 9
+                        },
+                        "snippet": "   7 |       if (msg.type() === 'error') errors.push(msg.text());\n   8 |     });\n>  9 |     await page.goto('/');\n     |                ^\n  10 |     expect(errors.length).toBe(0);\n  11 |   });\n  12 |"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/opt/data/workspace/aniverse/e2e/console.spec.ts",
+                            "column": 16,
+                            "line": 9
+                          },
+                          "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n\n   7 |       if (msg.type() === 'error') errors.push(msg.text());\n   8 |     });\n>  9 |     await page.goto('/');\n     |                ^\n  10 |     expect(errors.length).toBe(0);\n  11 |   });\n  12 |\n    at /opt/data/workspace/aniverse/e2e/console.spec.ts:9:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-07-26T07:04:30.453Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/opt/data/workspace/aniverse/test-results/console-Console-Performanc-02a2d-sole-errors-on-landing-page-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/opt/data/workspace/aniverse/test-results/console-Console-Performanc-02a2d-sole-errors-on-landing-page-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/opt/data/workspace/aniverse/test-results/console-Console-Performanc-02a2d-sole-errors-on-landing-page-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/opt/data/workspace/aniverse/e2e/console.spec.ts",
+                        "column": 16,
+                        "line": 9
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "ef58feb76c0befb42c6d-00359f74df3e601157ad",
+              "file": "console.spec.ts",
+              "line": 4,
+              "column": 7
+            },
+            {
+              "title": "should have no broken images",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 180,
+                      "error": {
+                        "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n    at /opt/data/workspace/aniverse/e2e/console.spec.ts:14:16",
+                        "location": {
+                          "file": "/opt/data/workspace/aniverse/e2e/console.spec.ts",
+                          "column": 16,
+                          "line": 14
+                        },
+                        "snippet": "  12 |\n  13 |   test('should have no broken images', async ({ page }) => {\n> 14 |     await page.goto('/');\n     |                ^\n  15 |     const images = page.locator('img');\n  16 |     const count = await images.count();\n  17 |     for (let i = 0; i < count; i++) {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/opt/data/workspace/aniverse/e2e/console.spec.ts",
+                            "column": 16,
+                            "line": 14
+                          },
+                          "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n\n  12 |\n  13 |   test('should have no broken images', async ({ page }) => {\n> 14 |     await page.goto('/');\n     |                ^\n  15 |     const images = page.locator('img');\n  16 |     const count = await images.count();\n  17 |     for (let i = 0; i < count; i++) {\n    at /opt/data/workspace/aniverse/e2e/console.spec.ts:14:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-26T07:04:31.679Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/opt/data/workspace/aniverse/test-results/console-Console-Performance-should-have-no-broken-images/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/opt/data/workspace/aniverse/test-results/console-Console-Performance-should-have-no-broken-images/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/opt/data/workspace/aniverse/e2e/console.spec.ts",
+                        "column": 16,
+                        "line": 14
+                      }
+                    },
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 245,
+                      "error": {
+                        "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n    at /opt/data/workspace/aniverse/e2e/console.spec.ts:14:16",
+                        "location": {
+                          "file": "/opt/data/workspace/aniverse/e2e/console.spec.ts",
+                          "column": 16,
+                          "line": 14
+                        },
+                        "snippet": "  12 |\n  13 |   test('should have no broken images', async ({ page }) => {\n> 14 |     await page.goto('/');\n     |                ^\n  15 |     const images = page.locator('img');\n  16 |     const count = await images.count();\n  17 |     for (let i = 0; i < count; i++) {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/opt/data/workspace/aniverse/e2e/console.spec.ts",
+                            "column": 16,
+                            "line": 14
+                          },
+                          "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n\n  12 |\n  13 |   test('should have no broken images', async ({ page }) => {\n> 14 |     await page.goto('/');\n     |                ^\n  15 |     const images = page.locator('img');\n  16 |     const count = await images.count();\n  17 |     for (let i = 0; i < count; i++) {\n    at /opt/data/workspace/aniverse/e2e/console.spec.ts:14:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-07-26T07:04:32.834Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/opt/data/workspace/aniverse/test-results/console-Console-Performance-should-have-no-broken-images-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/opt/data/workspace/aniverse/test-results/console-Console-Performance-should-have-no-broken-images-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/opt/data/workspace/aniverse/test-results/console-Console-Performance-should-have-no-broken-images-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/opt/data/workspace/aniverse/e2e/console.spec.ts",
+                        "column": 16,
+                        "line": 14
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "ef58feb76c0befb42c6d-985c738d3b4a96ae1d4a",
+              "file": "console.spec.ts",
+              "line": 13,
+              "column": 7
+            },
+            {
+              "title": "page load performance",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 186,
+                      "error": {
+                        "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n    at /opt/data/workspace/aniverse/e2e/console.spec.ts:28:16",
+                        "location": {
+                          "file": "/opt/data/workspace/aniverse/e2e/console.spec.ts",
+                          "column": 16,
+                          "line": 28
+                        },
+                        "snippet": "  26 |   test('page load performance', async ({ page }) => {\n  27 |     const start = Date.now();\n> 28 |     await page.goto('/');\n     |                ^\n  29 |     const loadTime = Date.now() - start;\n  30 |     expect(loadTime).toBeLessThan(10000); // Should load in under 10s\n  31 |   });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/opt/data/workspace/aniverse/e2e/console.spec.ts",
+                            "column": 16,
+                            "line": 28
+                          },
+                          "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n\n  26 |   test('page load performance', async ({ page }) => {\n  27 |     const start = Date.now();\n> 28 |     await page.goto('/');\n     |                ^\n  29 |     const loadTime = Date.now() - start;\n  30 |     expect(loadTime).toBeLessThan(10000); // Should load in under 10s\n  31 |   });\n    at /opt/data/workspace/aniverse/e2e/console.spec.ts:28:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-26T07:04:34.093Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/opt/data/workspace/aniverse/test-results/console-Console-Performance-page-load-performance/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/opt/data/workspace/aniverse/test-results/console-Console-Performance-page-load-performance/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/opt/data/workspace/aniverse/e2e/console.spec.ts",
+                        "column": 16,
+                        "line": 28
+                      }
+                    },
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 287,
+                      "error": {
+                        "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n    at /opt/data/workspace/aniverse/e2e/console.spec.ts:28:16",
+                        "location": {
+                          "file": "/opt/data/workspace/aniverse/e2e/console.spec.ts",
+                          "column": 16,
+                          "line": 28
+                        },
+                        "snippet": "  26 |   test('page load performance', async ({ page }) => {\n  27 |     const start = Date.now();\n> 28 |     await page.goto('/');\n     |                ^\n  29 |     const loadTime = Date.now() - start;\n  30 |     expect(loadTime).toBeLessThan(10000); // Should load in under 10s\n  31 |   });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/opt/data/workspace/aniverse/e2e/console.spec.ts",
+                            "column": 16,
+                            "line": 28
+                          },
+                          "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n\n  26 |   test('page load performance', async ({ page }) => {\n  27 |     const start = Date.now();\n> 28 |     await page.goto('/');\n     |                ^\n  29 |     const loadTime = Date.now() - start;\n  30 |     expect(loadTime).toBeLessThan(10000); // Should load in under 10s\n  31 |   });\n    at /opt/data/workspace/aniverse/e2e/console.spec.ts:28:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-07-26T07:04:35.387Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/opt/data/workspace/aniverse/test-results/console-Console-Performance-page-load-performance-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/opt/data/workspace/aniverse/test-results/console-Console-Performance-page-load-performance-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/opt/data/workspace/aniverse/test-results/console-Console-Performance-page-load-performance-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/opt/data/workspace/aniverse/e2e/console.spec.ts",
+                        "column": 16,
+                        "line": 28
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "ef58feb76c0befb42c6d-67c1c854fda16bf43af3",
+              "file": "console.spec.ts",
+              "line": 26,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "dashboard.spec.ts",
+      "file": "dashboard.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Dashboard Pages",
+          "file": "dashboard.spec.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Dashboard Home should load successfully",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 170,
+                      "error": {
+                        "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard\", waiting until \"load\"\u001b[22m\n\n    at /opt/data/workspace/aniverse/e2e/dashboard.spec.ts:13:35",
+                        "location": {
+                          "file": "/opt/data/workspace/aniverse/e2e/dashboard.spec.ts",
+                          "column": 35,
+                          "line": 13
+                        },
+                        "snippet": "  11 |   for (const { path, name } of dashboardPages) {\n  12 |     test(`${name} should load successfully`, async ({ page }) => {\n> 13 |       const response = await page.goto(path);\n     |                                   ^\n  14 |       expect(response?.status()).toBeLessThan(500);\n  15 |       await expect(page.locator('body')).toBeVisible();\n  16 |     });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/opt/data/workspace/aniverse/e2e/dashboard.spec.ts",
+                            "column": 35,
+                            "line": 13
+                          },
+                          "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard\", waiting until \"load\"\u001b[22m\n\n\n  11 |   for (const { path, name } of dashboardPages) {\n  12 |     test(`${name} should load successfully`, async ({ page }) => {\n> 13 |       const response = await page.goto(path);\n     |                                   ^\n  14 |       expect(response?.status()).toBeLessThan(500);\n  15 |       await expect(page.locator('body')).toBeVisible();\n  16 |     });\n    at /opt/data/workspace/aniverse/e2e/dashboard.spec.ts:13:35"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-26T07:04:36.679Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/opt/data/workspace/aniverse/test-results/dashboard-Dashboard-Pages--a77e7-me-should-load-successfully/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/opt/data/workspace/aniverse/test-results/dashboard-Dashboard-Pages--a77e7-me-should-load-successfully/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/opt/data/workspace/aniverse/e2e/dashboard.spec.ts",
+                        "column": 35,
+                        "line": 13
+                      }
+                    },
+                    {
+                      "workerIndex": 9,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 233,
+                      "error": {
+                        "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard\", waiting until \"load\"\u001b[22m\n\n    at /opt/data/workspace/aniverse/e2e/dashboard.spec.ts:13:35",
+                        "location": {
+                          "file": "/opt/data/workspace/aniverse/e2e/dashboard.spec.ts",
+                          "column": 35,
+                          "line": 13
+                        },
+                        "snippet": "  11 |   for (const { path, name } of dashboardPages) {\n  12 |     test(`${name} should load successfully`, async ({ page }) => {\n> 13 |       const response = await page.goto(path);\n     |                                   ^\n  14 |       expect(response?.status()).toBeLessThan(500);\n  15 |       await expect(page.locator('body')).toBeVisible();\n  16 |     });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/opt/data/workspace/aniverse/e2e/dashboard.spec.ts",
+                            "column": 35,
+                            "line": 13
+                          },
+                          "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard\", waiting until \"load\"\u001b[22m\n\n\n  11 |   for (const { path, name } of dashboardPages) {\n  12 |     test(`${name} should load successfully`, async ({ page }) => {\n> 13 |       const response = await page.goto(path);\n     |                                   ^\n  14 |       expect(response?.status()).toBeLessThan(500);\n  15 |       await expect(page.locator('body')).toBeVisible();\n  16 |     });\n    at /opt/data/workspace/aniverse/e2e/dashboard.spec.ts:13:35"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-07-26T07:04:37.822Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/opt/data/workspace/aniverse/test-results/dashboard-Dashboard-Pages--a77e7-me-should-load-successfully-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/opt/data/workspace/aniverse/test-results/dashboard-Dashboard-Pages--a77e7-me-should-load-successfully-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/opt/data/workspace/aniverse/test-results/dashboard-Dashboard-Pages--a77e7-me-should-load-successfully-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/opt/data/workspace/aniverse/e2e/dashboard.spec.ts",
+                        "column": 35,
+                        "line": 13
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "90cda532ab82d274b30b-a2be5ad3916ca52eaa71",
+              "file": "dashboard.spec.ts",
+              "line": 12,
+              "column": 9
+            },
+            {
+              "title": "Gallery should load successfully",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 190,
+                      "error": {
+                        "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard/gallery\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard/gallery\", waiting until \"load\"\u001b[22m\n\n    at /opt/data/workspace/aniverse/e2e/dashboard.spec.ts:13:35",
+                        "location": {
+                          "file": "/opt/data/workspace/aniverse/e2e/dashboard.spec.ts",
+                          "column": 35,
+                          "line": 13
+                        },
+                        "snippet": "  11 |   for (const { path, name } of dashboardPages) {\n  12 |     test(`${name} should load successfully`, async ({ page }) => {\n> 13 |       const response = await page.goto(path);\n     |                                   ^\n  14 |       expect(response?.status()).toBeLessThan(500);\n  15 |       await expect(page.locator('body')).toBeVisible();\n  16 |     });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/opt/data/workspace/aniverse/e2e/dashboard.spec.ts",
+                            "column": 35,
+                            "line": 13
+                          },
+                          "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard/gallery\", waiting until \"load\"\u001b[22m\n\n\n  11 |   for (const { path, name } of dashboardPages) {\n  12 |     test(`${name} should load successfully`, async ({ page }) => {\n> 13 |       const response = await page.goto(path);\n     |                                   ^\n  14 |       expect(response?.status()).toBeLessThan(500);\n  15 |       await expect(page.locator('body')).toBeVisible();\n  16 |     });\n    at /opt/data/workspace/aniverse/e2e/dashboard.spec.ts:13:35"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-26T07:04:39.038Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/opt/data/workspace/aniverse/test-results/dashboard-Dashboard-Pages-Gallery-should-load-successfully/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/opt/data/workspace/aniverse/test-results/dashboard-Dashboard-Pages-Gallery-should-load-successfully/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/opt/data/workspace/aniverse/e2e/dashboard.spec.ts",
+                        "column": 35,
+                        "line": 13
+                      }
+                    },
+                    {
+                      "workerIndex": 11,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 224,
+                      "error": {
+                        "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard/gallery\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard/gallery\", waiting until \"load\"\u001b[22m\n\n    at /opt/data/workspace/aniverse/e2e/dashboard.spec.ts:13:35",
+                        "location": {
+                          "file": "/opt/data/workspace/aniverse/e2e/dashboard.spec.ts",
+                          "column": 35,
+                          "line": 13
+                        },
+                        "snippet": "  11 |   for (const { path, name } of dashboardPages) {\n  12 |     test(`${name} should load successfully`, async ({ page }) => {\n> 13 |       const response = await page.goto(path);\n     |                                   ^\n  14 |       expect(response?.status()).toBeLessThan(500);\n  15 |       await expect(page.locator('body')).toBeVisible();\n  16 |     });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/opt/data/workspace/aniverse/e2e/dashboard.spec.ts",
+                            "column": 35,
+                            "line": 13
+                          },
+                          "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard/gallery\", waiting until \"load\"\u001b[22m\n\n\n  11 |   for (const { path, name } of dashboardPages) {\n  12 |     test(`${name} should load successfully`, async ({ page }) => {\n> 13 |       const response = await page.goto(path);\n     |                                   ^\n  14 |       expect(response?.status()).toBeLessThan(500);\n  15 |       await expect(page.locator('body')).toBeVisible();\n  16 |     });\n    at /opt/data/workspace/aniverse/e2e/dashboard.spec.ts:13:35"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-07-26T07:04:40.186Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/opt/data/workspace/aniverse/test-results/dashboard-Dashboard-Pages-Gallery-should-load-successfully-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/opt/data/workspace/aniverse/test-results/dashboard-Dashboard-Pages-Gallery-should-load-successfully-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/opt/data/workspace/aniverse/test-results/dashboard-Dashboard-Pages-Gallery-should-load-successfully-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/opt/data/workspace/aniverse/e2e/dashboard.spec.ts",
+                        "column": 35,
+                        "line": 13
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "90cda532ab82d274b30b-d39fb44177cd50d45ab1",
+              "file": "dashboard.spec.ts",
+              "line": 12,
+              "column": 9
+            },
+            {
+              "title": "Create should load successfully",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 12,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 173,
+                      "error": {
+                        "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard/create\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard/create\", waiting until \"load\"\u001b[22m\n\n    at /opt/data/workspace/aniverse/e2e/dashboard.spec.ts:13:35",
+                        "location": {
+                          "file": "/opt/data/workspace/aniverse/e2e/dashboard.spec.ts",
+                          "column": 35,
+                          "line": 13
+                        },
+                        "snippet": "  11 |   for (const { path, name } of dashboardPages) {\n  12 |     test(`${name} should load successfully`, async ({ page }) => {\n> 13 |       const response = await page.goto(path);\n     |                                   ^\n  14 |       expect(response?.status()).toBeLessThan(500);\n  15 |       await expect(page.locator('body')).toBeVisible();\n  16 |     });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/opt/data/workspace/aniverse/e2e/dashboard.spec.ts",
+                            "column": 35,
+                            "line": 13
+                          },
+                          "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard/create\", waiting until \"load\"\u001b[22m\n\n\n  11 |   for (const { path, name } of dashboardPages) {\n  12 |     test(`${name} should load successfully`, async ({ page }) => {\n> 13 |       const response = await page.goto(path);\n     |                                   ^\n  14 |       expect(response?.status()).toBeLessThan(500);\n  15 |       await expect(page.locator('body')).toBeVisible();\n  16 |     });\n    at /opt/data/workspace/aniverse/e2e/dashboard.spec.ts:13:35"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-26T07:04:41.375Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/opt/data/workspace/aniverse/test-results/dashboard-Dashboard-Pages-Create-should-load-successfully/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/opt/data/workspace/aniverse/test-results/dashboard-Dashboard-Pages-Create-should-load-successfully/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/opt/data/workspace/aniverse/e2e/dashboard.spec.ts",
+                        "column": 35,
+                        "line": 13
+                      }
+                    },
+                    {
+                      "workerIndex": 13,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 268,
+                      "error": {
+                        "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard/create\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard/create\", waiting until \"load\"\u001b[22m\n\n    at /opt/data/workspace/aniverse/e2e/dashboard.spec.ts:13:35",
+                        "location": {
+                          "file": "/opt/data/workspace/aniverse/e2e/dashboard.spec.ts",
+                          "column": 35,
+                          "line": 13
+                        },
+                        "snippet": "  11 |   for (const { path, name } of dashboardPages) {\n  12 |     test(`${name} should load successfully`, async ({ page }) => {\n> 13 |       const response = await page.goto(path);\n     |                                   ^\n  14 |       expect(response?.status()).toBeLessThan(500);\n  15 |       await expect(page.locator('body')).toBeVisible();\n  16 |     });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/opt/data/workspace/aniverse/e2e/dashboard.spec.ts",
+                            "column": 35,
+                            "line": 13
+                          },
+                          "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard/create\", waiting until \"load\"\u001b[22m\n\n\n  11 |   for (const { path, name } of dashboardPages) {\n  12 |     test(`${name} should load successfully`, async ({ page }) => {\n> 13 |       const response = await page.goto(path);\n     |                                   ^\n  14 |       expect(response?.status()).toBeLessThan(500);\n  15 |       await expect(page.locator('body')).toBeVisible();\n  16 |     });\n    at /opt/data/workspace/aniverse/e2e/dashboard.spec.ts:13:35"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-07-26T07:04:42.499Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/opt/data/workspace/aniverse/test-results/dashboard-Dashboard-Pages-Create-should-load-successfully-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/opt/data/workspace/aniverse/test-results/dashboard-Dashboard-Pages-Create-should-load-successfully-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/opt/data/workspace/aniverse/test-results/dashboard-Dashboard-Pages-Create-should-load-successfully-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/opt/data/workspace/aniverse/e2e/dashboard.spec.ts",
+                        "column": 35,
+                        "line": 13
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "90cda532ab82d274b30b-dc8d944412ad206b0676",
+              "file": "dashboard.spec.ts",
+              "line": 12,
+              "column": 9
+            },
+            {
+              "title": "Marketplace should load successfully",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 14,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 179,
+                      "error": {
+                        "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard/marketplace\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard/marketplace\", waiting until \"load\"\u001b[22m\n\n    at /opt/data/workspace/aniverse/e2e/dashboard.spec.ts:13:35",
+                        "location": {
+                          "file": "/opt/data/workspace/aniverse/e2e/dashboard.spec.ts",
+                          "column": 35,
+                          "line": 13
+                        },
+                        "snippet": "  11 |   for (const { path, name } of dashboardPages) {\n  12 |     test(`${name} should load successfully`, async ({ page }) => {\n> 13 |       const response = await page.goto(path);\n     |                                   ^\n  14 |       expect(response?.status()).toBeLessThan(500);\n  15 |       await expect(page.locator('body')).toBeVisible();\n  16 |     });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/opt/data/workspace/aniverse/e2e/dashboard.spec.ts",
+                            "column": 35,
+                            "line": 13
+                          },
+                          "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard/marketplace\", waiting until \"load\"\u001b[22m\n\n\n  11 |   for (const { path, name } of dashboardPages) {\n  12 |     test(`${name} should load successfully`, async ({ page }) => {\n> 13 |       const response = await page.goto(path);\n     |                                   ^\n  14 |       expect(response?.status()).toBeLessThan(500);\n  15 |       await expect(page.locator('body')).toBeVisible();\n  16 |     });\n    at /opt/data/workspace/aniverse/e2e/dashboard.spec.ts:13:35"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-26T07:04:43.760Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/opt/data/workspace/aniverse/test-results/dashboard-Dashboard-Pages--7cee6-ce-should-load-successfully/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/opt/data/workspace/aniverse/test-results/dashboard-Dashboard-Pages--7cee6-ce-should-load-successfully/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/opt/data/workspace/aniverse/e2e/dashboard.spec.ts",
+                        "column": 35,
+                        "line": 13
+                      }
+                    },
+                    {
+                      "workerIndex": 15,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 243,
+                      "error": {
+                        "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard/marketplace\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard/marketplace\", waiting until \"load\"\u001b[22m\n\n    at /opt/data/workspace/aniverse/e2e/dashboard.spec.ts:13:35",
+                        "location": {
+                          "file": "/opt/data/workspace/aniverse/e2e/dashboard.spec.ts",
+                          "column": 35,
+                          "line": 13
+                        },
+                        "snippet": "  11 |   for (const { path, name } of dashboardPages) {\n  12 |     test(`${name} should load successfully`, async ({ page }) => {\n> 13 |       const response = await page.goto(path);\n     |                                   ^\n  14 |       expect(response?.status()).toBeLessThan(500);\n  15 |       await expect(page.locator('body')).toBeVisible();\n  16 |     });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/opt/data/workspace/aniverse/e2e/dashboard.spec.ts",
+                            "column": 35,
+                            "line": 13
+                          },
+                          "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard/marketplace\", waiting until \"load\"\u001b[22m\n\n\n  11 |   for (const { path, name } of dashboardPages) {\n  12 |     test(`${name} should load successfully`, async ({ page }) => {\n> 13 |       const response = await page.goto(path);\n     |                                   ^\n  14 |       expect(response?.status()).toBeLessThan(500);\n  15 |       await expect(page.locator('body')).toBeVisible();\n  16 |     });\n    at /opt/data/workspace/aniverse/e2e/dashboard.spec.ts:13:35"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-07-26T07:04:44.905Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/opt/data/workspace/aniverse/test-results/dashboard-Dashboard-Pages--7cee6-ce-should-load-successfully-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/opt/data/workspace/aniverse/test-results/dashboard-Dashboard-Pages--7cee6-ce-should-load-successfully-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/opt/data/workspace/aniverse/test-results/dashboard-Dashboard-Pages--7cee6-ce-should-load-successfully-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/opt/data/workspace/aniverse/e2e/dashboard.spec.ts",
+                        "column": 35,
+                        "line": 13
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "90cda532ab82d274b30b-cef0a1f333e39a928e8f",
+              "file": "dashboard.spec.ts",
+              "line": 12,
+              "column": 9
+            },
+            {
+              "title": "dashboard sidebar should be visible",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 16,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 178,
+                      "error": {
+                        "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard\", waiting until \"load\"\u001b[22m\n\n    at /opt/data/workspace/aniverse/e2e/dashboard.spec.ts:20:16",
+                        "location": {
+                          "file": "/opt/data/workspace/aniverse/e2e/dashboard.spec.ts",
+                          "column": 16,
+                          "line": 20
+                        },
+                        "snippet": "  18 |\n  19 |   test('dashboard sidebar should be visible', async ({ page }) => {\n> 20 |     await page.goto('/dashboard');\n     |                ^\n  21 |     const sidebar = page.locator('nav, aside, [class*=\"sidebar\"]').first();\n  22 |     await expect(sidebar).toBeVisible();\n  23 |   });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/opt/data/workspace/aniverse/e2e/dashboard.spec.ts",
+                            "column": 16,
+                            "line": 20
+                          },
+                          "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard\", waiting until \"load\"\u001b[22m\n\n\n  18 |\n  19 |   test('dashboard sidebar should be visible', async ({ page }) => {\n> 20 |     await page.goto('/dashboard');\n     |                ^\n  21 |     const sidebar = page.locator('nav, aside, [class*=\"sidebar\"]').first();\n  22 |     await expect(sidebar).toBeVisible();\n  23 |   });\n    at /opt/data/workspace/aniverse/e2e/dashboard.spec.ts:20:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-26T07:04:46.137Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/opt/data/workspace/aniverse/test-results/dashboard-Dashboard-Pages--65579-d-sidebar-should-be-visible/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/opt/data/workspace/aniverse/test-results/dashboard-Dashboard-Pages--65579-d-sidebar-should-be-visible/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/opt/data/workspace/aniverse/e2e/dashboard.spec.ts",
+                        "column": 16,
+                        "line": 20
+                      }
+                    },
+                    {
+                      "workerIndex": 17,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 251,
+                      "error": {
+                        "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard\", waiting until \"load\"\u001b[22m\n\n    at /opt/data/workspace/aniverse/e2e/dashboard.spec.ts:20:16",
+                        "location": {
+                          "file": "/opt/data/workspace/aniverse/e2e/dashboard.spec.ts",
+                          "column": 16,
+                          "line": 20
+                        },
+                        "snippet": "  18 |\n  19 |   test('dashboard sidebar should be visible', async ({ page }) => {\n> 20 |     await page.goto('/dashboard');\n     |                ^\n  21 |     const sidebar = page.locator('nav, aside, [class*=\"sidebar\"]').first();\n  22 |     await expect(sidebar).toBeVisible();\n  23 |   });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/opt/data/workspace/aniverse/e2e/dashboard.spec.ts",
+                            "column": 16,
+                            "line": 20
+                          },
+                          "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard\", waiting until \"load\"\u001b[22m\n\n\n  18 |\n  19 |   test('dashboard sidebar should be visible', async ({ page }) => {\n> 20 |     await page.goto('/dashboard');\n     |                ^\n  21 |     const sidebar = page.locator('nav, aside, [class*=\"sidebar\"]').first();\n  22 |     await expect(sidebar).toBeVisible();\n  23 |   });\n    at /opt/data/workspace/aniverse/e2e/dashboard.spec.ts:20:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-07-26T07:04:47.331Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/opt/data/workspace/aniverse/test-results/dashboard-Dashboard-Pages--65579-d-sidebar-should-be-visible-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/opt/data/workspace/aniverse/test-results/dashboard-Dashboard-Pages--65579-d-sidebar-should-be-visible-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/opt/data/workspace/aniverse/test-results/dashboard-Dashboard-Pages--65579-d-sidebar-should-be-visible-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/opt/data/workspace/aniverse/e2e/dashboard.spec.ts",
+                        "column": 16,
+                        "line": 20
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "90cda532ab82d274b30b-67c26631d92baef83108",
+              "file": "dashboard.spec.ts",
+              "line": 19,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "landing.spec.ts",
+      "file": "landing.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "AniVerse Landing Page",
+          "file": "landing.spec.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should display hero section with title",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 18,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 180,
+                      "error": {
+                        "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n    at /opt/data/workspace/aniverse/e2e/landing.spec.ts:5:16",
+                        "location": {
+                          "file": "/opt/data/workspace/aniverse/e2e/landing.spec.ts",
+                          "column": 16,
+                          "line": 5
+                        },
+                        "snippet": "  3 | test.describe('AniVerse Landing Page', () => {\n  4 |   test.beforeEach(async ({ page }) => {\n> 5 |     await page.goto('/');\n    |                ^\n  6 |   });\n  7 |\n  8 |   test('should display hero section with title', async ({ page }) => {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/opt/data/workspace/aniverse/e2e/landing.spec.ts",
+                            "column": 16,
+                            "line": 5
+                          },
+                          "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n\n  3 | test.describe('AniVerse Landing Page', () => {\n  4 |   test.beforeEach(async ({ page }) => {\n> 5 |     await page.goto('/');\n    |                ^\n  6 |   });\n  7 |\n  8 |   test('should display hero section with title', async ({ page }) => {\n    at /opt/data/workspace/aniverse/e2e/landing.spec.ts:5:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-26T07:04:48.558Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/opt/data/workspace/aniverse/test-results/landing-AniVerse-Landing-P-b3c2c-lay-hero-section-with-title/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/opt/data/workspace/aniverse/test-results/landing-AniVerse-Landing-P-b3c2c-lay-hero-section-with-title/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/opt/data/workspace/aniverse/e2e/landing.spec.ts",
+                        "column": 16,
+                        "line": 5
+                      }
+                    },
+                    {
+                      "workerIndex": 19,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 250,
+                      "error": {
+                        "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n    at /opt/data/workspace/aniverse/e2e/landing.spec.ts:5:16",
+                        "location": {
+                          "file": "/opt/data/workspace/aniverse/e2e/landing.spec.ts",
+                          "column": 16,
+                          "line": 5
+                        },
+                        "snippet": "  3 | test.describe('AniVerse Landing Page', () => {\n  4 |   test.beforeEach(async ({ page }) => {\n> 5 |     await page.goto('/');\n    |                ^\n  6 |   });\n  7 |\n  8 |   test('should display hero section with title', async ({ page }) => {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/opt/data/workspace/aniverse/e2e/landing.spec.ts",
+                            "column": 16,
+                            "line": 5
+                          },
+                          "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n\n  3 | test.describe('AniVerse Landing Page', () => {\n  4 |   test.beforeEach(async ({ page }) => {\n> 5 |     await page.goto('/');\n    |                ^\n  6 |   });\n  7 |\n  8 |   test('should display hero section with title', async ({ page }) => {\n    at /opt/data/workspace/aniverse/e2e/landing.spec.ts:5:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-07-26T07:04:49.714Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/opt/data/workspace/aniverse/test-results/landing-AniVerse-Landing-P-b3c2c-lay-hero-section-with-title-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/opt/data/workspace/aniverse/test-results/landing-AniVerse-Landing-P-b3c2c-lay-hero-section-with-title-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/opt/data/workspace/aniverse/test-results/landing-AniVerse-Landing-P-b3c2c-lay-hero-section-with-title-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/opt/data/workspace/aniverse/e2e/landing.spec.ts",
+                        "column": 16,
+                        "line": 5
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "4e5b49d369fd48ca0656-57557b63c1aa1313295d",
+              "file": "landing.spec.ts",
+              "line": 8,
+              "column": 7
+            },
+            {
+              "title": "should show features grid",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 20,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 180,
+                      "error": {
+                        "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n    at /opt/data/workspace/aniverse/e2e/landing.spec.ts:5:16",
+                        "location": {
+                          "file": "/opt/data/workspace/aniverse/e2e/landing.spec.ts",
+                          "column": 16,
+                          "line": 5
+                        },
+                        "snippet": "  3 | test.describe('AniVerse Landing Page', () => {\n  4 |   test.beforeEach(async ({ page }) => {\n> 5 |     await page.goto('/');\n    |                ^\n  6 |   });\n  7 |\n  8 |   test('should display hero section with title', async ({ page }) => {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/opt/data/workspace/aniverse/e2e/landing.spec.ts",
+                            "column": 16,
+                            "line": 5
+                          },
+                          "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n\n  3 | test.describe('AniVerse Landing Page', () => {\n  4 |   test.beforeEach(async ({ page }) => {\n> 5 |     await page.goto('/');\n    |                ^\n  6 |   });\n  7 |\n  8 |   test('should display hero section with title', async ({ page }) => {\n    at /opt/data/workspace/aniverse/e2e/landing.spec.ts:5:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-26T07:04:50.933Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/opt/data/workspace/aniverse/test-results/landing-AniVerse-Landing-Page-should-show-features-grid/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/opt/data/workspace/aniverse/test-results/landing-AniVerse-Landing-Page-should-show-features-grid/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/opt/data/workspace/aniverse/e2e/landing.spec.ts",
+                        "column": 16,
+                        "line": 5
+                      }
+                    },
+                    {
+                      "workerIndex": 21,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 239,
+                      "error": {
+                        "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n    at /opt/data/workspace/aniverse/e2e/landing.spec.ts:5:16",
+                        "location": {
+                          "file": "/opt/data/workspace/aniverse/e2e/landing.spec.ts",
+                          "column": 16,
+                          "line": 5
+                        },
+                        "snippet": "  3 | test.describe('AniVerse Landing Page', () => {\n  4 |   test.beforeEach(async ({ page }) => {\n> 5 |     await page.goto('/');\n    |                ^\n  6 |   });\n  7 |\n  8 |   test('should display hero section with title', async ({ page }) => {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/opt/data/workspace/aniverse/e2e/landing.spec.ts",
+                            "column": 16,
+                            "line": 5
+                          },
+                          "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n\n  3 | test.describe('AniVerse Landing Page', () => {\n  4 |   test.beforeEach(async ({ page }) => {\n> 5 |     await page.goto('/');\n    |                ^\n  6 |   });\n  7 |\n  8 |   test('should display hero section with title', async ({ page }) => {\n    at /opt/data/workspace/aniverse/e2e/landing.spec.ts:5:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-07-26T07:04:52.092Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/opt/data/workspace/aniverse/test-results/landing-AniVerse-Landing-Page-should-show-features-grid-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/opt/data/workspace/aniverse/test-results/landing-AniVerse-Landing-Page-should-show-features-grid-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/opt/data/workspace/aniverse/test-results/landing-AniVerse-Landing-Page-should-show-features-grid-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/opt/data/workspace/aniverse/e2e/landing.spec.ts",
+                        "column": 16,
+                        "line": 5
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "4e5b49d369fd48ca0656-cc25c9ad85ab0e7815ed",
+              "file": "landing.spec.ts",
+              "line": 13,
+              "column": 7
+            },
+            {
+              "title": "should have CTA button that navigates",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 22,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 191,
+                      "error": {
+                        "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n    at /opt/data/workspace/aniverse/e2e/landing.spec.ts:5:16",
+                        "location": {
+                          "file": "/opt/data/workspace/aniverse/e2e/landing.spec.ts",
+                          "column": 16,
+                          "line": 5
+                        },
+                        "snippet": "  3 | test.describe('AniVerse Landing Page', () => {\n  4 |   test.beforeEach(async ({ page }) => {\n> 5 |     await page.goto('/');\n    |                ^\n  6 |   });\n  7 |\n  8 |   test('should display hero section with title', async ({ page }) => {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/opt/data/workspace/aniverse/e2e/landing.spec.ts",
+                            "column": 16,
+                            "line": 5
+                          },
+                          "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n\n  3 | test.describe('AniVerse Landing Page', () => {\n  4 |   test.beforeEach(async ({ page }) => {\n> 5 |     await page.goto('/');\n    |                ^\n  6 |   });\n  7 |\n  8 |   test('should display hero section with title', async ({ page }) => {\n    at /opt/data/workspace/aniverse/e2e/landing.spec.ts:5:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-26T07:04:53.319Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/opt/data/workspace/aniverse/test-results/landing-AniVerse-Landing-P-53ae9-e-CTA-button-that-navigates/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/opt/data/workspace/aniverse/test-results/landing-AniVerse-Landing-P-53ae9-e-CTA-button-that-navigates/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/opt/data/workspace/aniverse/e2e/landing.spec.ts",
+                        "column": 16,
+                        "line": 5
+                      }
+                    },
+                    {
+                      "workerIndex": 23,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 241,
+                      "error": {
+                        "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n    at /opt/data/workspace/aniverse/e2e/landing.spec.ts:5:16",
+                        "location": {
+                          "file": "/opt/data/workspace/aniverse/e2e/landing.spec.ts",
+                          "column": 16,
+                          "line": 5
+                        },
+                        "snippet": "  3 | test.describe('AniVerse Landing Page', () => {\n  4 |   test.beforeEach(async ({ page }) => {\n> 5 |     await page.goto('/');\n    |                ^\n  6 |   });\n  7 |\n  8 |   test('should display hero section with title', async ({ page }) => {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/opt/data/workspace/aniverse/e2e/landing.spec.ts",
+                            "column": 16,
+                            "line": 5
+                          },
+                          "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n\n  3 | test.describe('AniVerse Landing Page', () => {\n  4 |   test.beforeEach(async ({ page }) => {\n> 5 |     await page.goto('/');\n    |                ^\n  6 |   });\n  7 |\n  8 |   test('should display hero section with title', async ({ page }) => {\n    at /opt/data/workspace/aniverse/e2e/landing.spec.ts:5:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-07-26T07:04:54.494Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/opt/data/workspace/aniverse/test-results/landing-AniVerse-Landing-P-53ae9-e-CTA-button-that-navigates-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/opt/data/workspace/aniverse/test-results/landing-AniVerse-Landing-P-53ae9-e-CTA-button-that-navigates-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/opt/data/workspace/aniverse/test-results/landing-AniVerse-Landing-P-53ae9-e-CTA-button-that-navigates-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/opt/data/workspace/aniverse/e2e/landing.spec.ts",
+                        "column": 16,
+                        "line": 5
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "4e5b49d369fd48ca0656-4090a980a90ba5e63891",
+              "file": "landing.spec.ts",
+              "line": 18,
+              "column": 7
+            },
+            {
+              "title": "should have pricing section",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 24,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 171,
+                      "error": {
+                        "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n    at /opt/data/workspace/aniverse/e2e/landing.spec.ts:5:16",
+                        "location": {
+                          "file": "/opt/data/workspace/aniverse/e2e/landing.spec.ts",
+                          "column": 16,
+                          "line": 5
+                        },
+                        "snippet": "  3 | test.describe('AniVerse Landing Page', () => {\n  4 |   test.beforeEach(async ({ page }) => {\n> 5 |     await page.goto('/');\n    |                ^\n  6 |   });\n  7 |\n  8 |   test('should display hero section with title', async ({ page }) => {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/opt/data/workspace/aniverse/e2e/landing.spec.ts",
+                            "column": 16,
+                            "line": 5
+                          },
+                          "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n\n  3 | test.describe('AniVerse Landing Page', () => {\n  4 |   test.beforeEach(async ({ page }) => {\n> 5 |     await page.goto('/');\n    |                ^\n  6 |   });\n  7 |\n  8 |   test('should display hero section with title', async ({ page }) => {\n    at /opt/data/workspace/aniverse/e2e/landing.spec.ts:5:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-26T07:04:55.732Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/opt/data/workspace/aniverse/test-results/landing-AniVerse-Landing-Page-should-have-pricing-section/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/opt/data/workspace/aniverse/test-results/landing-AniVerse-Landing-Page-should-have-pricing-section/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/opt/data/workspace/aniverse/e2e/landing.spec.ts",
+                        "column": 16,
+                        "line": 5
+                      }
+                    },
+                    {
+                      "workerIndex": 25,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 248,
+                      "error": {
+                        "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n    at /opt/data/workspace/aniverse/e2e/landing.spec.ts:5:16",
+                        "location": {
+                          "file": "/opt/data/workspace/aniverse/e2e/landing.spec.ts",
+                          "column": 16,
+                          "line": 5
+                        },
+                        "snippet": "  3 | test.describe('AniVerse Landing Page', () => {\n  4 |   test.beforeEach(async ({ page }) => {\n> 5 |     await page.goto('/');\n    |                ^\n  6 |   });\n  7 |\n  8 |   test('should display hero section with title', async ({ page }) => {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/opt/data/workspace/aniverse/e2e/landing.spec.ts",
+                            "column": 16,
+                            "line": 5
+                          },
+                          "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n\n  3 | test.describe('AniVerse Landing Page', () => {\n  4 |   test.beforeEach(async ({ page }) => {\n> 5 |     await page.goto('/');\n    |                ^\n  6 |   });\n  7 |\n  8 |   test('should display hero section with title', async ({ page }) => {\n    at /opt/data/workspace/aniverse/e2e/landing.spec.ts:5:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-07-26T07:04:56.890Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/opt/data/workspace/aniverse/test-results/landing-AniVerse-Landing-Page-should-have-pricing-section-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/opt/data/workspace/aniverse/test-results/landing-AniVerse-Landing-Page-should-have-pricing-section-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/opt/data/workspace/aniverse/test-results/landing-AniVerse-Landing-Page-should-have-pricing-section-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/opt/data/workspace/aniverse/e2e/landing.spec.ts",
+                        "column": 16,
+                        "line": 5
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "4e5b49d369fd48ca0656-f49a64ce8cf31cc40723",
+              "file": "landing.spec.ts",
+              "line": 26,
+              "column": 7
+            },
+            {
+              "title": "should be responsive - viewport 375px",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 26,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 171,
+                      "error": {
+                        "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n    at /opt/data/workspace/aniverse/e2e/landing.spec.ts:5:16",
+                        "location": {
+                          "file": "/opt/data/workspace/aniverse/e2e/landing.spec.ts",
+                          "column": 16,
+                          "line": 5
+                        },
+                        "snippet": "  3 | test.describe('AniVerse Landing Page', () => {\n  4 |   test.beforeEach(async ({ page }) => {\n> 5 |     await page.goto('/');\n    |                ^\n  6 |   });\n  7 |\n  8 |   test('should display hero section with title', async ({ page }) => {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/opt/data/workspace/aniverse/e2e/landing.spec.ts",
+                            "column": 16,
+                            "line": 5
+                          },
+                          "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n\n  3 | test.describe('AniVerse Landing Page', () => {\n  4 |   test.beforeEach(async ({ page }) => {\n> 5 |     await page.goto('/');\n    |                ^\n  6 |   });\n  7 |\n  8 |   test('should display hero section with title', async ({ page }) => {\n    at /opt/data/workspace/aniverse/e2e/landing.spec.ts:5:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-26T07:04:58.140Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/opt/data/workspace/aniverse/test-results/landing-AniVerse-Landing-P-c16a0-responsive---viewport-375px/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/opt/data/workspace/aniverse/test-results/landing-AniVerse-Landing-P-c16a0-responsive---viewport-375px/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/opt/data/workspace/aniverse/e2e/landing.spec.ts",
+                        "column": 16,
+                        "line": 5
+                      }
+                    },
+                    {
+                      "workerIndex": 27,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 250,
+                      "error": {
+                        "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n    at /opt/data/workspace/aniverse/e2e/landing.spec.ts:5:16",
+                        "location": {
+                          "file": "/opt/data/workspace/aniverse/e2e/landing.spec.ts",
+                          "column": 16,
+                          "line": 5
+                        },
+                        "snippet": "  3 | test.describe('AniVerse Landing Page', () => {\n  4 |   test.beforeEach(async ({ page }) => {\n> 5 |     await page.goto('/');\n    |                ^\n  6 |   });\n  7 |\n  8 |   test('should display hero section with title', async ({ page }) => {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/opt/data/workspace/aniverse/e2e/landing.spec.ts",
+                            "column": 16,
+                            "line": 5
+                          },
+                          "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n\n  3 | test.describe('AniVerse Landing Page', () => {\n  4 |   test.beforeEach(async ({ page }) => {\n> 5 |     await page.goto('/');\n    |                ^\n  6 |   });\n  7 |\n  8 |   test('should display hero section with title', async ({ page }) => {\n    at /opt/data/workspace/aniverse/e2e/landing.spec.ts:5:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-07-26T07:04:59.329Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/opt/data/workspace/aniverse/test-results/landing-AniVerse-Landing-P-c16a0-responsive---viewport-375px-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/opt/data/workspace/aniverse/test-results/landing-AniVerse-Landing-P-c16a0-responsive---viewport-375px-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/opt/data/workspace/aniverse/test-results/landing-AniVerse-Landing-P-c16a0-responsive---viewport-375px-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/opt/data/workspace/aniverse/e2e/landing.spec.ts",
+                        "column": 16,
+                        "line": 5
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "4e5b49d369fd48ca0656-208f1d229f128efd6d66",
+              "file": "landing.spec.ts",
+              "line": 31,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "monetization.spec.ts",
+      "file": "monetization.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Monetization",
+          "file": "monetization.spec.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "monetization page should load",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 28,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 192,
+                      "error": {
+                        "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard/monetization\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard/monetization\", waiting until \"load\"\u001b[22m\n\n    at /opt/data/workspace/aniverse/e2e/monetization.spec.ts:5:33",
+                        "location": {
+                          "file": "/opt/data/workspace/aniverse/e2e/monetization.spec.ts",
+                          "column": 33,
+                          "line": 5
+                        },
+                        "snippet": "  3 | test.describe('Monetization', () => {\n  4 |   test('monetization page should load', async ({ page }) => {\n> 5 |     const response = await page.goto('/dashboard/monetization');\n    |                                 ^\n  6 |     expect(response?.status()).toBeLessThan(500);\n  7 |   });\n  8 | });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/opt/data/workspace/aniverse/e2e/monetization.spec.ts",
+                            "column": 33,
+                            "line": 5
+                          },
+                          "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard/monetization\", waiting until \"load\"\u001b[22m\n\n\n  3 | test.describe('Monetization', () => {\n  4 |   test('monetization page should load', async ({ page }) => {\n> 5 |     const response = await page.goto('/dashboard/monetization');\n    |                                 ^\n  6 |     expect(response?.status()).toBeLessThan(500);\n  7 |   });\n  8 | });\n    at /opt/data/workspace/aniverse/e2e/monetization.spec.ts:5:33"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-26T07:05:00.612Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/opt/data/workspace/aniverse/test-results/monetization-Monetization-monetization-page-should-load/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/opt/data/workspace/aniverse/test-results/monetization-Monetization-monetization-page-should-load/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/opt/data/workspace/aniverse/e2e/monetization.spec.ts",
+                        "column": 33,
+                        "line": 5
+                      }
+                    },
+                    {
+                      "workerIndex": 29,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 251,
+                      "error": {
+                        "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard/monetization\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard/monetization\", waiting until \"load\"\u001b[22m\n\n    at /opt/data/workspace/aniverse/e2e/monetization.spec.ts:5:33",
+                        "location": {
+                          "file": "/opt/data/workspace/aniverse/e2e/monetization.spec.ts",
+                          "column": 33,
+                          "line": 5
+                        },
+                        "snippet": "  3 | test.describe('Monetization', () => {\n  4 |   test('monetization page should load', async ({ page }) => {\n> 5 |     const response = await page.goto('/dashboard/monetization');\n    |                                 ^\n  6 |     expect(response?.status()).toBeLessThan(500);\n  7 |   });\n  8 | });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/opt/data/workspace/aniverse/e2e/monetization.spec.ts",
+                            "column": 33,
+                            "line": 5
+                          },
+                          "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/dashboard/monetization\", waiting until \"load\"\u001b[22m\n\n\n  3 | test.describe('Monetization', () => {\n  4 |   test('monetization page should load', async ({ page }) => {\n> 5 |     const response = await page.goto('/dashboard/monetization');\n    |                                 ^\n  6 |     expect(response?.status()).toBeLessThan(500);\n  7 |   });\n  8 | });\n    at /opt/data/workspace/aniverse/e2e/monetization.spec.ts:5:33"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-07-26T07:05:01.906Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/opt/data/workspace/aniverse/test-results/monetization-Monetization-monetization-page-should-load-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/opt/data/workspace/aniverse/test-results/monetization-Monetization-monetization-page-should-load-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/opt/data/workspace/aniverse/test-results/monetization-Monetization-monetization-page-should-load-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/opt/data/workspace/aniverse/e2e/monetization.spec.ts",
+                        "column": 33,
+                        "line": 5
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "0a90c19891966360dded-06a47fc0a270a2a16d88",
+              "file": "monetization.spec.ts",
+              "line": 4,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "navigation.spec.ts",
+      "file": "navigation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Navigation",
+          "file": "navigation.spec.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should navigate between all public pages",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 30,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 177,
+                      "error": {
+                        "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n    at /opt/data/workspace/aniverse/e2e/navigation.spec.ts:7:18",
+                        "location": {
+                          "file": "/opt/data/workspace/aniverse/e2e/navigation.spec.ts",
+                          "column": 18,
+                          "line": 7
+                        },
+                        "snippet": "   5 |     const pages = ['/', '/login', '/register'];\n   6 |     for (const path of pages) {\n>  7 |       await page.goto(path);\n     |                  ^\n   8 |       await expect(page).toHaveURL(path);\n   9 |       await expect(page.locator('body')).toBeVisible();\n  10 |     }"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/opt/data/workspace/aniverse/e2e/navigation.spec.ts",
+                            "column": 18,
+                            "line": 7
+                          },
+                          "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n\n   5 |     const pages = ['/', '/login', '/register'];\n   6 |     for (const path of pages) {\n>  7 |       await page.goto(path);\n     |                  ^\n   8 |       await expect(page).toHaveURL(path);\n   9 |       await expect(page.locator('body')).toBeVisible();\n  10 |     }\n    at /opt/data/workspace/aniverse/e2e/navigation.spec.ts:7:18"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-26T07:05:03.150Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/opt/data/workspace/aniverse/test-results/navigation-Navigation-shou-62c8d-te-between-all-public-pages/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/opt/data/workspace/aniverse/test-results/navigation-Navigation-shou-62c8d-te-between-all-public-pages/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/opt/data/workspace/aniverse/e2e/navigation.spec.ts",
+                        "column": 18,
+                        "line": 7
+                      }
+                    },
+                    {
+                      "workerIndex": 31,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 239,
+                      "error": {
+                        "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n    at /opt/data/workspace/aniverse/e2e/navigation.spec.ts:7:18",
+                        "location": {
+                          "file": "/opt/data/workspace/aniverse/e2e/navigation.spec.ts",
+                          "column": 18,
+                          "line": 7
+                        },
+                        "snippet": "   5 |     const pages = ['/', '/login', '/register'];\n   6 |     for (const path of pages) {\n>  7 |       await page.goto(path);\n     |                  ^\n   8 |       await expect(page).toHaveURL(path);\n   9 |       await expect(page.locator('body')).toBeVisible();\n  10 |     }"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/opt/data/workspace/aniverse/e2e/navigation.spec.ts",
+                            "column": 18,
+                            "line": 7
+                          },
+                          "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n\n   5 |     const pages = ['/', '/login', '/register'];\n   6 |     for (const path of pages) {\n>  7 |       await page.goto(path);\n     |                  ^\n   8 |       await expect(page).toHaveURL(path);\n   9 |       await expect(page.locator('body')).toBeVisible();\n  10 |     }\n    at /opt/data/workspace/aniverse/e2e/navigation.spec.ts:7:18"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-07-26T07:05:04.279Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/opt/data/workspace/aniverse/test-results/navigation-Navigation-shou-62c8d-te-between-all-public-pages-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/opt/data/workspace/aniverse/test-results/navigation-Navigation-shou-62c8d-te-between-all-public-pages-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/opt/data/workspace/aniverse/test-results/navigation-Navigation-shou-62c8d-te-between-all-public-pages-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/opt/data/workspace/aniverse/e2e/navigation.spec.ts",
+                        "column": 18,
+                        "line": 7
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "5d2868f7d23420c27cca-35d677222377ad5a48e2",
+              "file": "navigation.spec.ts",
+              "line": 4,
+              "column": 7
+            },
+            {
+              "title": "should have working header navigation",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 32,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 166,
+                      "error": {
+                        "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n    at /opt/data/workspace/aniverse/e2e/navigation.spec.ts:14:16",
+                        "location": {
+                          "file": "/opt/data/workspace/aniverse/e2e/navigation.spec.ts",
+                          "column": 16,
+                          "line": 14
+                        },
+                        "snippet": "  12 |\n  13 |   test('should have working header navigation', async ({ page }) => {\n> 14 |     await page.goto('/');\n     |                ^\n  15 |     const navLinks = page.locator('nav a, header a');\n  16 |     const count = await navLinks.count();\n  17 |     expect(count).toBeGreaterThan(0);"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/opt/data/workspace/aniverse/e2e/navigation.spec.ts",
+                            "column": 16,
+                            "line": 14
+                          },
+                          "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n\n  12 |\n  13 |   test('should have working header navigation', async ({ page }) => {\n> 14 |     await page.goto('/');\n     |                ^\n  15 |     const navLinks = page.locator('nav a, header a');\n  16 |     const count = await navLinks.count();\n  17 |     expect(count).toBeGreaterThan(0);\n    at /opt/data/workspace/aniverse/e2e/navigation.spec.ts:14:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-26T07:05:05.542Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/opt/data/workspace/aniverse/test-results/navigation-Navigation-should-have-working-header-navigation/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/opt/data/workspace/aniverse/test-results/navigation-Navigation-should-have-working-header-navigation/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/opt/data/workspace/aniverse/e2e/navigation.spec.ts",
+                        "column": 16,
+                        "line": 14
+                      }
+                    },
+                    {
+                      "workerIndex": 33,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 253,
+                      "error": {
+                        "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n    at /opt/data/workspace/aniverse/e2e/navigation.spec.ts:14:16",
+                        "location": {
+                          "file": "/opt/data/workspace/aniverse/e2e/navigation.spec.ts",
+                          "column": 16,
+                          "line": 14
+                        },
+                        "snippet": "  12 |\n  13 |   test('should have working header navigation', async ({ page }) => {\n> 14 |     await page.goto('/');\n     |                ^\n  15 |     const navLinks = page.locator('nav a, header a');\n  16 |     const count = await navLinks.count();\n  17 |     expect(count).toBeGreaterThan(0);"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/opt/data/workspace/aniverse/e2e/navigation.spec.ts",
+                            "column": 16,
+                            "line": 14
+                          },
+                          "message": "Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n\u001b[2m  - navigating to \"/\", waiting until \"load\"\u001b[22m\n\n\n  12 |\n  13 |   test('should have working header navigation', async ({ page }) => {\n> 14 |     await page.goto('/');\n     |                ^\n  15 |     const navLinks = page.locator('nav a, header a');\n  16 |     const count = await navLinks.count();\n  17 |     expect(count).toBeGreaterThan(0);\n    at /opt/data/workspace/aniverse/e2e/navigation.spec.ts:14:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-07-26T07:05:06.731Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/opt/data/workspace/aniverse/test-results/navigation-Navigation-should-have-working-header-navigation-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/opt/data/workspace/aniverse/test-results/navigation-Navigation-should-have-working-header-navigation-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/opt/data/workspace/aniverse/test-results/navigation-Navigation-should-have-working-header-navigation-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/opt/data/workspace/aniverse/e2e/navigation.spec.ts",
+                        "column": 16,
+                        "line": 14
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "5d2868f7d23420c27cca-4583e88b4337f6f56b0a",
+              "file": "navigation.spec.ts",
+              "line": 13,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-07-26T07:04:26.112Z",
+    "duration": 41107.774,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 17,
+    "flaky": 0
+  }
+}
