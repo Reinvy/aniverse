@@ -1,14 +1,6 @@
 "use client";
 
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useCallback,
-  useRef,
-  useEffect,
-  useMemo,
-} from "react";
+import React, { createContext, useContext, useState, useCallback, useRef, useEffect } from "react";
 
 // ─── Section Definitions ───────────────────────────────────────
 
@@ -94,9 +86,32 @@ export function SpatialProvider({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
-  // Subtle camera transform for desktop spatial feel — derived purely from
-  // activeSection, so memoize to avoid rebuilding the string every render.
-  const cameraTransform = useMemo(() => {
+  // Support deep-linking via URL hash (e.g. /#features, /#pricing) so the
+  // Header / footer nav anchors (MAIN_NAV_LINKS / FOOTER_PRODUCT_LINKS) land
+  // on the intended spatial section instead of always dropping to "hero".
+  // Guards:
+  //  - only run on the client (useEffect never runs on the server)
+  //  - validate the hash is one of the known SECTIONS before navigating
+  //  - only handle the initial hash on mount, not later hash changes
+  //    (in-app section changes use navigateTo() state, not the URL)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const raw = window.location.hash.replace(/^#/, "");
+    if (!raw) return;
+    const match = SECTIONS.find((s) => s.id === raw);
+    if (match) {
+      // Defer so the viewport mounts before the animated transition fires.
+      const t = window.setTimeout(() => {
+        setActiveSection(match.id);
+        setIsTransitioning(true);
+        window.setTimeout(() => setIsTransitioning(false), 700);
+      }, 0);
+      return () => window.clearTimeout(t);
+    }
+  }, []);
+
+  // Subtle camera transform for desktop spatial feel
+  const cameraTransform = (() => {
     const offsets: Record<SectionId, string> = {
       hero:     "perspective(1200px) rotateX(0deg) rotateY(0deg) translateZ(0px)",
       features: "perspective(1200px) rotateX(2deg) rotateY(4deg) translateZ(50px)",
