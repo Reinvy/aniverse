@@ -27,7 +27,6 @@ import { FetchErrorState } from "@/components/ui/fetch-error";
 import { FilterChips } from "@/components/ui/filter-chips";
 import { formatNumber, timeAgo, cn } from "@/lib/utils";
 import { GALLERY_CATEGORIES } from "@/lib/constants";
-import { dailyArt } from "@/data/daily-art-20260726";
 
 // ─── Types ────────────────────────────────────────────────────────
 
@@ -78,59 +77,55 @@ export default function GalleryPage() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [page, setPage] = useState(1);
 
-  const filtered = artworks.filter((art) => {
-    const matchesCategory =
-      activeCategory === "all" || art.category === activeCategory;
-    const query = searchQuery.toLowerCase().trim();
-    const matchesSearch =
-      !query ||
-      art.title.toLowerCase().includes(query) ||
-      art.artist.toLowerCase().includes(query) ||
-      ("description" in art &&
-        typeof (art as any).description === "string" &&
-        (art as any).description.toLowerCase().includes(query)) ||
-      ("style" in art &&
-        typeof (art as any).style === "string" &&
-        (art as any).style.toLowerCase().includes(query));
-    return matchesCategory && matchesSearch;
-  });
+  const fetchGallery = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const params = new URLSearchParams({ page: String(page), limit: "12" });
+      if (searchQuery.trim()) params.set("search", searchQuery.trim());
+      const style = STYLE_BY_CATEGORY[activeCategory];
+      if (style) params.set("style", style);
+
+      const res = await fetch(`/api/gallery?${params}`);
+      if (!res.ok) throw new Error(`Request failed (${res.status})`);
+      const data = await res.json();
+      setArtworks(data.artworks || []);
+      setPagination(data.pagination || null);
+    } catch (err) {
+      console.error("Failed to fetch gallery:", err);
+      setError(err instanceof Error ? err.message : "Failed to load gallery");
+      setArtworks([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [page, activeCategory, searchQuery]);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchGallery();
+  }, [fetchGallery]);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    setPage(1);
+    fetchGallery();
+  };
 
   return (
-    <div className="p-6 lg:p-8">
-      {/* ─── Daily Art Section ─── */}
-      {showDailyArt && (
-        <motion.section
-          initial={{ opacity: 0, y: -8 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-10"
-        >
-          <div className="mb-6 flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-amber-400 to-orange-600 shadow-lg">
-              <Sun className="h-5 w-5 text-white" />
-            </div>
-            <div>
-              <h2 className="text-xl font-bold text-white">
-                Today&apos;s Daily Art
-              </h2>
-              <p className="text-xs text-zinc-500">
-                Curated artwork descriptions — July 26, 2026
-              </p>
-            </div>
-            <button
-              onClick={() => setShowDailyArt(false)}
-              className="ml-auto text-xs text-zinc-600 hover:text-zinc-400 transition-colors"
-            >
-              Dismiss
-            </button>
-          </div>
-
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {dailyArt.map((art, i) => (
-              <motion.div
-                key={art.id}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.05, duration: 0.3 }}
+    <ErrorBoundary compact message="Failed to load gallery">
+      <div className="p-4 sm:p-6 lg:p-8">
+        {/* Header */}
+        <PageHeader
+          title="Gallery"
+          description="COLLECTION // Browse and discover community creations"
+          actions={
+            <div className="flex items-center gap-2">
+              <Button
+                variant={viewMode === "grid" ? "default" : "ghost"}
+                size="icon"
+                className="sm:h-8 sm:w-8"
+                onClick={() => setViewMode("grid")}
+                aria-label="Grid view"
               >
                 <Grid3X3 className="h-4 w-4" />
               </Button>

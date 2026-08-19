@@ -7,6 +7,7 @@ import React, {
   useCallback,
   useRef,
   useEffect,
+  useMemo,
 } from "react";
 
 // ─── Section Definitions ───────────────────────────────────────
@@ -93,32 +94,9 @@ export function SpatialProvider({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
-  // Support deep-linking via URL hash (e.g. /#features, /#pricing) so the
-  // Header / footer nav anchors (MAIN_NAV_LINKS / FOOTER_PRODUCT_LINKS) land
-  // on the intended spatial section instead of always dropping to "hero".
-  // Guards:
-  //  - only run on the client (useEffect never runs on the server)
-  //  - validate the hash is one of the known SECTIONS before navigating
-  //  - only handle the initial hash on mount, not later hash changes
-  //    (in-app section changes use navigateTo() state, not the URL)
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const raw = window.location.hash.replace(/^#/, "");
-    if (!raw) return;
-    const match = SECTIONS.find((s) => s.id === raw);
-    if (match) {
-      // Defer so the viewport mounts before the animated transition fires.
-      const t = window.setTimeout(() => {
-        setActiveSection(match.id);
-        setIsTransitioning(true);
-        window.setTimeout(() => setIsTransitioning(false), 700);
-      }, 0);
-      return () => window.clearTimeout(t);
-    }
-  }, []);
-
-  // Subtle camera transform for desktop spatial feel
-  const cameraTransform = (() => {
+  // Subtle camera transform for desktop spatial feel — derived purely from
+  // activeSection, so memoize to avoid rebuilding the string every render.
+  const cameraTransform = useMemo(() => {
     const offsets: Record<SectionId, string> = {
       hero:     "perspective(1200px) rotateX(0deg) rotateY(0deg) translateZ(0px)",
       features: "perspective(1200px) rotateX(2deg) rotateY(4deg) translateZ(50px)",
@@ -145,33 +123,6 @@ export function SpatialProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
-    const onHashChange = () => {
-      const next = sectionFromHash(window.location.hash);
-      if (next) navigateTo(next);
-    };
-    window.addEventListener("hashchange", onHashChange);
-    return () => window.removeEventListener("hashchange", onHashChange);
-  }, [navigateTo]);
-
-  // Keep the URL hash in sync with the active section (replaceState, so HUD
-  // navigation doesn't spam history entries) — deep links stay valid after
-  // in-page navigation.
-  useEffect(() => {
-    const expected = `#${activeSection}`;
-    if (window.location.hash !== expected) {
-      window.history.replaceState(null, "", expected);
-    }
-  }, [activeSection]);
-
-  // ─── Hash-anchor deep linking ─────────────────────────────────
-  // Header nav links (MAIN_NAV_LINKS) point to /#features and /#pricing.
-  // On mount with a section hash (or when the hash changes), navigate to
-  // that section instead of always starting at hero. This makes the header
-  // nav work from any page AND makes section state shareable via URL.
-  useEffect(() => {
-    const initial = sectionFromHash(window.location.hash);
-    if (initial) setActiveSection(initial);
-
     const onHashChange = () => {
       const next = sectionFromHash(window.location.hash);
       if (next) navigateTo(next);

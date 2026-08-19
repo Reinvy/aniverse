@@ -18,33 +18,26 @@ export const MAIN_NAV_LINKS = [
   { label: "Pricing", href: "/#pricing" },
 ] as const;
 
-/** Dashboard sidebar navigation items. */
-export const DASHBOARD_NAV = [
-  {
-    label: "Overview",
-    href: "/dashboard",
-    icon: "LayoutDashboard",
-  },
-  {
-    label: "Gallery",
-    href: "/dashboard/gallery",
-    icon: "Image",
-  },
-  {
-    label: "Create",
-    href: "/dashboard/create",
-    icon: "Wand2",
-  },
-  {
-    label: "Marketplace",
-    href: "/dashboard/marketplace",
-    icon: "Store",
-  },
-  {
-    label: "Social",
-    href: "/dashboard/social",
-    icon: "Share2",
-  },
+/** Secondary discoverable links for the public footer. */
+export const FOOTER_PRODUCT_LINKS = [
+  { label: "Features", href: "/#features" },
+  { label: "Characters", href: "/characters" },
+  { label: "Challenges", href: "/challenges" },
+  { label: "Pricing", href: "/#pricing" },
+] as const;
+
+export const FOOTER_RESOURCE_LINKS = [
+  { label: "Blog", href: "/blog" },
+  { label: "Gallery", href: "/dashboard/gallery" },
+  { label: "Marketplace", href: "/dashboard/marketplace" },
+  { label: "Social Feed", href: "/dashboard/social" },
+] as const;
+
+export const FOOTER_APP_LINKS = [
+  { label: "Create", href: "/dashboard/create" },
+  { label: "Overview", href: "/dashboard" },
+  { label: "Monetization", href: "/dashboard/monetization" },
+  { label: "Dashboard Challenges", href: "/dashboard/challenges" },
 ] as const;
 
 /** Subscription tier definitions. */
@@ -124,6 +117,9 @@ export const STYLE_PRESETS = [
   { id: "pixel-anime", label: "Pixel Anime", description: "Pixel-art fusion with anime-style characters and sprites" },
   { id: "vaporwave", label: "Vaporwave", description: "Retro-futuristic neon-drenched aesthetic with purple and pink hues, glitch effects, and '80s/'90s nostalgia" },
   { id: "dusty-pastel", label: "Dusty Pastel", description: "Muted, warm fantasy tones inspired by Frieren's soft color palette — perfect for romance and fantasy genres" },
+  { id: "caricature", label: "Caricature", description: "Exaggerated, playful caricature style with bold features and vibrant colors — inspired by the viral AI caricature trend" },
+  { id: "sepia-nostalgia", label: "Sepia Nostalgia", description: "Warm sepia-toned vintage anime aesthetic with film grain texture — retro photo look applied to anime characters" },
+  { id: "pastel-goth", label: "Pastel Goth", description: "Dark romance meets soft pastels — muted charcoals paired with blush pinks, lavender, and mint tones" },
 ] as const;
 
 /** Trending styles from market research (used for showcase). */
@@ -164,31 +160,10 @@ export const TRENDING_STYLES = [
     badge: "TRENDING",
   },
   {
-    id: "cyberpunk",
-    label: "Cyberpunk Neon",
-    description: "Neon-drenched futurescapes with magenta, cyan, and electric blue on dark backgrounds. The perennial favorite for sci-fi anime art.",
-    gradient: "from-violet-500 to-fuchsia-600",
-    badge: "CLASSIC",
-  },
-  {
-    id: "dusty-pastel",
-    label: "Dusty Pastel",
-    description: "Muted, warm fantasy tones inspired by Frieren's palette — soft lavenders, dusty roses, and sage greens dominating romance and fantasy anime art.",
-    gradient: "from-rose-400 to-orange-400",
-    badge: "TRENDING",
-  },
-  {
     id: "sepia-nostalgia",
     label: "Sepia Nostalgia",
     description: "Warm sepia-toned vintage anime aesthetic with film grain texture — TikTok's #animeedit community is driving this nostalgic trend to new heights.",
     gradient: "from-yellow-600 to-amber-700",
     badge: "NEW",
-  },
-  {
-    id: "monochrome-accent",
-    label: "Monochrome Accent",
-    description: "Dramatic monochrome compositions with a single electric accent color — red, cyan, or gold on grayscale — trending for character profile art across social platforms.",
-    gradient: "from-slate-600 to-zinc-800",
-    badge: "TRENDING",
   },
 ] as const;
