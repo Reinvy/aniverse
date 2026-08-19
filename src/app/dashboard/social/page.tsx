@@ -62,21 +62,21 @@ const socialPlatforms = [
 const todaysStats = [
   {
     label: "Total Posts Scheduled",
-    value: "16",
+    value: "18",
     subtext: "Across 4 platforms",
     icon: Share2,
     color: "text-violet-400",
   },
   {
     label: "Artworks Featured",
-    value: "7",
-    subtext: "From today's A3 generation",
+    value: "8",
+    subtext: "From A3 generation + story teaser",
     icon: Image,
     color: "text-fuchsia-400",
   },
   {
     label: "Est. Reach",
-    value: "14.2K+",
+    value: "15K+",
     subtext: "Combined platform reach",
     icon: TrendingUp,
     color: "text-emerald-400",
@@ -84,7 +84,7 @@ const todaysStats = [
   {
     label: "Next Post",
     value: "10:00 WIB",
-    subtext: "IG Carousel goes live",
+    subtext: "IG Carousel goes live (9 slides)",
     icon: Clock,
     color: "text-amber-400",
   },
@@ -94,7 +94,7 @@ const scheduledPosts = [
   {
     platform: "Instagram",
     time: "10:00 WIB",
-    content: "7-Artwork Carousel — Daily Art Drop (VHS Memories lead)",
+    content: "9-Slide Carousel — Daily Art Drop + Story Teaser",
     status: "ready",
   },
   {
@@ -106,31 +106,31 @@ const scheduledPosts = [
   {
     platform: "Twitter / X",
     time: "10:15 WIB",
-    content: "Tweet 2/5: Vaporwave revival & tips",
+    content: "Tweet 2/5: Story teaser — Gerbang di Antara Dua Dunia",
     status: "ready",
   },
   {
     platform: "Twitter / X",
     time: "10:25 WIB",
-    content: "Tweet 3/5: Art Nouveau x Anime fusion",
+    content: "Tweet 3/5: Retro 90s deep-dive",
     status: "ready",
   },
   {
     platform: "Twitter / X",
     time: "10:35 WIB",
-    content: "Tweet 4/5: Sepia Nostalgia + Pastel Goth",
+    content: "Tweet 4/5: CyberWeeb spotlight + prompt tips",
     status: "ready",
   },
   {
     platform: "Twitter / X",
     time: "10:45 WIB",
-    content: "Tweet 5/5: Story teaser + CTA + poll",
+    content: "Tweet 5/5: CTA + art poll",
     status: "ready",
   },
   {
     platform: "Pinterest",
     time: "10:00 WIB",
-    content: "7 pins — AI Anime Art Inspiration + Style Guide boards",
+    content: "9 pins — AI Anime Art Inspiration + Story board",
     status: "ready",
   },
   {
@@ -148,7 +148,7 @@ const scheduledPosts = [
   {
     platform: "TikTok",
     time: "17:00 WIB",
-    content: "Variant C: 90s vs AI Anime Challenge",
+    content: "Variant C: Storytime — The Brush of Destiny",
     status: "ready",
   },
 ];
@@ -328,7 +328,7 @@ export default function SocialDashboardPage() {
         <Card className="border-zinc-800/60">
           <CardContent className="p-5">
             <p className="text-xs text-zinc-500">
-              📁 Data files: src/data/social/twitter-20260725.ts • instagram-20260725.ts • pinterest-20260725.ts • tiktok-20260725.ts
+              📁 Data files: src/data/social/twitter-20260726.ts • instagram-20260726.ts • pinterest-20260726.ts • tiktok-20260726.ts
             </p>
             <p className="mt-1 text-xs text-zinc-600">
               Note: API publishing requires platform API keys. Posts are saved as data files ready for publishing.
