@@ -77,39 +77,22 @@ export default function GalleryPage() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [page, setPage] = useState(1);
 
-  const fetchGallery = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const params = new URLSearchParams({ page: String(page), limit: "12" });
-      if (searchQuery.trim()) params.set("search", searchQuery.trim());
-      const style = STYLE_BY_CATEGORY[activeCategory];
-      if (style) params.set("style", style);
-
-      const res = await fetch(`/api/gallery?${params}`);
-      if (!res.ok) throw new Error(`Request failed (${res.status})`);
-      const data = await res.json();
-      setArtworks(data.artworks || []);
-      setPagination(data.pagination || null);
-    } catch (err) {
-      console.error("Failed to fetch gallery:", err);
-      setError(err instanceof Error ? err.message : "Failed to load gallery");
-      setArtworks([]);
-    } finally {
-      setLoading(false);
-    }
-  }, [page, activeCategory, searchQuery]);
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    fetchGallery();
-  }, [fetchGallery]);
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    setPage(1);
-    fetchGallery();
-  };
+  const filtered = artworks.filter((art) => {
+    const matchesCategory =
+      activeCategory === "all" || art.category === activeCategory;
+    const query = searchQuery.toLowerCase().trim();
+    const matchesSearch =
+      !query ||
+      art.title.toLowerCase().includes(query) ||
+      art.artist.toLowerCase().includes(query) ||
+      ("description" in art &&
+        typeof (art as any).description === "string" &&
+        (art as any).description.toLowerCase().includes(query)) ||
+      ("style" in art &&
+        typeof (art as any).style === "string" &&
+        (art as any).style.toLowerCase().includes(query));
+    return matchesCategory && matchesSearch;
+  });
 
   return (
     <ErrorBoundary compact message="Failed to load gallery">
