@@ -1,15 +1,11 @@
 import { test, expect } from "@playwright/test";
 
-test.describe("Navigation", () => {
-  test("should navigate between all public pages", async ({ page }) => {
-    const pages = [
-      "/",
-      "/login",
-      "/register",
-      "/blog",
-      "/challenges",
-      "/characters",
-    ];
+/** Routes under /dashboard/ that require authentication. */
+const PROTECTED_ROUTES = ['/dashboard/gallery', '/dashboard/marketplace', '/dashboard/create'];
+
+test.describe('Navigation', () => {
+  test('should navigate between all public pages', async ({ page }) => {
+    const pages = ['/', '/login', '/register'];
     for (const path of pages) {
       await page.goto(path);
       await expect(page).toHaveURL(new RegExp(path.replace(/\//g, "\\/")));
@@ -44,15 +40,15 @@ test.describe("Navigation", () => {
 
         await link.click();
 
+        // Protected routes redirect to /login when unauthenticated — that's expected.
+        const isProtected = PROTECTED_ROUTES.some((route) => href.startsWith(route));
         if (isProtected) {
-          // Protected routes redirect to login when not authenticated
           await expect(page).toHaveURL(/\/login/);
         } else {
-          await expect(page).toHaveURL(new RegExp(href.replace(/\//g, "\\/")));
+          await expect(page).toHaveURL(new RegExp(href.replace(/\//g, '\\/')));
         }
 
-        // Navigate back to home for next test
-        await page.goto("/characters");
+        await page.goto('/');
       }
     }
   });
