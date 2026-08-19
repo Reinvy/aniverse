@@ -8,8 +8,6 @@ import {
   Wand2,
   Store,
   Share2,
-  DollarSign,
-  Trophy,
   Sparkles,
   LogOut,
   X,
@@ -26,8 +24,6 @@ const sidebarNav = [
   { label: "Create", href: "/dashboard/create", icon: Wand2 },
   { label: "Marketplace", href: "/dashboard/marketplace", icon: Store },
   { label: "Social", href: "/dashboard/social", icon: Share2 },
-  { label: "Challenges", href: "/dashboard/challenges", icon: Trophy },
-  { label: "Monetization", href: "/dashboard/monetization", icon: DollarSign },
 ] as const;
 
 export function Sidebar({

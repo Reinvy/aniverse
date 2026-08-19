@@ -18,26 +18,33 @@ export const MAIN_NAV_LINKS = [
   { label: "Pricing", href: "/#pricing" },
 ] as const;
 
-/** Secondary discoverable links for the public footer. */
-export const FOOTER_PRODUCT_LINKS = [
-  { label: "Features", href: "/#features" },
-  { label: "Characters", href: "/characters" },
-  { label: "Challenges", href: "/challenges" },
-  { label: "Pricing", href: "/#pricing" },
-] as const;
-
-export const FOOTER_RESOURCE_LINKS = [
-  { label: "Blog", href: "/blog" },
-  { label: "Gallery", href: "/dashboard/gallery" },
-  { label: "Marketplace", href: "/dashboard/marketplace" },
-  { label: "Social Feed", href: "/dashboard/social" },
-] as const;
-
-export const FOOTER_APP_LINKS = [
-  { label: "Create", href: "/dashboard/create" },
-  { label: "Overview", href: "/dashboard" },
-  { label: "Monetization", href: "/dashboard/monetization" },
-  { label: "Dashboard Challenges", href: "/dashboard/challenges" },
+/** Dashboard sidebar navigation items. */
+export const DASHBOARD_NAV = [
+  {
+    label: "Overview",
+    href: "/dashboard",
+    icon: "LayoutDashboard",
+  },
+  {
+    label: "Gallery",
+    href: "/dashboard/gallery",
+    icon: "Image",
+  },
+  {
+    label: "Create",
+    href: "/dashboard/create",
+    icon: "Wand2",
+  },
+  {
+    label: "Marketplace",
+    href: "/dashboard/marketplace",
+    icon: "Store",
+  },
+  {
+    label: "Social",
+    href: "/dashboard/social",
+    icon: "Share2",
+  },
 ] as const;
 
 /** Subscription tier definitions. */
