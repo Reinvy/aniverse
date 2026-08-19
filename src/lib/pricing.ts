@@ -33,9 +33,77 @@ function tier(
 }
 
 export const pricingTiers = {
-  free: tier("FREE", "Perfect for exploring AI anime generation.", "Get Started"),
-  pro: tier("PRO", "For serious creators who want more power.", "Subscribe"),
-  studio: tier("STUDIO", "For studios and power users.", "Go Pro"),
+  free: {
+    name: "Free",
+    price: 0,
+    description: "Perfect for exploring AI anime generation.",
+    features: [
+      "10 AI generations per month",
+      "Standard resolution (512×512)",
+      "Basic style presets",
+      "Community gallery access",
+      "Watermark on exports",
+    ],
+    cta: "Get Started",
+    popular: false,
+    color: "zinc" as const,
+  },
+  pro: {
+    name: "Pro",
+    price: 9.99,
+    description: "For serious creators who want more power.",
+    features: [
+      "100 AI generations per month",
+      "HD resolution (1024×1024)",
+      "All style presets + custom prompts",
+      "Commercial license",
+      "Priority generation queue",
+      "Export without watermark",
+      "API access (100 req/day)",
+    ],
+    cta: "Subscribe",
+    popular: true,
+    color: "violet" as const,
+  },
+  studio: {
+    name: "Studio",
+    price: 19.99,
+    description: "For studios and power users.",
+    features: [
+      "Unlimited AI generations",
+      "4K resolution (2048×2048)",
+      "Full model control + negative prompts",
+      "Commercial + resale license",
+      "Priority support",
+      "API access (1000 req/day)",
+      "Team collaboration (up to 5)",
+    ],
+    cta: "Go Pro",
+    popular: false,
+    color: "amber" as const,
+  },
+} as const;
+
+export type PricingTierId = keyof typeof pricingTiers;
+
+/** Annual billing prices (20% discount). */
+export const annualPrices: Record<PricingTierId, number> = {
+  free: 0,
+  pro: 7.99, // $95.88/yr — saves $24
+  studio: 15.99, // $191.88/yr — saves $48
+} as const;
+
+/** Annual savings display strings. */
+export const annualSavings: Record<Exclude<PricingTierId, "free">, string> = {
+  pro: "Save $24/year",
+  studio: "Save $48/year",
+} as const;
+
+/** Per-generation cost breakdown for transparency. */
+export const perGenerationCost = {
+  free: { generations: 10, costPerGen: "Free" },
+  pro: { generations: 100, costPerGen: "$0.10" },
+  studio: { generations: "Unlimited", costPerGen: "~$0.00" },
 } as const;
 
 /** Coin pack pricing (microtransaction model). */
