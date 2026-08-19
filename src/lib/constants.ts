@@ -124,10 +124,6 @@ export const STYLE_PRESETS = [
   { id: "pixel-anime", label: "Pixel Anime", description: "Pixel-art fusion with anime-style characters and sprites" },
   { id: "vaporwave", label: "Vaporwave", description: "Retro-futuristic neon-drenched aesthetic with purple and pink hues, glitch effects, and '80s/'90s nostalgia" },
   { id: "dusty-pastel", label: "Dusty Pastel", description: "Muted, warm fantasy tones inspired by Frieren's soft color palette — perfect for romance and fantasy genres" },
-  { id: "caricature", label: "Caricature", description: "Exaggerated, playful caricature style with bold features and vibrant colors — inspired by the viral AI caricature trend" },
-  { id: "sepia-nostalgia", label: "Sepia Nostalgia", description: "Warm sepia-toned vintage anime aesthetic with film grain texture — retro photo look applied to anime characters" },
-  { id: "pastel-goth", label: "Pastel Goth", description: "Dark romance meets soft pastels — muted charcoals paired with blush pinks, lavender, and mint tones" },
-  { id: "monochrome-accent", label: "Monochrome Accent", description: "Dramatic monochrome with a single bold accent color — popular for striking character profile art" },
 ] as const;
 
 /** Trending styles from market research (used for showcase). */
@@ -159,6 +155,20 @@ export const TRENDING_STYLES = [
     description: "Vaporwave's retro-futuristic aesthetic is surging — neon sunsets, glitch typography, and purple-pink gradients defining 2026's anime art revolution.",
     gradient: "from-purple-500 to-fuchsia-600",
     badge: "HOT",
+  },
+  {
+    id: "dusty-pastel",
+    label: "Dusty Pastel",
+    description: "Muted, warm fantasy tones inspired by Frieren's palette — soft lavenders, dusty roses, and sage greens dominating romance and fantasy anime art.",
+    gradient: "from-rose-400 to-orange-400",
+    badge: "TRENDING",
+  },
+  {
+    id: "cyberpunk",
+    label: "Cyberpunk Neon",
+    description: "Neon-drenched futurescapes with magenta, cyan, and electric blue on dark backgrounds. The perennial favorite for sci-fi anime art.",
+    gradient: "from-violet-500 to-fuchsia-600",
+    badge: "CLASSIC",
   },
   {
     id: "dusty-pastel",
